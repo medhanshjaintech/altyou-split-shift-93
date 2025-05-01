@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TrendingUp, ArrowRight } from 'lucide-react';
@@ -6,7 +5,6 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '@/components/ui/scroll-area';
-
 const ContentSuggestion = () => {
   const {
     toast
@@ -16,7 +14,6 @@ const ContentSuggestion = () => {
 
   // Mock trending topics
   const trendingTopics = ["AI in Healthcare", "Sustainable Living", "Web3 Development", "Remote Work Productivity", "Digital Minimalism", "Future of Education", "Mental Health Awareness", "Smart Home Technology"];
-  
   const handleSearch = () => {
     if (!searchQuery.trim()) {
       toast({
@@ -33,22 +30,20 @@ const ContentSuggestion = () => {
     });
     console.log("Searching for:", searchQuery);
   };
-  
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleSearch();
     }
   };
-  
   return <div className="fixed inset-0 bg-[#121212] flex items-center justify-center">
       <ScrollArea className="h-full w-full">
         <div className="container mx-auto max-w-7xl px-6 py-[100px]">
           <div className="absolute top-10 left-10">
-            <h1 className="text-white text-xl font-medium">Content Suggestion</h1>
+            
           </div>
           
           <div className="flex flex-col w-full max-w-2xl mx-auto">
-            <h2 className="text-white text-3xl md:text-4xl font-medium mb-12 text-center">What would you like to talk about today?</h2>
+            <h2 className="text-white text-3xl md:text-4xl font-medium mb-12 text-center px-0">What would you like to talk about today?</h2>
             
             <div className="w-full flex items-center mb-8">
               <Input placeholder="Enter a topic..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} onKeyDown={handleKeyDown} className="bg-white/10 border-0 text-white h-14 text-lg focus-visible:ring-white/40 placeholder:text-white/50 rounded-md" />
@@ -85,5 +80,4 @@ const ContentSuggestion = () => {
       </ScrollArea>
     </div>;
 };
-
 export default ContentSuggestion;
