@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FileText, Bot, Search, Scissors, Star, Mic, Image, Video } from 'lucide-react';
@@ -16,11 +17,11 @@ const Dashboard = () => {
   const tools = [
     { id: 1, name: 'Batch Transcribe', icon: FileText, description: 'Convert audio and video files to text', comingSoon: false, path: '/batch-transcribe' },
     { id: 2, name: 'SRT File - Hinglish', icon: FileText, description: 'Generate subtitle files with Hinglish text', comingSoon: false, path: '/hinglish-transcribe' },
-    { id: 3, name: 'Knowledge Bot', icon: Bot, description: 'AI assistant trained on your content', comingSoon: false },
-    { id: 4, name: 'Content Suggestion Engine', icon: Search, description: 'Get AI-powered content ideas', comingSoon: false },
-    { id: 5, name: 'Script Builder', icon: FileText, description: 'Create compelling scripts for videos', comingSoon: false },
-    { id: 6, name: 'Content Analyser', icon: Bot, description: 'Analyze your content performance', comingSoon: false },
-    { id: 7, name: 'Viral Reel Cutter', icon: Scissors, description: 'Create engaging short video clips', comingSoon: false },
+    { id: 3, name: 'Knowledge Bot', icon: Bot, description: 'AI assistant trained on your content', comingSoon: false, path: '/knowledge-bot' },
+    { id: 4, name: 'Content Suggestion Engine', icon: Search, description: 'Get AI-powered content ideas', comingSoon: true },
+    { id: 5, name: 'Script Builder', icon: FileText, description: 'Create compelling scripts for videos', comingSoon: true },
+    { id: 6, name: 'Content Analyser', icon: Bot, description: 'Analyze your content performance', comingSoon: true },
+    { id: 7, name: 'Viral Reel Cutter', icon: Scissors, description: 'Create engaging short video clips', comingSoon: true },
     { id: 8, name: 'Bonus', icon: Star, description: 'Special features and upcoming tools', comingSoon: true },
   ];
 
@@ -85,10 +86,15 @@ const Dashboard = () => {
     
     if (tool?.path) {
       navigate(tool.path);
-    } else {
+    } else if (tool?.comingSoon) {
       toast({
         title: "Coming soon!",
         description: "This feature will be available shortly.",
+      });
+    } else {
+      toast({
+        title: "Feature unavailable",
+        description: "This feature is not yet implemented.",
       });
     }
   };
@@ -121,7 +127,7 @@ const Dashboard = () => {
               {tools.map((tool) => (
                 <Card 
                   key={tool.id} 
-                  className="p-6 cursor-pointer hover:bg-neutral-800 bg-neutral-900 border-0 transition"
+                  className={`p-6 cursor-pointer hover:bg-neutral-800 bg-neutral-900 border-0 transition ${tool.comingSoon ? 'opacity-70' : ''}`}
                   onClick={() => handleToolClick(tool.id)}
                 >
                   <div className="flex flex-col items-center text-center">
