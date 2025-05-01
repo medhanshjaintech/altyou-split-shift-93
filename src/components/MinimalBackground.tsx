@@ -3,36 +3,30 @@ import React from 'react';
 
 const MinimalBackground: React.FC = () => {
   return (
-    <div className="fixed inset-0 pointer-events-none">
-      {/* Diagonal line top left */}
-      <div className="absolute top-[15%] left-[5%] w-[20%] h-[1px] bg-white/10 rotate-45"></div>
+    <div className="fixed inset-0 pointer-events-none overflow-hidden">
+      {/* Gradient mesh background */}
+      <div className="absolute inset-0 bg-[#222222] opacity-90"></div>
       
-      {/* Diagonal line bottom right */}
-      <div className="absolute bottom-[15%] right-[5%] w-[20%] h-[1px] bg-white/10 rotate-45"></div>
+      {/* Subtle gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#2a2a2a] via-[#222222] to-[#1a1a1a]"></div>
       
-      {/* Circle top right */}
-      <div className="absolute top-[10%] right-[10%] w-[150px] h-[150px] rounded-full border border-white/5"></div>
-      
-      {/* Small dot bottom left */}
-      <div className="absolute bottom-[20%] left-[10%] w-[4px] h-[4px] rounded-full bg-white/20"></div>
-      
-      {/* Grid pattern center-left */}
-      <div className="absolute top-[40%] left-[5%] w-[200px] h-[200px] opacity-10">
-        <div className="grid grid-cols-4 gap-2">
-          {Array(16).fill(0).map((_, i) => (
-            <div key={i} className="w-full h-[1px] bg-white/30"></div>
-          ))}
-        </div>
+      {/* Animated elements */}
+      <div className="absolute top-0 left-0 w-full h-full">
+        {/* Large blurred circle */}
+        <div className="absolute top-[20%] left-[10%] w-[300px] h-[300px] rounded-full bg-blue-500/10 blur-[100px]"></div>
+        
+        {/* Second blurred circle */}
+        <div className="absolute bottom-[20%] right-[10%] w-[400px] h-[400px] rounded-full bg-purple-500/10 blur-[120px]"></div>
+        
+        {/* Third blurred circle */}
+        <div className="absolute top-[60%] left-[60%] w-[200px] h-[200px] rounded-full bg-pink-500/10 blur-[80px]"></div>
+        
+        {/* Subtle grid lines */}
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0wIDBoNjB2NjBIMHoiLz48cGF0aCBkPSJNNjAgMEgwdjYwaDYwVjB6TTU5IDU5SDFWMWg1OHY1OHoiIGZpbGw9IiMxNDE0MTQiLz48L2c+PC9zdmc+')] opacity-[0.03]"></div>
       </div>
       
-      {/* Horizontal line center-right */}
-      <div className="absolute top-[60%] right-[8%] w-[100px] h-[1px] bg-white/15"></div>
-      
-      {/* Small dot top left */}
-      <div className="absolute top-[25%] left-[15%] w-[3px] h-[3px] rounded-full bg-white/15"></div>
-      
-      {/* Small dot top right */}
-      <div className="absolute top-[30%] right-[25%] w-[2px] h-[2px] rounded-full bg-white/20"></div>
+      {/* Subtle noise overlay */}
+      <div className="absolute inset-0 bg-noise opacity-[0.03]"></div>
     </div>
   );
 };
