@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TrendingUp, ArrowRight, FileText } from 'lucide-react';
@@ -89,10 +88,6 @@ const ContentSuggestion = () => {
   return <div className="fixed inset-0 bg-[#121212] flex items-center justify-center">
       <ScrollArea className="h-full w-full">
         <div className="container mx-auto max-w-7xl px-6 py-[210px]">
-          <div className="absolute top-10 left-10">
-            <h1 className="text-white text-2xl font-bold">Content Suggestion</h1>
-          </div>
-          
           <div className="flex flex-col w-full max-w-3xl mx-auto">
             <h2 className="text-white text-5xl font-medium mb-8 text-center md:text-5xl">What would you like to talk about today?</h2>
             
