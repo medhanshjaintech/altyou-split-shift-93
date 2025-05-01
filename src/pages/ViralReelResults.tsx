@@ -6,6 +6,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
 import Sidebar from '@/components/Sidebar';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
+
 type VideoClip = {
   id: number;
   name: string;
@@ -14,6 +15,7 @@ type VideoClip = {
   endTime: string;
   reason: string;
 };
+
 const ViralReelResults = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -93,7 +95,7 @@ const ViralReelResults = () => {
             </div>
 
             <div className="mb-12 text-center">
-              <h2 className="text-2xl font-semibold text-white mb-4 font-handwriting">
+              <h2 className="text-2xl font-semibold text-white mb-4">
                 {videoTitle}
               </h2>
               <p className="text-gray-400">
