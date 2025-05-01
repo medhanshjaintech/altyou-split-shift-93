@@ -57,7 +57,7 @@ const ContentSuggestion = () => {
                 <div className="w-full border-t border-white/20"></div>
               </div>
               
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-6 py-[21px] px-[15px]">
                 {trendingTopics.map((topic, index) => <div key={index} className="flex items-center gap-3 p-4 rounded-md hover:bg-white/10 cursor-pointer transition-colors" onClick={() => {
                 setSearchQuery(topic);
                 handleSearch();
