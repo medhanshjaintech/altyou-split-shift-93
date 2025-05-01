@@ -100,7 +100,7 @@ const ContentAnalysisResult = () => {
       
       <main className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-16'}`}>
         <ScrollArea className="h-screen">
-          <div className="container mx-auto px-6 py-8 max-w-6xl"> {/* Changed from max-w-4xl to max-w-6xl */}
+          <div className="container mx-auto px-6 py-8 max-w-6xl">
             <div className="flex items-center mb-8">
               <Button 
                 variant="ghost" 
@@ -126,7 +126,7 @@ const ContentAnalysisResult = () => {
                   <h3 className="text-xl font-medium text-blue-400 mb-3">
                     {section.title}
                   </h3>
-                  <div className="bg-neutral-800/50 p-8 rounded-lg"> {/* Increased padding from p-6 to p-8 */}
+                  <div className="bg-neutral-800/50 p-8 rounded-lg">
                     <p className="text-gray-300 leading-relaxed">
                       {section.content}
                     </p>
@@ -145,7 +145,7 @@ const ContentAnalysisResult = () => {
                 <Button 
                   onClick={downloadReport}
                   disabled={isGeneratingPDF}
-                  className="bg-neutral-700 hover:bg-neutral-600 px-8 py-2 text-white" {/* Increased horizontal padding from px-6 to px-8 */}
+                  className="bg-neutral-700 hover:bg-neutral-600 px-8 py-2 text-white"
                 >
                   <Download className="h-4 w-4 mr-2" />
                   Download report
@@ -153,7 +153,7 @@ const ContentAnalysisResult = () => {
                 
                 <Button 
                   onClick={compareContent}
-                  className="bg-indigo-600 hover:bg-indigo-700 px-8 py-2 text-white" {/* Increased horizontal padding from px-6 to px-8 */}
+                  className="bg-indigo-600 hover:bg-indigo-700 px-8 py-2 text-white"
                 >
                   <BarChart2 className="h-4 w-4 mr-2" />
                   Compare your content
@@ -165,7 +165,7 @@ const ContentAnalysisResult = () => {
 
         {/* Content Comparison Dialog */}
         <Dialog open={comparisonDialogOpen} onOpenChange={setComparisonDialogOpen}>
-          <DialogContent className="bg-neutral-800 border-neutral-700 text-white sm:max-w-5xl"> {/* Changed from max-w-4xl to max-w-5xl */}
+          <DialogContent className="bg-neutral-800 border-neutral-700 text-white sm:max-w-5xl">
             <DialogHeader>
               <DialogTitle className="text-2xl font-bold text-center text-white mb-6">
                 Content Comparison
@@ -173,14 +173,14 @@ const ContentAnalysisResult = () => {
             </DialogHeader>
             
             {/* Comparison content */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8"> {/* Increased gap from gap-6 to gap-8 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Your channel */}
               <div className="flex flex-col items-center">
                 <h3 className="text-xl font-semibold mb-4 italic text-gray-200">Your Channel</h3>
                 <div className="bg-neutral-700/50 w-full aspect-square rounded-md flex items-center justify-center mb-4">
-                  <div className="text-center p-6"> {/* Increased padding from p-4 to p-6 */}
+                  <div className="text-center p-6">
                     <FileText className="h-12 w-12 text-indigo-400 mx-auto mb-2" />
-                    <div className="space-y-3"> {/* Increased spacing from space-y-2 to space-y-3 */}
+                    <div className="space-y-3">
                       <p className="font-medium">Average View Duration: 6:42</p>
                       <p className="font-medium">Engagement Rate: 7.2%</p>
                       <p className="font-medium">Publishing Frequency: 1.5/week</p>
@@ -194,9 +194,9 @@ const ContentAnalysisResult = () => {
               <div className="flex flex-col items-center">
                 <h3 className="text-xl font-semibold mb-4 italic text-gray-200">Competitor Channel</h3>
                 <div className="bg-neutral-700/50 w-full aspect-square rounded-md flex items-center justify-center mb-4">
-                  <div className="text-center p-6"> {/* Increased padding from p-4 to p-6 */}
+                  <div className="text-center p-6">
                     <FileText className="h-12 w-12 text-green-400 mx-auto mb-2" />
-                    <div className="space-y-3"> {/* Increased spacing from space-y-2 to space-y-3 */}
+                    <div className="space-y-3">
                       <p className="font-medium">Average View Duration: 8:15</p>
                       <p className="font-medium">Engagement Rate: 9.3%</p>
                       <p className="font-medium">Publishing Frequency: 2/week</p>
@@ -210,8 +210,8 @@ const ContentAnalysisResult = () => {
             {/* Improvement points */}
             <div className="mt-8">
               <h3 className="text-xl font-semibold mb-4 italic text-gray-200">Points Where You Can Improve</h3>
-              <div className="bg-neutral-700/50 rounded-md p-8"> {/* Increased padding from p-6 to p-8 */}
-                <ul className="space-y-5"> {/* Increased spacing from space-y-4 to space-y-5 */}
+              <div className="bg-neutral-700/50 rounded-md p-8">
+                <ul className="space-y-5">
                   {improvementPoints.map((point, index) => (
                     <li key={index} className="flex items-start">
                       <span className="bg-indigo-600 text-white rounded-full h-5 w-5 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
@@ -225,10 +225,10 @@ const ContentAnalysisResult = () => {
             </div>
             
             {/* Close button */}
-            <div className="mt-8 flex justify-center"> {/* Increased margin from mt-6 to mt-8 */}
+            <div className="mt-8 flex justify-center">
               <Button 
                 onClick={() => setComparisonDialogOpen(false)}
-                className="bg-neutral-700 hover:bg-neutral-600 px-10" {/* Increased horizontal padding from px-8 to px-10 */}
+                className="bg-neutral-700 hover:bg-neutral-600 px-10"
               >
                 Close Comparison
               </Button>
