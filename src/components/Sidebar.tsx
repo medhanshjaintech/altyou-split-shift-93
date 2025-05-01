@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { LayoutDashboard, Folder, LayoutTemplate, ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -12,9 +13,27 @@ const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
   const [activeSection, setActiveSection] = useState<'dashboard' | 'projects' | 'templates'>('dashboard');
   
   const sampleProjects = [
-    { id: 1, name: 'Content Analyzer Report', date: '2 days ago' },
-    { id: 2, name: 'Podcast Transcription', date: '1 week ago' },
-    { id: 3, name: 'Marketing Video Script', date: '2 weeks ago' }
+    { 
+      id: 1, 
+      name: 'Content Analyzer Report', 
+      date: '2 days ago',
+      image: '/lovable-uploads/d6514f20-6f3f-4b8e-a6d0-813ec1bf1539.png',
+      users: ['A', 'M']
+    },
+    { 
+      id: 2, 
+      name: 'Podcast Transcription', 
+      date: '1 week ago',
+      image: null,
+      users: ['K', 'S'] 
+    },
+    { 
+      id: 3, 
+      name: 'Marketing Video Script', 
+      date: '2 weeks ago',
+      image: null,
+      users: ['R'] 
+    }
   ];
   
   const templates = [
@@ -92,34 +111,62 @@ const Sidebar = ({ isOpen, toggleSidebar }: SidebarProps) => {
       </div>
       
       {isOpen && (
-        <div className="mt-8 px-4">
-          {activeSection === 'projects' && (
-            <div>
-              <h3 className="text-sm font-medium text-gray-400 mb-4">Sample Projects</h3>
-              <div className="space-y-3">
-                {sampleProjects.map(project => (
-                  <div key={project.id} className="p-2 rounded-md hover:bg-white/5 cursor-pointer">
-                    <p className="text-sm text-white">{project.name}</p>
-                    <p className="text-xs text-gray-500">{project.date}</p>
-                  </div>
-                ))}
+        <div className="mt-8 px-4 overflow-hidden">
+          <ScrollArea className="h-[calc(100vh-320px)]">
+            {activeSection === 'projects' && (
+              <div>
+                <h3 className="text-sm font-medium text-gray-400 mb-4">Sample Projects</h3>
+                <div className="space-y-4">
+                  {sampleProjects.map(project => (
+                    <div key={project.id} className="rounded-md hover:bg-white/5 cursor-pointer overflow-hidden">
+                      {project.image && (
+                        <div className="relative w-full h-28 mb-2">
+                          <img 
+                            src={project.image} 
+                            alt={project.name} 
+                            className="w-full h-full object-cover rounded-md"
+                          />
+                          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2">
+                            <p className="text-xs text-white font-medium uppercase">ALTYOU</p>
+                            <p className="text-xs text-gray-400">{project.date}</p>
+                          </div>
+                        </div>
+                      )}
+                      <div className="p-2">
+                        <p className="text-sm text-white font-medium">{project.name}</p>
+                        {!project.image && (
+                          <p className="text-xs text-gray-500 mt-1">{project.date}</p>
+                        )}
+                        <div className="flex justify-between items-center mt-2">
+                          <div className="flex -space-x-2">
+                            {project.users.map((user, i) => (
+                              <div key={i} className="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center text-xs text-white border-2 border-[#0A0A0A]">
+                                {user}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
-          
-          {activeSection === 'templates' && (
-            <div>
-              <h3 className="text-sm font-medium text-gray-400 mb-4">Ready-to-go Templates</h3>
-              <div className="space-y-3">
-                {templates.map(template => (
-                  <div key={template.id} className="p-2 rounded-md hover:bg-white/5 cursor-pointer">
-                    <p className="text-sm text-white">{template.name}</p>
-                    <p className="text-xs text-gray-500">{template.category}</p>
-                  </div>
-                ))}
+            )}
+            
+            {activeSection === 'templates' && (
+              <div>
+                <h3 className="text-sm font-medium text-gray-400 mb-4">Ready-to-go Templates</h3>
+                <div className="space-y-3">
+                  {templates.map(template => (
+                    <div key={template.id} className="p-2 rounded-md hover:bg-white/5 cursor-pointer">
+                      <p className="text-sm text-white">{template.name}</p>
+                      <p className="text-xs text-gray-500">{template.category}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </ScrollArea>
         </div>
       )}
       
