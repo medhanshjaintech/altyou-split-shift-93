@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ChevronLeft, Upload, FileText, Download, Edit } from 'lucide-react';
@@ -161,7 +160,7 @@ END OF SCENE 1`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    URL.revoObjectURL(url);
+    URL.revokeObjectURL(url);
 
     toast({
       title: "Script downloaded",
