@@ -1,7 +1,6 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Upload, FileText, Link as LinkIcon, Play } from 'lucide-react';
+import { Upload, FileText, Link as LinkIcon, Play, ChevronLeft } from 'lucide-react';
 import Sidebar from '@/components/Sidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card } from '@/components/ui/card';
@@ -127,6 +126,10 @@ const ViralReelCutter = () => {
     setYoutubeUrl('');
   };
 
+  const handleBackToDashboard = () => {
+    navigate('/dashboard');
+  };
+
   return (
     <div className="flex min-h-screen bg-[#121212]">
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
@@ -135,7 +138,12 @@ const ViralReelCutter = () => {
         <ScrollArea className="h-screen">
           <div className="container mx-auto px-6 py-8 max-w-5xl">
             <div className="flex justify-between items-center mb-8">
-              <h1 className="text-3xl font-bold text-white">Viral Reel Cutter</h1>
+              <div className="flex items-center">
+                <Button variant="ghost" size="icon" onClick={handleBackToDashboard} className="mr-3">
+                  <ChevronLeft className="h-5 w-5 text-white" />
+                </Button>
+                <h1 className="text-3xl font-bold text-white">Viral Reel Cutter</h1>
+              </div>
             </div>
             
             <div className="mb-12">
