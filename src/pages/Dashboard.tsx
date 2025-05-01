@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import Sidebar from '@/components/Sidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import ProjectCard from '@/components/ProjectCard';
 
 const Dashboard = () => {
   const { toast } = useToast();
@@ -24,50 +25,6 @@ const Dashboard = () => {
     { id: 8, name: 'Bonus', icon: Star, description: 'Special features and upcoming tools', comingSoon: true },
   ];
 
-  // Quick actions that were previously at the top
-  const quickActions = [
-    { 
-      icon: "file-text", 
-      color: "orange-500", 
-      label: "Edit a video"
-    },
-    { 
-      icon: "circle", 
-      color: "green-500", 
-      label: "Make a podcast"
-    },
-    { 
-      icon: "arrow-up-right", 
-      color: "red-500", 
-      label: "Create social clips"
-    },
-    { 
-      icon: "plus", 
-      color: "blue-500", 
-      label: "Transcribe a file"
-    },
-    { 
-      icon: "ellipsis-vertical", 
-      color: "purple-500", 
-      label: "Clean up audio"
-    },
-    { 
-      icon: "plus", 
-      color: "pink-500", 
-      label: "Add captions"
-    },
-    { 
-      icon: "circle", 
-      color: "sky-500", 
-      label: "Fix eye contact"
-    },
-    { 
-      icon: "list", 
-      color: "emerald-500", 
-      label: "Translate & dub video"
-    },
-  ];
-
   // Featured tools that were previously shown as large cards
   const featuredTools = [
     { 
@@ -81,6 +38,34 @@ const Dashboard = () => {
       description: 'Have an avatar present your script—no need to record',
       image: 'public/lovable-uploads/5b4f74cb-9647-4976-b745-447aa79a6dcc.png',
       gradient: 'bg-gradient-to-r from-gray-900 to-slate-900'
+    }
+  ];
+
+  // Recent projects data (updated to match the image example)
+  const recentProjects = [
+    {
+      id: 1,
+      title: 'ALTYOU',
+      editedTime: '1 hour ago',
+      image: '/lovable-uploads/3e238a3b-7ec0-47ec-afba-db80bd0d0a50.png',
+      userInitial: 'A',
+      avatarColor: 'bg-blue-500'
+    },
+    {
+      id: 2,
+      title: 'Creator tool flow',
+      editedTime: '17 days ago',
+      image: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+      userInitial: 'P',
+      avatarColor: 'bg-purple-500'
+    },
+    {
+      id: 3,
+      title: "Medhansh Jain's team library",
+      editedTime: '24 days ago',
+      image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+      userInitial: 'M',
+      avatarColor: 'bg-blue-500'
     }
   ];
 
@@ -169,48 +154,19 @@ const Dashboard = () => {
               ))}
             </div>
             
-            {/* Recent Projects Section - Using the quick actions format */}
+            {/* Recent Projects Section - Updated to match the design in the image */}
             <h2 className="text-xl font-semibold text-white mb-4">Recent Projects</h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 pb-8">
-              {quickActions.map((action, index) => (
-                <Card key={index} className="p-4 cursor-pointer hover:bg-neutral-800 bg-neutral-900 border-0 transition">
-                  <div className="flex items-center gap-3">
-                    <div className={`text-${action.color}`}>
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="24" height="24" rx="4" fill="currentColor" fillOpacity="0.2" />
-                        {action.icon === "file-text" && (
-                          <path d="M7 8L17 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                        )}
-                        {action.icon === "circle" && (
-                          <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.5" />
-                        )}
-                        {action.icon === "arrow-up-right" && (
-                          <path d="M15 10L19 6M19 6H15M19 6V10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                        )}
-                        {action.icon === "plus" && (
-                          <path d="M9 12H15M12 9V15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                        )}
-                        {action.icon === "ellipsis-vertical" && (
-                          <>
-                            <path d="M11 6L13 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                            <path d="M11 10L13 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                            <path d="M11 14L13 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                            <path d="M11 18L13 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                          </>
-                        )}
-                        {action.icon === "list" && (
-                          <>
-                            <path d="M7 8L17 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                            <path d="M7 12L17 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                            <path d="M7 16L13 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                          </>
-                        )}
-                      </svg>
-                    </div>
-                    <span className="text-white">{action.label}</span>
-                  </div>
-                </Card>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 pb-8">
+              {recentProjects.map((project) => (
+                <ProjectCard
+                  key={project.id}
+                  image={project.image}
+                  title={project.title}
+                  editedTime={project.editedTime}
+                  userInitial={project.userInitial}
+                  avatarColor={project.avatarColor}
+                />
               ))}
             </div>
           </div>
