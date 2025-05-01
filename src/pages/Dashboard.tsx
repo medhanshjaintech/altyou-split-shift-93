@@ -21,7 +21,7 @@ const Dashboard = () => {
     { id: 4, name: 'Content Suggestion Engine', icon: Search, description: 'Get AI-powered content ideas', comingSoon: false, path: '/content-suggestion' },
     { id: 5, name: 'Script Builder', icon: FileText, description: 'Create compelling scripts for videos', comingSoon: false, path: '/script-builder' },
     { id: 6, name: 'Content Analyser', icon: ChartBar, description: 'Analyze your content performance', comingSoon: false, path: '/content-analyser' },
-    { id: 7, name: 'Viral Reel Cutter', icon: Scissors, description: 'Create engaging short video clips', comingSoon: true },
+    { id: 7, name: 'Viral Reel Cutter', icon: Scissors, description: 'Create engaging short video clips', comingSoon: false, path: '/viral-reel-cutter' },
     { id: 8, name: 'Bonus', icon: Star, description: 'Special features and upcoming tools', comingSoon: true },
   ];
 

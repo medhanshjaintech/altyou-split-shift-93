@@ -13,6 +13,7 @@ import ContentSuggestion from "./pages/ContentSuggestion";
 import ScriptBuilder from "./pages/ScriptBuilder";
 import ContentAnalyser from "./pages/ContentAnalyser";
 import ContentAnalysisResult from "./pages/ContentAnalysisResult";
+import ViralReelCutter from "./pages/ViralReelCutter";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/script-builder" element={<ScriptBuilder />} />
           <Route path="/content-analyser" element={<ContentAnalyser />} />
           <Route path="/content-analysis-result" element={<ContentAnalysisResult />} />
+          <Route path="/viral-reel-cutter" element={<ViralReelCutter />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
