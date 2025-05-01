@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { LayoutDashboard, Folder, LayoutTemplate, ChevronLeft, ChevronRight, Database } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -34,6 +35,30 @@ const Sidebar = ({
     date: '2 weeks ago',
     image: null,
     users: ['R']
+  }, {
+    id: 4,
+    name: 'YouTube Viral Clips',
+    date: '3 weeks ago',
+    image: 'https://images.unsplash.com/photo-1492321936769-b49830bc1d1e',
+    users: ['J', 'P', 'M']
+  }, {
+    id: 5,
+    name: 'Q2 Sales Pitch',
+    date: '1 month ago',
+    image: 'https://images.unsplash.com/photo-1460574283810-2aab119d8511',
+    users: ['S']
+  }, {
+    id: 6,
+    name: 'Tech Conference Talk',
+    date: '1 month ago',
+    image: null,
+    users: ['A', 'R', 'T']
+  }, {
+    id: 7,
+    name: 'Product Launch Video',
+    date: '2 months ago',
+    image: 'https://images.unsplash.com/photo-1498936178812-4b2e558d2937',
+    users: ['D', 'L']
   }];
   
   const templates = [{
@@ -48,6 +73,34 @@ const Sidebar = ({
     id: 3,
     name: 'Podcast Show Notes',
     category: 'Audio'
+  }, {
+    id: 4,
+    name: 'YouTube Description',
+    category: 'Video'
+  }, {
+    id: 5,
+    name: 'Blog Post Outline',
+    category: 'Content'
+  }, {
+    id: 6,
+    name: 'Email Newsletter',
+    category: 'Marketing'
+  }, {
+    id: 7,
+    name: 'Product Review Script',
+    category: 'Video'
+  }, {
+    id: 8,
+    name: 'Interview Questions',
+    category: 'Audio'
+  }, {
+    id: 9,
+    name: 'Landing Page Copy',
+    category: 'Marketing'
+  }, {
+    id: 10,
+    name: 'Short Video Script',
+    category: 'Video'
   }];
   
   const handleNavigation = (path: string, section: 'dashboard' | 'projects' | 'templates' | 'knowledge-base') => {
