@@ -1,12 +1,12 @@
-
 import { useState } from 'react';
-import { FileText, Youtube, ArrowLeft, Search, Plus, Mic, Video, Download } from 'lucide-react';
+import { FileText, Youtube, ArrowLeft, Search, Plus, Mic, Video, Download, Database } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
+import { toast } from '@/components/ui/sonner';
 import Sidebar from '@/components/Sidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
@@ -24,6 +24,7 @@ interface TranscriptionItem {
   videoTitle: string;
   content: string;
   isCompleted: boolean;
+  addedToKnowledgeBase?: boolean;
 }
 
 const BatchTranscribe = () => {
@@ -229,6 +230,23 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
     });
   };
   
+  const sendToKnowledgeBase = (videoId: string, videoTitle: string, content: string) => {
+    // Mark the transcription as added to knowledge base
+    setTranscriptions(prev => 
+      prev.map(t => 
+        t.videoId === videoId 
+          ? { ...t, addedToKnowledgeBase: true } 
+          : t
+      )
+    );
+    
+    // Display success toast
+    toast({
+      title: "Success",
+      description: `"${videoTitle}" has been sent to your Knowledge Base.`,
+    });
+  };
+  
   return (
     <div className="flex min-h-screen bg-[#121212]">
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
@@ -365,7 +383,7 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
                               <pre>{transcription.content}</pre>
                             </div>
                             
-                            <div className="flex justify-end">
+                            <div className="flex justify-end space-x-3">
                               <Button
                                 onClick={() => downloadTranscription(
                                   transcription.videoId,
@@ -373,10 +391,31 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
                                   transcription.content
                                 )}
                                 size="sm"
-                                className="bg-indigo-600 hover:bg-indigo-700"
+                                variant="outline"
+                                className="border-indigo-600/50 text-indigo-400 hover:bg-indigo-600/20"
                               >
                                 <Download className="mr-2 h-4 w-4" />
                                 Download SRT
+                              </Button>
+                              
+                              <Button
+                                onClick={() => sendToKnowledgeBase(
+                                  transcription.videoId,
+                                  transcription.videoTitle,
+                                  transcription.content
+                                )}
+                                size="sm"
+                                className={`${
+                                  transcription.addedToKnowledgeBase 
+                                    ? "bg-green-600 hover:bg-green-700" 
+                                    : "bg-indigo-600 hover:bg-indigo-700"
+                                }`}
+                                disabled={transcription.addedToKnowledgeBase}
+                              >
+                                <Database className="mr-2 h-4 w-4" />
+                                {transcription.addedToKnowledgeBase 
+                                  ? "Added to Knowledge Base" 
+                                  : "Send to Knowledge Base"}
                               </Button>
                             </div>
                           </>
