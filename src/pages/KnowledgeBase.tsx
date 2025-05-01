@@ -75,10 +75,10 @@ const KnowledgeBase = () => {
           <div className="max-w-5xl mx-auto">
             <div className="flex justify-between items-center mb-6">
               <h1 className="text-2xl font-bold text-white">Knowledge Base</h1>
-              <Button variant="outline" size="sm" asChild className="text-white border-white/20 hover:bg-white/10">
-                <Link to="/dashboard">
-                  <ArrowLeft className="mr-2 h-4 w-4" />
-                  Back to Dashboard
+              <Button variant="outline" size="sm" asChild className="text-white border-white/20 bg-neutral-800 hover:bg-white/10">
+                <Link to="/dashboard" className="flex items-center">
+                  <ArrowLeft className="mr-2 h-4 w-4 text-white" />
+                  <span className="text-white">Back to Dashboard</span>
                 </Link>
               </Button>
             </div>
