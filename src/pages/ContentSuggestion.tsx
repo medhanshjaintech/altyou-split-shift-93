@@ -50,15 +50,15 @@ const ContentSuggestion = () => {
   return (
     <div className="fixed inset-0 bg-[#121212] flex items-center justify-center">
       <ScrollArea className="h-full w-full">
-        <div className="container mx-auto max-w-4xl px-6 py-12">
-          <h1 className="text-white text-3xl md:text-4xl font-bold mb-12 text-center">Content Suggestion</h1>
+        <div className="container mx-auto max-w-7xl px-6 py-12">
+          <h1 className="text-white text-3xl md:text-4xl font-bold mb-16 text-left">Content Suggestion</h1>
           
-          <div className="flex flex-col items-center justify-center py-8">
-            <h2 className="text-white text-xl md:text-2xl font-medium mb-8">What would you like to talk about today?</h2>
+          <div className="flex flex-col w-full max-w-2xl mx-auto">
+            <h2 className="text-white text-2xl md:text-3xl font-medium mb-12 text-center">What would you like to talk about today?</h2>
             
-            <div className="w-full max-w-md flex items-center">
+            <div className="w-full flex items-center mb-20">
               <Input
-                className="bg-white/20 border-0 text-white focus-visible:ring-white/40 placeholder:text-white/50"
+                className="bg-white/10 border-0 text-white h-14 text-lg focus-visible:ring-white/40 placeholder:text-white/50"
                 placeholder="Enter a topic..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -67,39 +67,39 @@ const ContentSuggestion = () => {
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="ml-2 text-white"
+                className="ml-4 text-white h-14 w-14"
                 onClick={handleSearch}
               >
-                <ArrowRight className="h-5 w-5" />
+                <ArrowRight className="h-6 w-6" />
               </Button>
             </div>
             
-            <div className="w-full max-w-md mt-16">
-              <div className="flex justify-between items-center mb-6">
+            <div className="w-full mt-6">
+              <div className="flex justify-between items-center mb-10">
                 <div className="w-full border-t border-white/20"></div>
-                <span className="text-white/70 text-sm px-4 whitespace-nowrap">Trending Topics</span>
+                <span className="text-white/70 text-base px-6 whitespace-nowrap">Trending Topics</span>
                 <div className="w-full border-t border-white/20"></div>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                 {trendingTopics.map((topic, index) => (
                   <div 
                     key={index} 
-                    className="flex items-center gap-2 p-3 rounded-md hover:bg-white/10 cursor-pointer transition-colors"
+                    className="flex items-center gap-3 p-4 rounded-md hover:bg-white/10 cursor-pointer transition-colors"
                     onClick={() => {
                       setSearchQuery(topic);
                       handleSearch();
                     }}
                   >
-                    <TrendingUp className="h-4 w-4 text-white/50" />
-                    <span className="text-white/80">{topic}</span>
+                    <TrendingUp className="h-5 w-5 text-white/50" />
+                    <span className="text-white/90 text-lg">{topic}</span>
                   </div>
                 ))}
               </div>
             </div>
           </div>
 
-          <div className="mt-8 flex justify-center">
+          <div className="mt-14 flex justify-center">
             <Button 
               variant="outline" 
               className="text-white/70 border-white/20 hover:bg-white/10 hover:text-white"
