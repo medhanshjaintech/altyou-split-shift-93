@@ -1,12 +1,14 @@
 
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ChevronLeft, Upload, FileText } from 'lucide-react';
+import { ChevronLeft, Upload, FileText, Download, Edit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 
 interface ScriptFile {
   id: string;
@@ -20,9 +22,10 @@ const ScriptBuilder = () => {
   const location = useLocation();
   const { toast } = useToast();
   const [isGenerating, setIsGenerating] = useState(false);
-  // Setting scriptUploaded to true by default to skip upload requirement
   const [scriptUploaded, setScriptUploaded] = useState(true);
   const [generatedScript, setGeneratedScript] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedScript, setEditedScript] = useState<string>('');
   
   // Mock data for previously uploaded scripts - adding some default scripts
   const [previousScripts, setPreviousScripts] = useState<ScriptFile[]>([
@@ -122,8 +125,47 @@ Perfect. Act I will establish the foundation. Act II explores implementations. A
 END OF SCENE 1`;
 
       setGeneratedScript(mockScript);
+      setEditedScript(mockScript);
       setIsGenerating(false);
     }, 3000);
+  };
+
+  const handleDownloadScript = () => {
+    if (!generatedScript) return;
+
+    const blob = new Blob([generatedScript], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${searchTopic.replace(/\s+/g, '-').toLowerCase()}-script.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    toast({
+      title: "Script downloaded",
+      description: "Your script has been downloaded successfully."
+    });
+  };
+
+  const handleEditScript = () => {
+    setIsEditing(true);
+  };
+
+  const handleSaveEdits = () => {
+    setGeneratedScript(editedScript);
+    setIsEditing(false);
+    
+    toast({
+      title: "Script updated",
+      description: "Your changes have been saved successfully."
+    });
+  };
+
+  const handleCancelEdit = () => {
+    setEditedScript(generatedScript || '');
+    setIsEditing(false);
   };
 
   return (
@@ -163,6 +205,7 @@ END OF SCENE 1`;
                         onChange={handleFileUpload}
                       />
                       <Button size="sm" variant="ghost" className="text-white/70 hover:text-white border border-white/20 hover:bg-white/10">
+                        <Upload className="h-4 w-4 mr-1" />
                         Upload More
                       </Button>
                     </label>
@@ -205,7 +248,7 @@ END OF SCENE 1`;
               </div>
             )}
             
-            {generatedScript && (
+            {generatedScript && !isEditing && (
               <div className="mt-8">
                 <h3 className="text-white text-2xl font-medium mb-4">Your Generated Script</h3>
                 <Card className="bg-white/10 border-0 text-white p-6 rounded-lg">
@@ -215,11 +258,49 @@ END OF SCENE 1`;
                 </Card>
                 
                 <div className="flex justify-end gap-4 mt-6">
-                  <Button variant="outline" className="text-white border-white/20 hover:bg-white/10">
+                  <Button 
+                    variant="outline" 
+                    className="text-white border-white/20 hover:bg-white/10" 
+                    onClick={handleDownloadScript}
+                  >
+                    <Download className="h-4 w-4 mr-1" />
                     Download Script
                   </Button>
-                  <Button className="bg-white/10 hover:bg-white/20 text-white border-0">
+                  <Button 
+                    className="bg-white/10 hover:bg-white/20 text-white border-0"
+                    onClick={handleEditScript}
+                  >
+                    <Edit className="h-4 w-4 mr-1" />
                     Edit Script
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {isEditing && generatedScript && (
+              <div className="mt-8">
+                <h3 className="text-white text-2xl font-medium mb-4">Edit Your Script</h3>
+                <Card className="bg-white/10 border-0 text-white p-6 rounded-lg">
+                  <textarea 
+                    className="w-full h-96 bg-white/5 text-white p-4 font-mono text-sm rounded-md border-0 focus:ring-1 focus:ring-white/30 focus:outline-none"
+                    value={editedScript}
+                    onChange={(e) => setEditedScript(e.target.value)}
+                  />
+                </Card>
+                
+                <div className="flex justify-end gap-4 mt-6">
+                  <Button 
+                    variant="outline" 
+                    className="text-white border-white/20 hover:bg-white/10"
+                    onClick={handleCancelEdit}
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    className="bg-white/10 hover:bg-white/20 text-white border-0"
+                    onClick={handleSaveEdits}
+                  >
+                    Save Changes
                   </Button>
                 </div>
               </div>
@@ -232,3 +313,4 @@ END OF SCENE 1`;
 };
 
 export default ScriptBuilder;
+
