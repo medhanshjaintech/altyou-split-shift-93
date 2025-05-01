@@ -1,13 +1,31 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { useState } from 'react';
+import LogoAnimation from '@/components/LogoAnimation';
+import AuthForm from '@/components/AuthForm';
 
 const Index = () => {
+  const [animationComplete, setAnimationComplete] = useState(false);
+
+  const handleAnimationComplete = () => {
+    setAnimationComplete(true);
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <>
+      {/* Background with noise texture and gradient */}
+      <div className="noise-bg">
+        <div className="gradient-blob" style={{ top: '10%', left: '15%' }}></div>
+        <div className="gradient-blob" style={{ bottom: '10%', right: '15%' }}></div>
       </div>
-    </div>
+      
+      {/* Logo animation */}
+      {!animationComplete && (
+        <LogoAnimation onAnimationComplete={handleAnimationComplete} />
+      )}
+      
+      {/* Auth form */}
+      <AuthForm visible={animationComplete} />
+    </>
   );
 };
 
