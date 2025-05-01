@@ -37,8 +37,8 @@ const ContentSuggestion = () => {
   };
   return <div className="fixed inset-0 bg-[#121212] flex items-center justify-center">
       <ScrollArea className="h-full w-full">
-        <div className="container mx-auto max-w-7xl px-6 py-12">
-          <h1 className="text-white text-3xl font-bold mb-16 text-left md:text-2xl">Content Suggestion</h1>
+        <div className="container mx-auto max-w-7xl px-6 py-[171px]">
+          
           
           <div className="flex flex-col w-full max-w-2xl mx-auto">
             <h2 className="text-white text-2xl md:text-3xl font-medium mb-12 text-center">What would you like to talk about today?</h2>
