@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FileText, Bot, Search, Scissors, Star, Mic, Image, Video, ChartBar } from 'lucide-react';
+import { FileText, Database, Search, Scissors, Star, Mic, Image, Video, ChartBar } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import Sidebar from '@/components/Sidebar';
@@ -17,7 +17,7 @@ const Dashboard = () => {
   const tools = [
     { id: 1, name: 'Batch Transcribe', icon: FileText, description: 'Convert audio and video files to text', comingSoon: false, path: '/batch-transcribe' },
     { id: 2, name: 'SRT File - Hinglish', icon: FileText, description: 'Generate subtitle files with Hinglish text', comingSoon: false, path: '/hinglish-transcribe' },
-    { id: 3, name: 'Knowledge Bot', icon: Bot, description: 'AI assistant trained on your content', comingSoon: false, path: '/knowledge-bot' },
+    { id: 3, name: 'Knowledge Base', icon: Database, description: 'Access and manage your content library', comingSoon: false, path: '/knowledge-base' },
     { id: 4, name: 'Content Suggestion Engine', icon: Search, description: 'Get AI-powered content ideas', comingSoon: false, path: '/content-suggestion' },
     { id: 5, name: 'Script Builder', icon: FileText, description: 'Create compelling scripts for videos', comingSoon: false, path: '/script-builder' },
     { id: 6, name: 'Content Analyser', icon: ChartBar, description: 'Analyze your content performance', comingSoon: false, path: '/content-analyser' },

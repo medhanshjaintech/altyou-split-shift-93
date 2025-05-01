@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import BatchTranscribe from "./pages/BatchTranscribe";
 import HinglishTranscribe from "./pages/HinglishTranscribe";
 import KnowledgeBot from "./pages/KnowledgeBot";
+import KnowledgeBase from "./pages/KnowledgeBase";
 import ContentSuggestion from "./pages/ContentSuggestion";
 import ScriptBuilder from "./pages/ScriptBuilder";
 import ContentAnalyser from "./pages/ContentAnalyser";
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/batch-transcribe" element={<BatchTranscribe />} />
           <Route path="/hinglish-transcribe" element={<HinglishTranscribe />} />
           <Route path="/knowledge-bot" element={<KnowledgeBot />} />
+          <Route path="/knowledge-base" element={<KnowledgeBase />} />
           <Route path="/content-suggestion" element={<ContentSuggestion />} />
           <Route path="/script-builder" element={<ScriptBuilder />} />
           <Route path="/content-analyser" element={<ContentAnalyser />} />

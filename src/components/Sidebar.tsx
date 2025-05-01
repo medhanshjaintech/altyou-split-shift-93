@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { LayoutDashboard, Folder, LayoutTemplate, ChevronLeft, ChevronRight, Bot } from 'lucide-react';
+import { LayoutDashboard, Folder, LayoutTemplate, ChevronLeft, ChevronRight, Database } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useNavigate } from 'react-router-dom';
@@ -14,7 +14,7 @@ const Sidebar = ({
   toggleSidebar
 }: SidebarProps) => {
   const navigate = useNavigate();
-  const [activeSection, setActiveSection] = useState<'dashboard' | 'projects' | 'templates' | 'knowledge-bot'>('dashboard');
+  const [activeSection, setActiveSection] = useState<'dashboard' | 'projects' | 'templates' | 'knowledge-base'>('dashboard');
   
   const sampleProjects = [{
     id: 1,
@@ -50,7 +50,7 @@ const Sidebar = ({
     category: 'Audio'
   }];
   
-  const handleNavigation = (path: string, section: 'dashboard' | 'projects' | 'templates' | 'knowledge-bot') => {
+  const handleNavigation = (path: string, section: 'dashboard' | 'projects' | 'templates' | 'knowledge-base') => {
     setActiveSection(section);
     navigate(path);
   };
@@ -100,12 +100,12 @@ const Sidebar = ({
           
           <button 
             className={cn("flex items-center w-full px-4 py-3 transition-colors", 
-              activeSection === 'knowledge-bot' ? "bg-white/10 border-l-2 border-indigo-500" : "hover:bg-white/5 border-l-2 border-transparent", 
+              activeSection === 'knowledge-base' ? "bg-white/10 border-l-2 border-indigo-500" : "hover:bg-white/5 border-l-2 border-transparent", 
               !isOpen && "justify-center")} 
-            onClick={() => handleNavigation('/knowledge-bot', 'knowledge-bot')}
+            onClick={() => handleNavigation('/knowledge-base', 'knowledge-base')}
           >
-            <Bot size={20} className="text-gray-400" />
-            {isOpen && <span className="ml-3 text-white">Knowledge Bot</span>}
+            <Database size={20} className="text-gray-400" />
+            {isOpen && <span className="ml-3 text-white">Knowledge Base</span>}
           </button>
         </nav>
       </div>
