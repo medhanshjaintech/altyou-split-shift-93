@@ -1,32 +1,30 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ArrowRight } from 'lucide-react';
-
 interface AuthFormProps {
   visible: boolean;
 }
-
-const AuthForm = ({ visible }: AuthFormProps) => {
+const AuthForm = ({
+  visible
+}: AuthFormProps) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(`${isLogin ? 'Logging in' : 'Signing up'} with:`, { email, password });
+    console.log(`${isLogin ? 'Logging in' : 'Signing up'} with:`, {
+      email,
+      password
+    });
   };
-  
   if (!visible) return null;
-  
-  return (
-    <div className={`fixed inset-0 flex flex-col items-center justify-center ${visible ? 'animate-fade-in' : 'animate-fade-out'}`}>
+  return <div className={`fixed inset-0 flex flex-col items-center justify-center ${visible ? 'animate-fade-in' : 'animate-fade-out'}`}>
       {/* Logo header */}
       <div className={`mb-8 animate-slide-up [animation-delay:300ms] opacity-0`}>
         <div className="text-3xl font-bold tracking-wider">
-          <span className="bg-gradient-to-r from-purple-400 to-indigo-500 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-purple-400 to-indigo-500 bg-clip-text text-slate-50">
             altyou
           </span>
         </div>
@@ -41,28 +39,12 @@ const AuthForm = ({ visible }: AuthFormProps) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="bg-white/5 border-white/10"
-            />
+            <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} required className="bg-white/5 border-white/10" />
           </div>
           
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="bg-white/5 border-white/10"
-            />
+            <Input id="password" type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required className="bg-white/5 border-white/10" />
           </div>
           
           <Button type="submit" className="w-full">
@@ -72,17 +54,11 @@ const AuthForm = ({ visible }: AuthFormProps) => {
         
         <div className="mt-6 text-center text-sm text-muted-foreground">
           {isLogin ? "Don't have an account? " : "Already have an account? "}
-          <button
-            type="button"
-            onClick={() => setIsLogin(!isLogin)}
-            className="text-primary hover:underline"
-          >
+          <button type="button" onClick={() => setIsLogin(!isLogin)} className="text-primary hover:underline">
             {isLogin ? 'Sign up' : 'Sign in'}
           </button>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default AuthForm;
