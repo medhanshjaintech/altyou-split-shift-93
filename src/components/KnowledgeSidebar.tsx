@@ -44,20 +44,20 @@ const KnowledgeSidebar = ({
     <Sidebar variant="inset" side="left">
       <SidebarHeader>
         <div className="p-2">
-          <h3 className="text-xl font-bold text-sidebar-foreground">altyou</h3>
+          <h3 className="text-xl font-bold text-blue-500">altyou</h3>
         </div>
       </SidebarHeader>
       <SidebarContent>
         {/* Knowledge Base Files */}
         <div className="p-4">
           <div className="space-y-2 mb-2">
-            <h3 className="text-sm font-medium text-sidebar-foreground/70">Knowledge Base</h3>
+            <h3 className="text-sm font-medium text-white">Knowledge Base</h3>
             <div className="flex gap-1">
               <Button 
                 variant="outline" 
                 size="sm" 
                 onClick={onSelectAll}
-                className="text-xs h-6"
+                className="text-xs h-6 text-white border-white/20 bg-neutral-800 hover:bg-blue-700"
               >
                 Select All
               </Button>
@@ -65,7 +65,7 @@ const KnowledgeSidebar = ({
                 variant="outline" 
                 size="sm" 
                 onClick={onDeselectAll}
-                className="text-xs h-6"
+                className="text-xs h-6 text-white border-white/20 bg-neutral-800 hover:bg-blue-700"
               >
                 Clear
               </Button>
@@ -78,10 +78,10 @@ const KnowledgeSidebar = ({
                   key={file.id}
                   onClick={() => onToggleFile(file.id)}
                   className={`flex items-center gap-2 p-2 text-sm rounded-md cursor-pointer ${
-                    file.selected ? "bg-primary/10 text-primary" : "hover:bg-sidebar-accent"
+                    file.selected ? "bg-blue-800/50 text-white" : "text-white hover:bg-blue-900/30"
                   }`}
                 >
-                  <FileText className="h-4 w-4" />
+                  <FileText className="h-4 w-4 text-blue-500" />
                   <span>{file.name}</span>
                 </div>
               ))}
@@ -89,17 +89,17 @@ const KnowledgeSidebar = ({
           </ScrollArea>
         </div>
 
-        <Separator className="my-2" />
+        <Separator className="my-2 bg-white/10" />
 
         {/* Uploads */}
         <div className="p-4">
           <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm font-medium text-sidebar-foreground/70">Uploads</h3>
+            <h3 className="text-sm font-medium text-white">Uploads</h3>
             <Button 
               variant="outline" 
               size="sm" 
               onClick={handleFileUpload}
-              className="text-xs h-6 flex items-center gap-1"
+              className="text-xs h-6 flex items-center gap-1 text-white border-white/20 bg-neutral-800 hover:bg-blue-700"
             >
               <Upload className="h-3 w-3" /> Upload
             </Button>
@@ -111,10 +111,10 @@ const KnowledgeSidebar = ({
                   key={file.id}
                   onClick={() => onToggleFile(file.id)}
                   className={`flex items-center gap-2 p-2 text-sm rounded-md cursor-pointer ${
-                    file.selected ? "bg-primary/10 text-primary" : "hover:bg-sidebar-accent"
+                    file.selected ? "bg-blue-800/50 text-white" : "text-white hover:bg-blue-900/30"
                   }`}
                 >
-                  <File className="h-4 w-4" />
+                  <File className="h-4 w-4 text-green-500" />
                   <span>{file.name}</span>
                 </div>
               ))}

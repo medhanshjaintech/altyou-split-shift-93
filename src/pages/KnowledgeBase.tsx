@@ -75,7 +75,7 @@ const KnowledgeBase = () => {
           <div className="max-w-5xl mx-auto">
             <div className="flex justify-between items-center mb-6">
               <h1 className="text-2xl font-bold text-white">Knowledge Base</h1>
-              <Button variant="outline" size="sm" asChild>
+              <Button variant="outline" size="sm" asChild className="text-white border-white/20 hover:bg-white/10">
                 <Link to="/dashboard">
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Back to Dashboard
@@ -86,7 +86,7 @@ const KnowledgeBase = () => {
             <div className="mb-6 relative">
               <Input 
                 placeholder="Search knowledge base..."
-                className="pl-10"
+                className="pl-10 bg-neutral-800 border-white/20 text-white"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -94,10 +94,25 @@ const KnowledgeBase = () => {
             </div>
             
             <Tabs defaultValue="all" className="text-white">
-              <TabsList className="mb-4 bg-neutral-800">
-                <TabsTrigger value="all" className="data-[state=active]:bg-indigo-600 text-white data-[state=active]:text-white">All Files ({knowledgeFiles.length})</TabsTrigger>
-                <TabsTrigger value="transcriptions" className="data-[state=active]:bg-indigo-600 text-white data-[state=active]:text-white">Transcriptions ({transcriptions.length})</TabsTrigger>
-                <TabsTrigger value="uploads" className="data-[state=active]:bg-indigo-600 text-white data-[state=active]:text-white">Uploads ({uploads.length})</TabsTrigger>
+              <TabsList className="mb-4 bg-neutral-800 border border-white/10">
+                <TabsTrigger 
+                  value="all" 
+                  className="text-white data-[state=active]:bg-blue-700 data-[state=active]:text-white"
+                >
+                  All Files ({filteredFiles.length})
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="transcriptions" 
+                  className="text-white data-[state=active]:bg-blue-700 data-[state=active]:text-white"
+                >
+                  Transcriptions ({transcriptions.length})
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="uploads" 
+                  className="text-white data-[state=active]:bg-blue-700 data-[state=active]:text-white"
+                >
+                  Uploads ({uploads.length})
+                </TabsTrigger>
               </TabsList>
 
               <TabsContent value="all" className="space-y-4">
@@ -106,7 +121,7 @@ const KnowledgeBase = () => {
                     <Card key={file.id} className="p-4 bg-neutral-900 border-neutral-800">
                       <div className="flex items-start space-x-3">
                         {file.type === "transcription" ? (
-                          <FileText className="h-8 w-8 text-indigo-400" />
+                          <FileText className="h-8 w-8 text-blue-400" />
                         ) : (
                           <File className="h-8 w-8 text-green-400" />
                         )}
@@ -128,7 +143,7 @@ const KnowledgeBase = () => {
                   {transcriptions.map(file => (
                     <Card key={file.id} className="p-4 bg-neutral-900 border-neutral-800">
                       <div className="flex items-start space-x-3">
-                        <FileText className="h-8 w-8 text-indigo-400" />
+                        <FileText className="h-8 w-8 text-blue-400" />
                         <div className="flex-1 min-w-0">
                           <p className="text-white font-medium truncate">{file.name}</p>
                           <p className="text-sm text-gray-400">Duration: {file.duration}</p>
