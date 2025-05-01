@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ChevronLeft, Download } from 'lucide-react';
+import { ChevronLeft, Download, BarChart2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
@@ -74,6 +74,18 @@ const ContentAnalysisResult = () => {
     }, 2000);
   };
 
+  const compareContent = () => {
+    toast({
+      title: "Content comparison",
+      description: "Redirecting to content comparison tool...",
+    });
+
+    // Navigate to content analyzer for comparison (in a real app, this could go to a comparison-specific page)
+    setTimeout(() => {
+      navigate('/content-analyser');
+    }, 1500);
+  };
+
   return (
     <div className="flex min-h-screen bg-[#121212]">
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
@@ -116,19 +128,29 @@ const ContentAnalysisResult = () => {
             </div>
             
             {/* Call to action */}
-            <div className="mt-16 mb-12 text-center">
-              <p className="text-lg text-white italic mb-8">
+            <div className="mt-16 mb-12 flex flex-col items-center gap-6">
+              <p className="text-lg text-white italic">
                 Want to analyse and compare your content?
               </p>
               
-              <Button 
-                onClick={downloadReport}
-                disabled={isGeneratingPDF}
-                className="bg-neutral-700 hover:bg-neutral-600 px-6 py-2 text-white"
-              >
-                <Download className="h-4 w-4 mr-2" />
-                Download report
-              </Button>
+              <div className="flex flex-wrap gap-4 justify-center">
+                <Button 
+                  onClick={downloadReport}
+                  disabled={isGeneratingPDF}
+                  className="bg-neutral-700 hover:bg-neutral-600 px-6 py-2 text-white"
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  Download report
+                </Button>
+                
+                <Button 
+                  onClick={compareContent}
+                  className="bg-indigo-600 hover:bg-indigo-700 px-6 py-2 text-white"
+                >
+                  <BarChart2 className="h-4 w-4 mr-2" />
+                  Compare your content
+                </Button>
+              </div>
             </div>
           </div>
         </ScrollArea>
