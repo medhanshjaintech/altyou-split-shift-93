@@ -1,8 +1,9 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ChevronLeft, Upload, FileText, Download, Edit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card } from '@/components/ui/card';
@@ -26,6 +27,7 @@ const ScriptBuilder = () => {
   const [generatedScript, setGeneratedScript] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedScript, setEditedScript] = useState<string>('');
+  const [topic, setTopic] = useState<string>('');
   
   // Mock data for previously uploaded scripts - adding some default scripts
   const [previousScripts, setPreviousScripts] = useState<ScriptFile[]>([
@@ -43,10 +45,20 @@ const ScriptBuilder = () => {
     }
   ]);
 
-  const searchTopic = location.state?.searchQuery || "Content Topic";
+  // Check if we have a topic from the location state (coming from Content Suggestion)
+  useEffect(() => {
+    if (location.state?.searchQuery) {
+      setTopic(location.state.searchQuery);
+    }
+  }, [location.state]);
   
-  const handleBackToDashboard = () => {
-    navigate('/content-suggestion');
+  const handleBackNavigation = () => {
+    // Navigate back to the appropriate page
+    if (location.state?.from === 'content-suggestion') {
+      navigate('/content-suggestion');
+    } else {
+      navigate('/dashboard');
+    }
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,6 +91,14 @@ const ScriptBuilder = () => {
   };
   
   const handleGenerateScript = () => {
+    if (!topic.trim()) {
+      toast({
+        title: "Missing topic",
+        description: "Please enter a topic for your script"
+      });
+      return;
+    }
+
     setIsGenerating(true);
     toast({
       title: "Generating script",
@@ -88,7 +108,7 @@ const ScriptBuilder = () => {
     // Simulate script generation with a delay
     setTimeout(() => {
       // Mock generated script in theater play format
-      const mockScript = `TITLE: ${searchTopic.toUpperCase()}
+      const mockScript = `TITLE: ${topic.toUpperCase()}
       
 ACT I
 SCENE 1
@@ -137,11 +157,11 @@ END OF SCENE 1`;
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${searchTopic.replace(/\s+/g, '-').toLowerCase()}-script.txt`;
+    a.download = `${topic.replace(/\s+/g, '-').toLowerCase()}-script.txt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    URL.revoObjectURL(url);
 
     toast({
       title: "Script downloaded",
@@ -175,19 +195,33 @@ END OF SCENE 1`;
           <div className="absolute top-8 left-8">
             <Button 
               variant="ghost" 
-              onClick={handleBackToDashboard}
+              onClick={handleBackNavigation}
               className="text-white/70 hover:bg-white/10 hover:text-white flex items-center gap-2"
             >
               <ChevronLeft className="h-5 w-5" />
-              <span>Back to Content Suggestion</span>
+              <span>Back</span>
             </Button>
           </div>
           
           <div className="w-full max-w-5xl mx-auto pt-16">
             <h2 className="text-white text-4xl font-medium mb-6">Script Builder</h2>
+            
+            <div className="mb-8">
+              <label htmlFor="topic" className="block text-white/70 mb-2">
+                Script Topic
+              </label>
+              <Input 
+                id="topic"
+                value={topic} 
+                onChange={(e) => setTopic(e.target.value)} 
+                placeholder="Enter your script topic..."
+                className="bg-white/10 border-0 text-white focus-visible:ring-white/30"
+              />
+            </div>
+            
             <p className="text-white/70 mb-8">
               Upload 8-10 of your previous scripts to help us understand your style and tone. 
-              We'll generate a script for "{searchTopic}" that matches your unique voice.
+              We'll generate a script that matches your unique voice.
             </p>
             
             <Card className="bg-white/10 border-0 text-white p-6 rounded-lg mb-8">
@@ -313,4 +347,3 @@ END OF SCENE 1`;
 };
 
 export default ScriptBuilder;
-

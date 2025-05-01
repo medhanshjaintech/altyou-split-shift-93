@@ -19,7 +19,7 @@ const Dashboard = () => {
     { id: 2, name: 'SRT File - Hinglish', icon: FileText, description: 'Generate subtitle files with Hinglish text', comingSoon: false, path: '/hinglish-transcribe' },
     { id: 3, name: 'Knowledge Bot', icon: Bot, description: 'AI assistant trained on your content', comingSoon: false, path: '/knowledge-bot' },
     { id: 4, name: 'Content Suggestion Engine', icon: Search, description: 'Get AI-powered content ideas', comingSoon: false, path: '/content-suggestion' },
-    { id: 5, name: 'Script Builder', icon: FileText, description: 'Create compelling scripts for videos', comingSoon: true },
+    { id: 5, name: 'Script Builder', icon: FileText, description: 'Create compelling scripts for videos', comingSoon: false, path: '/script-builder' },
     { id: 6, name: 'Content Analyser', icon: Bot, description: 'Analyze your content performance', comingSoon: true },
     { id: 7, name: 'Viral Reel Cutter', icon: Scissors, description: 'Create engaging short video clips', comingSoon: true },
     { id: 8, name: 'Bonus', icon: Star, description: 'Special features and upcoming tools', comingSoon: true },
