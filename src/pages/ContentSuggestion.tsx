@@ -80,10 +80,11 @@ const ContentSuggestion = () => {
 
   const handleGenerateScript = () => {
     toast({
-      title: "Generating script",
-      description: "Creating content script based on the search results..."
+      title: "Opening script builder",
+      description: "Taking you to the script builder tool..."
     });
-    // In a real implementation, this would trigger script generation
+    // Navigate to the script builder page with the search query as state
+    navigate('/script-builder', { state: { searchQuery: searchResult?.title || searchQuery } });
   };
 
   const handleBackToDashboard = () => {
