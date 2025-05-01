@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FileText, Bot, Search, Scissors, Star, LayoutDashboard, Folder, LayoutTemplate, BarChart, Code, FileAudio, FileVideo } from 'lucide-react';
+import { FileText, Bot, Search, Scissors, Star, Mic, Image, Video } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import Sidebar from '@/components/Sidebar';
@@ -16,32 +16,44 @@ const Dashboard = () => {
   // Your 8 primary tools
   const tools = [
     { id: 1, name: 'Batch Transcribe', icon: FileText, description: 'Convert audio and video files to text', comingSoon: false },
-    { id: 2, name: 'SRT File - Hinglish', icon: FileAudio, description: 'Generate subtitle files with Hinglish text', comingSoon: false },
+    { id: 2, name: 'SRT File - Hinglish', icon: FileText, description: 'Generate subtitle files with Hinglish text', comingSoon: false },
     { id: 3, name: 'Knowledge Bot', icon: Bot, description: 'AI assistant trained on your content', comingSoon: false },
     { id: 4, name: 'Content Suggestion Engine', icon: Search, description: 'Get AI-powered content ideas', comingSoon: false },
-    { id: 5, name: 'Script Builder', icon: Code, description: 'Create compelling scripts for videos', comingSoon: false },
-    { id: 6, name: 'Content Analyser', icon: BarChart, description: 'Analyze your content performance', comingSoon: false },
-    { id: 7, name: 'Viral Reel Cutter', icon: FileVideo, description: 'Create engaging short video clips', comingSoon: false },
+    { id: 5, name: 'Script Builder', icon: FileText, description: 'Create compelling scripts for videos', comingSoon: false },
+    { id: 6, name: 'Content Analyser', icon: Bot, description: 'Analyze your content performance', comingSoon: false },
+    { id: 7, name: 'Viral Reel Cutter', icon: Scissors, description: 'Create engaging short video clips', comingSoon: false },
     { id: 8, name: 'Bonus', icon: Star, description: 'Special features and upcoming tools', comingSoon: true },
   ];
 
-  // Featured tools that were previously shown as large cards
-  const featuredTools = [
+  // Gen AI tools (replacing featuredTools)
+  const genAITools = [
     { 
-      title: 'Text to AI video',
-      description: 'Describe your idea and get a video with voiceover and visuals',
-      image: null,
-      gradient: 'bg-gradient-to-r from-slate-800 to-slate-900'
+      id: 1,
+      name: 'Voice Generation',
+      description: 'Generate realistic voices and speech from your text',
+      icon: Mic,
+      color: 'bg-gradient-to-r from-purple-800 to-indigo-900',
+      buttonText: 'Generate Voice'
     },
     { 
-      title: 'Create with AI speaker',
-      description: 'Have an avatar present your script—no need to record',
-      image: 'public/lovable-uploads/5b4f74cb-9647-4976-b745-447aa79a6dcc.png',
-      gradient: 'bg-gradient-to-r from-gray-900 to-slate-900'
+      id: 2,
+      name: 'Image Generation',
+      description: 'Create stunning AI-generated images from your descriptions',
+      icon: Image,
+      color: 'bg-gradient-to-r from-emerald-800 to-teal-900',
+      buttonText: 'Create Image'
+    },
+    {
+      id: 3,
+      name: 'Video Generation',
+      description: 'Transform your ideas into engaging video content',
+      icon: Video,
+      color: 'bg-gradient-to-r from-orange-800 to-red-900',
+      buttonText: 'Create Video'
     }
   ];
 
-  // Recent projects data (updated to match the image example)
+  // Recent projects data 
   const recentProjects = [
     {
       id: 1,
@@ -99,7 +111,7 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* Main Tools Section - Your 8 tools from the list */}
+            {/* Main Tools Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               {tools.map((tool) => (
                 <Card 
@@ -123,38 +135,34 @@ const Dashboard = () => {
               ))}
             </div>
             
-            <h2 className="text-xl font-semibold text-white mb-4">Popular features</h2>
+            {/* Gen AI Tools Section (Previously Popular Features) */}
+            <h2 className="text-xl font-semibold text-white mb-4">Gen AI Tools</h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-              {featuredTools.map((tool, index) => (
-                <Card key={index} className={`p-6 cursor-pointer ${tool.gradient} border-0 transition h-64 flex flex-col justify-between relative overflow-hidden`}>
-                  <div className="z-10">
-                    <h3 className="text-xl font-semibold text-white mb-2">{tool.title}</h3>
-                    <p className="text-gray-300">{tool.description}</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              {genAITools.map((tool) => (
+                <Card 
+                  key={tool.id} 
+                  className={`${tool.color} border-0 overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-all`}
+                >
+                  <div className="p-6 flex flex-col h-[200px] relative">
+                    <div className="absolute top-4 right-4 h-12 w-12 rounded-full bg-white/10 flex items-center justify-center">
+                      <tool.icon className="h-6 w-6 text-white" />
+                    </div>
+                    
+                    <div className="mt-6">
+                      <h3 className="text-xl font-bold text-white mb-2">{tool.name}</h3>
+                      <p className="text-white/80 text-sm mb-6">{tool.description}</p>
+                      
+                      <button className="mt-auto px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-white text-sm font-medium transition-colors">
+                        {tool.buttonText}
+                      </button>
+                    </div>
                   </div>
-                  
-                  {index === 0 && (
-                    <div className="z-10 mt-4 flex items-center space-x-2">
-                      <div className="p-2 bg-blue-600 rounded-lg">
-                        <span className="text-white text-sm">Generate</span>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {tool.image && (
-                    <div className="absolute right-4 bottom-4">
-                      <div className="flex space-x-[-15px]">
-                        <div className="h-12 w-12 rounded-full bg-orange-500 border-2 border-black"></div>
-                        <div className="h-12 w-12 rounded-full bg-pink-400 border-2 border-black"></div>
-                        <div className="h-12 w-12 rounded-full bg-blue-400 border-2 border-black"></div>
-                      </div>
-                    </div>
-                  )}
                 </Card>
               ))}
             </div>
             
-            {/* Recent Projects Section - Updated to match the design in the image */}
+            {/* Recent Projects Section */}
             <h2 className="text-xl font-semibold text-white mb-4">Recent Projects</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 pb-8">
