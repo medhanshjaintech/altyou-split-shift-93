@@ -11,6 +11,7 @@ import HinglishTranscribe from "./pages/HinglishTranscribe";
 import KnowledgeBot from "./pages/KnowledgeBot";
 import ContentSuggestion from "./pages/ContentSuggestion";
 import ScriptBuilder from "./pages/ScriptBuilder";
+import ContentAnalyser from "./pages/ContentAnalyser";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/knowledge-bot" element={<KnowledgeBot />} />
           <Route path="/content-suggestion" element={<ContentSuggestion />} />
           <Route path="/script-builder" element={<ScriptBuilder />} />
+          <Route path="/content-analyser" element={<ContentAnalyser />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

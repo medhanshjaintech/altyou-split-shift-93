@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FileText, Bot, Search, Scissors, Star, Mic, Image, Video } from 'lucide-react';
+import { FileText, Bot, Search, Scissors, Star, Mic, Image, Video, ChartBar } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import Sidebar from '@/components/Sidebar';
@@ -20,7 +20,7 @@ const Dashboard = () => {
     { id: 3, name: 'Knowledge Bot', icon: Bot, description: 'AI assistant trained on your content', comingSoon: false, path: '/knowledge-bot' },
     { id: 4, name: 'Content Suggestion Engine', icon: Search, description: 'Get AI-powered content ideas', comingSoon: false, path: '/content-suggestion' },
     { id: 5, name: 'Script Builder', icon: FileText, description: 'Create compelling scripts for videos', comingSoon: false, path: '/script-builder' },
-    { id: 6, name: 'Content Analyser', icon: Bot, description: 'Analyze your content performance', comingSoon: true },
+    { id: 6, name: 'Content Analyser', icon: ChartBar, description: 'Analyze your content performance', comingSoon: false, path: '/content-analyser' },
     { id: 7, name: 'Viral Reel Cutter', icon: Scissors, description: 'Create engaging short video clips', comingSoon: true },
     { id: 8, name: 'Bonus', icon: Star, description: 'Special features and upcoming tools', comingSoon: true },
   ];
