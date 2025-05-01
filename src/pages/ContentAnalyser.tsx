@@ -64,6 +64,7 @@ const ContentAnalyser = () => {
   const [inputValue, setInputValue] = useState('');
   const [searchPerformed, setSearchPerformed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [channelName, setChannelName] = useState('');
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -91,6 +92,13 @@ const ContentAnalyser = () => {
 
     setIsLoading(true);
     
+    // Extract channel name from URL (simplified mock extraction)
+    const extractedName = inputValue.includes('channel')
+      ? inputValue.split('/').pop() || 'YouTube Channel'
+      : 'YouTube Channel';
+    
+    setChannelName(extractedName);
+    
     // Simulate loading
     setTimeout(() => {
       setIsLoading(false);
@@ -98,20 +106,16 @@ const ContentAnalyser = () => {
     }, 1500);
   };
 
-  const analyzeContent = (videoId: string) => {
+  const analyzeContent = () => {
     toast({
       title: "Analysis started",
-      description: "Analyzing content of the selected video...",
+      description: "Analyzing content of the selected videos...",
     });
     
-    // Navigate to a detailed analysis page (to be implemented)
-    // For now just show a toast
+    // Navigate to analysis result page
     setTimeout(() => {
-      toast({
-        title: "Analysis complete",
-        description: "Content analysis report is ready",
-      });
-    }, 2000);
+      navigate('/content-analysis-result', { state: { channelName } });
+    }, 1000);
   };
 
   return (
@@ -197,23 +201,27 @@ const ContentAnalyser = () => {
                           <div>Published: {video.publishedDate}</div>
                         </div>
                         
-                        <div className="flex justify-between items-center">
+                        <div className="flex items-center">
                           <div className="text-sm">
                             <span className="text-green-500 font-medium">{video.engagement}</span>
                             <span className="text-gray-400"> engagement rate</span>
                           </div>
-                          <Button 
-                            size="sm"
-                            onClick={() => analyzeContent(video.id)}
-                            className="bg-indigo-600 hover:bg-indigo-700"
-                          >
-                            Analyze
-                            <Play className="h-3 w-3 ml-1" />
-                          </Button>
                         </div>
                       </CardContent>
                     </Card>
                   ))}
+                </div>
+                
+                {/* Analyze button at the bottom */}
+                <div className="flex justify-center mb-16">
+                  <Button 
+                    onClick={analyzeContent}
+                    className="bg-indigo-600 hover:bg-indigo-700 px-8"
+                    size="lg"
+                  >
+                    Analyze Content
+                    <Play className="h-4 w-4 ml-2" />
+                  </Button>
                 </div>
               </div>
             )}

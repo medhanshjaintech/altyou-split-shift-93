@@ -12,6 +12,7 @@ import KnowledgeBot from "./pages/KnowledgeBot";
 import ContentSuggestion from "./pages/ContentSuggestion";
 import ScriptBuilder from "./pages/ScriptBuilder";
 import ContentAnalyser from "./pages/ContentAnalyser";
+import ContentAnalysisResult from "./pages/ContentAnalysisResult";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/content-suggestion" element={<ContentSuggestion />} />
           <Route path="/script-builder" element={<ScriptBuilder />} />
           <Route path="/content-analyser" element={<ContentAnalyser />} />
+          <Route path="/content-analysis-result" element={<ContentAnalysisResult />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
