@@ -51,24 +51,26 @@ const KnowledgeSidebar = ({
         {/* Knowledge Base Files */}
         <div className="p-4">
           <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm font-medium text-sidebar-foreground/70">Knowledge Base</h3>
-            <div className="flex gap-2">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={onSelectAll}
-                className="text-xs h-6"
-              >
-                Select All
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={onDeselectAll}
-                className="text-xs h-6"
-              >
-                Clear
-              </Button>
+            <div className="flex items-center gap-2">
+              <h3 className="text-sm font-medium text-sidebar-foreground/70">Knowledge Base</h3>
+              <div className="flex gap-1">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={onSelectAll}
+                  className="text-xs h-6"
+                >
+                  Select All
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={onDeselectAll}
+                  className="text-xs h-6"
+                >
+                  Clear
+                </Button>
+              </div>
             </div>
           </div>
           <ScrollArea className="h-48">
