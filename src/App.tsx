@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import BatchTranscribe from "./pages/BatchTranscribe";
 import HinglishTranscribe from "./pages/HinglishTranscribe";
 import KnowledgeBot from "./pages/KnowledgeBot";
+import ContentSuggestion from "./pages/ContentSuggestion";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/batch-transcribe" element={<BatchTranscribe />} />
           <Route path="/hinglish-transcribe" element={<HinglishTranscribe />} />
           <Route path="/knowledge-bot" element={<KnowledgeBot />} />
+          <Route path="/content-suggestion" element={<ContentSuggestion />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
