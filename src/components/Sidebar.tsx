@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { LayoutDashboard, Folder, LayoutTemplate, ChevronLeft, ChevronRight, Database } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -17,7 +18,7 @@ const Sidebar = ({
     id: 1,
     name: 'Content Analyzer Report',
     date: '2 days ago',
-    image: '/lovable-uploads/d6514f20-6f3f-4b8e-a6d0-813ec1bf1539.png',
+    image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d',
     users: ['A', 'M'],
     color: 'from-indigo-500 to-purple-600'
   }, {

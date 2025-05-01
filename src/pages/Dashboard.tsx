@@ -59,7 +59,7 @@ const Dashboard = () => {
       id: 1,
       title: 'ALTYOU',
       editedTime: '1 hour ago',
-      image: '/lovable-uploads/3e238a3b-7ec0-47ec-afba-db80bd0d0a50.png',
+      image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d',
       userInitial: 'A',
       avatarColor: 'bg-blue-500'
     },
