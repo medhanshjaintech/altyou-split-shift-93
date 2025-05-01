@@ -1,6 +1,7 @@
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TrendingUp, ArrowRight, FileText } from 'lucide-react';
+import { TrendingUp, ArrowRight, FileText, ChevronLeft } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -85,9 +86,24 @@ const ContentSuggestion = () => {
     // In a real implementation, this would trigger script generation
   };
 
+  const handleBackToDashboard = () => {
+    navigate('/dashboard');
+  };
+
   return <div className="fixed inset-0 bg-[#121212] flex items-center justify-center">
       <ScrollArea className="h-full w-full">
         <div className="container mx-auto max-w-7xl px-6 py-[210px]">
+          <div className="absolute top-8 left-8">
+            <Button 
+              variant="ghost" 
+              onClick={handleBackToDashboard}
+              className="text-white/70 hover:bg-white/10 hover:text-white flex items-center gap-2"
+            >
+              <ChevronLeft className="h-5 w-5" />
+              <span>Back to Dashboard</span>
+            </Button>
+          </div>
+          
           <div className="flex flex-col w-full max-w-3xl mx-auto">
             <h2 className="text-white text-5xl font-medium mb-8 text-center md:text-5xl">What would you like to talk about today?</h2>
             
@@ -180,12 +196,6 @@ const ContentSuggestion = () => {
                 </div>
               </div>}
           </div>
-
-          {!searchResult && <div className="mt-14 flex justify-center">
-              <Button variant="outline" className="text-white/70 border-white/20 hover:bg-white/10 hover:text-white" onClick={() => navigate(-1)}>
-                Back to Dashboard
-              </Button>
-            </div>}
         </div>
       </ScrollArea>
     </div>;
