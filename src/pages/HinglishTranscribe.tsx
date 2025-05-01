@@ -1,3 +1,4 @@
+
 import { useState, useRef } from 'react';
 import { FileText, Youtube, ArrowLeft, Play, Upload, Download, Database, File } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -285,7 +286,7 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
                 <div className="mr-4 h-12 w-12 rounded-full bg-indigo-600/20 flex items-center justify-center">
                   <FileText className="h-6 w-6 text-indigo-400" />
                 </div>
-                <h1 className="text-3xl font-bold text-white">SRT File - Hinglish</h1>
+                <h1 className="text-3xl font-bold text-white">File to SRT</h1>
               </div>
             </div>
             
@@ -361,19 +362,17 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
               </div>
             ) : (
               <div className="mb-6">
-                <h3 className="text-xl font-semibold text-white mb-4">Hinglish Transcription</h3>
-                
                 <Card className="bg-neutral-800 border-neutral-700 overflow-hidden">
-                  <CardContent className="p-6">
-                    <div className="mb-4">
-                      <h4 className="text-lg font-medium text-white mb-2">{transcriptionData.title}</h4>
+                  <CardContent className="p-0">
+                    <div className="border-b border-neutral-700 p-4">
+                      <h4 className="text-lg font-medium text-white">{transcriptionData.title}</h4>
                       {transcriptionData.mediaType === 'video' ? (
-                        <div className="flex items-center space-x-2 mb-4">
+                        <div className="flex items-center space-x-2">
                           <Youtube className="text-red-500 h-4 w-4" />
                           <span className="text-sm text-neutral-400">YouTube Video</span>
                         </div>
                       ) : (
-                        <div className="flex items-center space-x-2 mb-4">
+                        <div className="flex items-center space-x-2">
                           <File className="text-blue-500 h-4 w-4" />
                           <span className="text-sm text-neutral-400">Audio File</span>
                         </div>
@@ -385,29 +384,27 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
                         <div className="text-neutral-400">Transcribing...</div>
                       </div>
                     ) : (
-                      <>
-                        <div className="grid grid-cols-1 gap-6">
-                          {/* Combined Media Player and Hinglish Editor */}
-                          <div className="bg-neutral-900 rounded-md overflow-hidden">
-                            {/* Media Player */}
-                            <div className="aspect-video relative">
+                      <div className="grid grid-cols-2">
+                        {/* Left side - Media Player */}
+                        <div className="border-r border-neutral-700">
+                          <div className="p-6">
+                            <h3 className="text-sm font-medium text-neutral-400 mb-3">Audio/video playing here</h3>
+                            
+                            <div className="aspect-video bg-neutral-700 rounded-md mb-6">
                               {transcriptionData.mediaType === 'video' ? (
-                                <div className="w-full h-full flex items-center justify-center">
-                                  {/* In a real app, this would be a proper video player */}
-                                  <video
-                                    ref={videoRef}
-                                    controls
-                                    className="max-w-full max-h-full"
-                                    poster="https://placehold.co/640x360/232323/606060?text=Video+Player"
-                                  >
-                                    <source src={transcriptionData.mediaSource} type="video/mp4" />
-                                    Your browser does not support the video tag.
-                                  </video>
-                                </div>
+                                <video
+                                  ref={videoRef}
+                                  controls
+                                  className="w-full h-full rounded-md"
+                                  poster="https://placehold.co/640x360/232323/606060?text=Video+Player"
+                                >
+                                  <source src={transcriptionData.mediaSource} type="video/mp4" />
+                                  Your browser does not support the video tag.
+                                </video>
                               ) : (
-                                <div className="w-full h-full flex flex-col items-center justify-center bg-neutral-800 p-4">
-                                  <div className="w-32 h-32 rounded-full bg-neutral-700 flex items-center justify-center mb-4">
-                                    <Play className="h-12 w-12 text-indigo-400 ml-2" />
+                                <div className="w-full h-full flex flex-col items-center justify-center bg-neutral-700 p-4 rounded-md">
+                                  <div className="w-20 h-20 rounded-full bg-neutral-600 flex items-center justify-center mb-4">
+                                    <Play className="h-8 w-8 text-white ml-1" />
                                   </div>
                                   <audio 
                                     ref={audioRef} 
@@ -421,68 +418,64 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
                               )}
                             </div>
                             
-                            {/* Hinglish Editor */}
-                            <div className="p-4">
-                              <h5 className="text-sm font-medium text-white mb-2">Hinglish Transcript Editor</h5>
-                              <div className="h-80 mb-4">
-                                <Textarea 
-                                  value={hinglishText}
-                                  onChange={handleHinglishTextChange}
-                                  className="h-full resize-none font-mono text-sm bg-neutral-800 border-neutral-700"
-                                />
-                              </div>
-                              
-                              <div className="text-xs text-neutral-400 mb-1">
-                                Tip: Edit the Hinglish text above to match your requirements
-                              </div>
+                            <div className="flex justify-center">
+                              <Button
+                                onClick={downloadSRT}
+                                className="bg-neutral-700 hover:bg-neutral-600 text-white"
+                              >
+                                <Download className="mr-2 h-4 w-4" />
+                                Download SRT
+                              </Button>
                             </div>
                           </div>
                         </div>
                         
-                        <Separator className="my-6 bg-neutral-700" />
-                        
-                        <div className="flex justify-end space-x-3">
-                          <Button
-                            onClick={downloadSRT}
-                            size="sm"
-                            variant="outline"
-                            className="border-indigo-600/50 text-indigo-400 hover:bg-indigo-600/20"
-                          >
-                            <Download className="mr-2 h-4 w-4" />
-                            Download SRT
-                          </Button>
-                          
-                          <Button
-                            onClick={sendToKnowledgeBase}
-                            size="sm"
-                            className={`${
-                              transcriptionData.addedToKnowledgeBase 
-                                ? "bg-green-600 hover:bg-green-700" 
-                                : "bg-indigo-600 hover:bg-indigo-700"
-                            }`}
-                            disabled={transcriptionData.addedToKnowledgeBase}
-                          >
-                            <Database className="mr-2 h-4 w-4" />
-                            {transcriptionData.addedToKnowledgeBase 
-                              ? "Added to Knowledge Base" 
-                              : "Send to Knowledge Base"
-                            }
-                          </Button>
+                        {/* Right side - SRT Editor */}
+                        <div>
+                          <div className="p-6">
+                            <h3 className="text-sm font-medium text-neutral-400 mb-3">SRT file with timestamps</h3>
+                            
+                            <div className="bg-neutral-700 rounded-md h-[400px]">
+                              <Textarea 
+                                value={hinglishText}
+                                onChange={handleHinglishTextChange}
+                                className="h-full resize-none font-mono text-sm bg-neutral-700 border-none text-white"
+                              />
+                            </div>
+                          </div>
                         </div>
-                      </>
+                      </div>
                     )}
+                    
+                    <div className="border-t border-neutral-700 p-4 flex justify-between items-center">
+                      <Button 
+                        onClick={() => setTranscriptionData(null)}
+                        variant="outline" 
+                        size="sm"
+                        className="border-neutral-600 text-neutral-300"
+                      >
+                        Start New Transcription
+                      </Button>
+                      
+                      <Button
+                        onClick={sendToKnowledgeBase}
+                        size="sm"
+                        className={`${
+                          transcriptionData.addedToKnowledgeBase 
+                            ? "bg-green-600 hover:bg-green-700" 
+                            : "bg-indigo-600 hover:bg-indigo-700"
+                        }`}
+                        disabled={transcriptionData.addedToKnowledgeBase}
+                      >
+                        <Database className="mr-2 h-4 w-4" />
+                        {transcriptionData.addedToKnowledgeBase 
+                          ? "Added to Knowledge Base" 
+                          : "Send to Knowledge Base"
+                        }
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
-                
-                <div className="flex justify-between mt-4">
-                  <Button 
-                    onClick={() => setTranscriptionData(null)}
-                    variant="outline" 
-                    size="sm"
-                  >
-                    Start New Transcription
-                  </Button>
-                </div>
               </div>
             )}
           </div>
