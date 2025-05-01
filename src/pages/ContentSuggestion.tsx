@@ -51,7 +51,7 @@ const ContentSuggestion = () => {
             </div>
             
             <div className="w-full mt-6">
-              <div className="flex justify-between items-center mb-10">
+              <div className="flex justify-between items-center mb-10 py-0 px-0 my-0 mx-[116px]">
                 <div className="w-full border-t border-white/20"></div>
                 <span className="text-white/70 text-base px-6 whitespace-nowrap">Trending Topics</span>
                 <div className="w-full border-t border-white/20"></div>
