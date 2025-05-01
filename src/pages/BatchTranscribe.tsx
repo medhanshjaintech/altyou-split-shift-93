@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { FileText, Youtube, ArrowLeft } from 'lucide-react';
+import { FileText, Youtube, ArrowLeft, Search, Plus, Mic, Video } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,6 +9,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import Sidebar from '@/components/Sidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Textarea } from '@/components/ui/textarea';
 
 interface VideoItem {
   id: string;
@@ -149,25 +150,55 @@ const BatchTranscribe = () => {
               </div>
             </div>
             
-            <div className="mb-12 max-w-4xl">
-              <h2 className="text-2xl font-semibold text-white mb-6">What would you like to transcribe?</h2>
-              
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="flex gap-3">
-                  <div className="flex-1">
-                    <Input
-                      type="text"
-                      placeholder="Paste YouTube video or channel URL"
-                      value={youtubeUrl}
-                      onChange={handleInputChange}
-                      className="bg-neutral-800 border-neutral-700 text-white"
-                    />
+            <div className="max-w-4xl mx-auto mb-12">
+              {/* Centered search section similar to the image */}
+              <div className="text-center mb-8">
+                <h2 className="text-4xl font-bold text-white mb-10">What can I help with?</h2>
+                
+                <form onSubmit={handleSubmit} className="max-w-3xl mx-auto">
+                  <div className="relative">
+                    <div className="bg-neutral-800/80 backdrop-blur-sm rounded-full border border-neutral-700 overflow-hidden">
+                      <div className="flex items-center px-4 py-3">
+                        <Input
+                          type="text"
+                          placeholder="Paste YouTube video or channel URL"
+                          value={youtubeUrl}
+                          onChange={handleInputChange}
+                          className="bg-transparent border-0 text-white text-base focus-visible:ring-0 focus-visible:ring-offset-0 px-2"
+                        />
+                      </div>
+                      
+                      <div className="border-t border-neutral-700 flex items-center justify-between px-4 py-2">
+                        <div className="flex items-center space-x-2">
+                          <Button type="button" size="sm" variant="ghost" className="rounded-full w-8 h-8 p-0">
+                            <Plus className="h-4 w-4" />
+                          </Button>
+                          <Button type="button" size="sm" variant="ghost" className="text-xs rounded-full px-3">
+                            <Search className="h-3 w-3 mr-1" />
+                            Search
+                          </Button>
+                          <Button type="button" size="sm" variant="ghost" className="text-xs rounded-full px-3">
+                            Deep research
+                          </Button>
+                          <Button type="button" size="sm" variant="ghost" className="text-xs rounded-full px-3">
+                            <Video className="h-3 w-3 mr-1" />
+                            Create image
+                          </Button>
+                        </div>
+                        
+                        <div className="flex items-center">
+                          <Button type="button" size="sm" variant="ghost" className="rounded-full w-8 h-8 p-0">
+                            <Mic className="h-4 w-4" />
+                          </Button>
+                          <Button type="submit" size="sm" disabled={isLoading} className="ml-2 rounded-full w-8 h-8 p-0 bg-neutral-700">
+                            {isLoading ? "..." : "→"}
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <Button type="submit" disabled={isLoading}>
-                    {isLoading ? "Loading..." : "Fetch Videos"}
-                  </Button>
-                </div>
-              </form>
+                </form>
+              </div>
             </div>
             
             {videos.length > 0 && (
