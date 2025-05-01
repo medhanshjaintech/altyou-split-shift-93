@@ -61,12 +61,29 @@ const ViralReelCutter = () => {
     
     setTimeout(() => {
       setIsProcessing(false);
+      
       toast({
         title: "Content processed",
         description: "Your viral reel clips have been created.",
       });
-      // Navigate to results page (this would be implemented in the future)
-      // navigate('/viral-reel-results');
+      
+      // Get title based on the type of upload
+      let videoTitle = "";
+      if (uploadType === 'youtube') {
+        videoTitle = "How I Built a Million-Dollar Business in 30 Days"; // Mock YouTube video title
+      } else if (selectedFileName) {
+        videoTitle = selectedFileName.replace(/\.[^/.]+$/, ""); // Remove file extension
+      } else {
+        videoTitle = "Content Analysis";
+      }
+      
+      // Navigate to the results page with the video title
+      navigate('/viral-reel-results', { 
+        state: { 
+          videoTitle,
+          contentType: uploadType
+        }
+      });
     }, 3000);
   };
 
