@@ -17,9 +17,8 @@ import ContentAnalysisResult from "./pages/ContentAnalysisResult";
 import ViralReelCutter from "./pages/ViralReelCutter";
 import ViralReelResults from "./pages/ViralReelResults";
 import NotFound from "./pages/NotFound";
-// Future pages
-// import Profile from "./pages/Profile";
-// import Settings from "./pages/Settings";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 
 const queryClient = new QueryClient();
 
@@ -42,9 +41,8 @@ const App = () => (
           <Route path="/content-analysis-result" element={<ContentAnalysisResult />} />
           <Route path="/viral-reel-cutter" element={<ViralReelCutter />} />
           <Route path="/viral-reel-results" element={<ViralReelResults />} />
-          {/* Future routes for Profile and Settings */}
-          {/* <Route path="/profile" element={<Profile />} /> */}
-          {/* <Route path="/settings" element={<Settings />} /> */}
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

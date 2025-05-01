@@ -4,101 +4,100 @@ import { LayoutDashboard, Folder, LayoutTemplate, ChevronLeft, ChevronRight, Dat
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useNavigate } from 'react-router-dom';
+
 interface SidebarProps {
   isOpen: boolean;
   toggleSidebar: () => void;
 }
+
 const Sidebar = ({
   isOpen,
   toggleSidebar
 }: SidebarProps) => {
   const navigate = useNavigate();
-  const [activeSection, setActiveSection] = useState<'dashboard' | 'projects' | 'templates' | 'knowledge-base' | 'profile' | 'settings'>('dashboard');
-  const sampleProjects = [{
-    id: 1,
-    name: 'Content Analyzer Report',
-    date: '2 days ago',
-    image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d',
-    users: ['A', 'M'],
-    color: 'from-indigo-500 to-purple-600'
-  }, {
-    id: 2,
-    name: 'Podcast Transcription',
-    date: '1 week ago',
-    image: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7',
-    users: ['K', 'S'],
-    color: 'from-pink-500 to-rose-500'
-  }, {
-    id: 3,
-    name: 'Marketing Video Script',
-    date: '2 weeks ago',
-    image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d',
-    users: ['R', 'J'],
-    color: 'from-amber-400 to-orange-500'
-  }, {
-    id: 4,
-    name: 'YouTube Viral Clips',
-    date: '3 weeks ago',
-    image: 'https://images.unsplash.com/photo-1492321936769-b49830bc1d1e',
-    users: ['J', 'P', 'M'],
-    color: 'from-emerald-500 to-teal-600'
-  }, {
-    id: 5,
-    name: 'Q2 Sales Pitch',
-    date: '1 month ago',
-    image: 'https://images.unsplash.com/photo-1460574283810-2aab119d8511',
-    users: ['S', 'A'],
-    color: 'from-blue-500 to-cyan-500'
-  }];
-  const templates = [{
-    id: 1,
-    name: 'Social Media Post',
-    category: 'Content',
-    color: 'bg-gradient-to-r from-violet-600 to-indigo-600'
-  }, {
-    id: 2,
-    name: 'Video Script Template',
-    category: 'Video',
-    color: 'bg-gradient-to-r from-amber-500 to-orange-600'
-  }, {
-    id: 3,
-    name: 'Podcast Show Notes',
-    category: 'Audio',
-    color: 'bg-gradient-to-r from-emerald-500 to-green-600'
-  }, {
-    id: 4,
-    name: 'Blog Post Outline',
-    category: 'Content',
-    color: 'bg-gradient-to-r from-blue-500 to-cyan-600'
-  }, {
-    id: 5,
-    name: 'Email Newsletter',
-    category: 'Marketing',
-    color: 'bg-gradient-to-r from-rose-500 to-pink-600'
-  }];
+  const [activeSection, setActiveSection] = useState<'dashboard' | 'projects' | 'templates' | 'knowledge-base'>('dashboard');
   
-  // Social account data for profile
-  const socialAccounts = [
-    { platform: 'YouTube', username: '@altyoucreator', connected: true, followers: '245K' },
-    { platform: 'Instagram', username: '@altyou_official', connected: true, followers: '112K' },
-    { platform: 'Twitter', username: '@altyou', connected: true, followers: '58.2K' },
-    { platform: 'TikTok', username: '@altyoucreator', connected: true, followers: '325K' },
-    { platform: 'Facebook', username: 'ALTYOU Creator', connected: false, followers: '- -' }
+  const sampleProjects = [
+    {
+      id: 1,
+      name: 'Content Analyzer Report',
+      date: '2 days ago',
+      image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d',
+      users: ['A', 'M'],
+      color: 'from-indigo-500 to-purple-600'
+    }, 
+    {
+      id: 2,
+      name: 'Podcast Transcription',
+      date: '1 week ago',
+      image: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7',
+      users: ['K', 'S'],
+      color: 'from-pink-500 to-rose-500'
+    }, 
+    {
+      id: 3,
+      name: 'Marketing Video Script',
+      date: '2 weeks ago',
+      image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d',
+      users: ['R', 'J'],
+      color: 'from-amber-400 to-orange-500'
+    }, 
+    {
+      id: 4,
+      name: 'YouTube Viral Clips',
+      date: '3 weeks ago',
+      image: 'https://images.unsplash.com/photo-1492321936769-b49830bc1d1e',
+      users: ['J', 'P', 'M'],
+      color: 'from-emerald-500 to-teal-600'
+    }, 
+    {
+      id: 5,
+      name: 'Q2 Sales Pitch',
+      date: '1 month ago',
+      image: 'https://images.unsplash.com/photo-1460574283810-2aab119d8511',
+      users: ['S', 'A'],
+      color: 'from-blue-500 to-cyan-500'
+    }
   ];
   
-  // Settings categories
-  const settingsCategories = [
-    { name: 'Account Settings', icon: User },
-    { name: 'Subscription', icon: Database },
-    { name: 'Notifications', icon: LayoutDashboard },
-    { name: 'API Keys', icon: ChevronRight },
-    { name: 'Privacy & Security', icon: Settings }
+  const templates = [
+    {
+      id: 1,
+      name: 'Social Media Post',
+      category: 'Content',
+      color: 'bg-gradient-to-r from-violet-600 to-indigo-600'
+    }, 
+    {
+      id: 2,
+      name: 'Video Script Template',
+      category: 'Video',
+      color: 'bg-gradient-to-r from-amber-500 to-orange-600'
+    }, 
+    {
+      id: 3,
+      name: 'Podcast Show Notes',
+      category: 'Audio',
+      color: 'bg-gradient-to-r from-emerald-500 to-green-600'
+    }, 
+    {
+      id: 4,
+      name: 'Blog Post Outline',
+      category: 'Content',
+      color: 'bg-gradient-to-r from-blue-500 to-cyan-600'
+    }, 
+    {
+      id: 5,
+      name: 'Email Newsletter',
+      category: 'Marketing',
+      color: 'bg-gradient-to-r from-rose-500 to-pink-600'
+    }
   ];
   
-  const handleNavigation = (path: string, section: 'dashboard' | 'projects' | 'templates' | 'knowledge-base' | 'profile' | 'settings') => {
+  const handleNavigation = (path: string, section: 'dashboard' | 'projects' | 'templates' | 'knowledge-base') => {
     setActiveSection(section);
     navigate(path);
   };
+  
   return <aside className={cn("fixed left-0 top-0 h-screen bg-[#0A0A0A] transition-all duration-300 ease-in-out z-10 border-r border-white/10", isOpen ? "w-64" : "w-16")}>
       <div className="flex items-center justify-between p-4">
         <div className={cn("flex items-center", !isOpen && "justify-center w-full")}>
@@ -176,114 +175,22 @@ const Sidebar = ({
                     </div>)}
                 </div>
               </div>}
-              
-            {activeSection === 'profile' && <div>
-                <h3 className="text-sm font-medium text-gray-400 mb-4">Your Creator Profile</h3>
-                <div className="mb-5">
-                  <div className="flex items-center space-x-3 mb-4">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center">
-                      <span className="text-white font-bold text-xl">M</span>
-                    </div>
-                    <div>
-                      <p className="text-white font-medium">Medhansh Jain</p>
-                      <p className="text-xs text-gray-400">Premium Creator</p>
-                    </div>
-                  </div>
-                  <div className="bg-white/5 rounded-md p-3 mb-4">
-                    <p className="text-sm text-gray-300 mb-1">Content Stats</p>
-                    <div className="grid grid-cols-3 gap-2">
-                      <div className="text-center">
-                        <p className="text-white font-bold">47</p>
-                        <p className="text-xs text-gray-400">Videos</p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-white font-bold">12</p>
-                        <p className="text-xs text-gray-400">Podcasts</p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-white font-bold">28</p>
-                        <p className="text-xs text-gray-400">Articles</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <h3 className="text-sm font-medium text-gray-400 mb-3">Linked Social Accounts</h3>
-                <div className="space-y-3">
-                  {socialAccounts.map((account, index) => (
-                    <div key={index} className="bg-white/5 rounded-md p-3 hover:bg-white/10 transition-all">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-sm text-white font-medium">{account.platform}</p>
-                          <p className="text-xs text-gray-400">{account.username}</p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-xs text-white font-medium">{account.followers}</p>
-                          <p className="text-[10px] text-gray-400">Followers</p>
-                        </div>
-                      </div>
-                      <div className={`mt-2 text-xs ${account.connected ? 'text-green-400' : 'text-yellow-400'} font-medium`}>
-                        {account.connected ? '● Connected' : '○ Connect'}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>}
-              
-            {activeSection === 'settings' && <div>
-                <h3 className="text-sm font-medium text-gray-400 mb-4">Settings</h3>
-                <div className="space-y-3">
-                  {settingsCategories.map((category, index) => (
-                    <div key={index} className="bg-white/5 rounded-md p-3 hover:bg-white/10 transition-all cursor-pointer">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 rounded-md bg-indigo-600/20 flex items-center justify-center">
-                          <category.icon size={18} className="text-indigo-400" />
-                        </div>
-                        <div>
-                          <p className="text-sm text-white font-medium">{category.name}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                  
-                  <div className="mt-6 bg-gradient-to-r from-indigo-700 to-purple-800 rounded-md p-4">
-                    <p className="text-sm text-white font-medium mb-1">Premium Plan</p>
-                    <p className="text-xs text-gray-200 mb-3">You're on the Creator Pro plan</p>
-                    <div className="flex justify-between items-center">
-                      <p className="text-xs text-white/80">Valid until: <span className="font-medium">May 24, 2025</span></p>
-                      <button className="px-3 py-1 bg-white/20 hover:bg-white/30 rounded-md text-xs text-white font-medium transition-colors">
-                        Manage
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>}
           </ScrollArea>
         </div>}
       
       {isOpen && <div className="absolute bottom-6 left-0 right-0 px-4">
           <div className="space-y-2">
             <button 
-              className={cn(
-                "flex items-center w-full px-4 py-3 rounded-md transition-colors", 
-                activeSection === 'profile' ? "bg-white/10 border-l-2 border-indigo-500" : "hover:bg-white/5",
-                "border-l-2", 
-                activeSection === 'profile' ? "border-indigo-500" : "border-transparent"
-              )} 
-              onClick={() => handleNavigation('/dashboard', 'profile')}
+              className="flex items-center w-full px-4 py-3 rounded-md hover:bg-white/5 transition-colors"
+              onClick={() => navigate('/profile')}
             >
               <User size={20} className="text-gray-400" />
               <span className="ml-3 text-white">Profile</span>
             </button>
             
             <button 
-              className={cn(
-                "flex items-center w-full px-4 py-3 rounded-md transition-colors", 
-                activeSection === 'settings' ? "bg-white/10 border-l-2 border-indigo-500" : "hover:bg-white/5",
-                "border-l-2", 
-                activeSection === 'settings' ? "border-indigo-500" : "border-transparent"
-              )} 
-              onClick={() => handleNavigation('/dashboard', 'settings')}
+              className="flex items-center w-full px-4 py-3 rounded-md hover:bg-white/5 transition-colors"
+              onClick={() => navigate('/settings')}
             >
               <Settings size={20} className="text-gray-400" />
               <span className="ml-3 text-white">Settings</span>
@@ -292,4 +199,5 @@ const Sidebar = ({
         </div>}
     </aside>;
 };
+
 export default Sidebar;
