@@ -151,13 +151,12 @@ const BatchTranscribe = () => {
             </div>
             
             <div className="max-w-4xl mx-auto mb-12">
-              {/* Centered search section similar to the image */}
               <div className="text-center mb-8">
-                <h2 className="text-4xl font-bold text-white mb-10">What can I help with?</h2>
+                <h2 className="text-4xl font-bold text-white mb-10">What should I transcribe for you?</h2>
                 
                 <form onSubmit={handleSubmit} className="max-w-3xl mx-auto">
                   <div className="relative">
-                    <div className="bg-neutral-800/80 backdrop-blur-sm rounded-full border border-neutral-700 overflow-hidden">
+                    <div className="bg-neutral-800 border border-neutral-700 rounded-xl overflow-hidden">
                       <div className="flex items-center px-4 py-3">
                         <Input
                           type="text"
@@ -166,34 +165,9 @@ const BatchTranscribe = () => {
                           onChange={handleInputChange}
                           className="bg-transparent border-0 text-white text-base focus-visible:ring-0 focus-visible:ring-offset-0 px-2"
                         />
-                      </div>
-                      
-                      <div className="border-t border-neutral-700 flex items-center justify-between px-4 py-2">
-                        <div className="flex items-center space-x-2">
-                          <Button type="button" size="sm" variant="ghost" className="rounded-full w-8 h-8 p-0">
-                            <Plus className="h-4 w-4" />
-                          </Button>
-                          <Button type="button" size="sm" variant="ghost" className="text-xs rounded-full px-3">
-                            <Search className="h-3 w-3 mr-1" />
-                            Search
-                          </Button>
-                          <Button type="button" size="sm" variant="ghost" className="text-xs rounded-full px-3">
-                            Deep research
-                          </Button>
-                          <Button type="button" size="sm" variant="ghost" className="text-xs rounded-full px-3">
-                            <Video className="h-3 w-3 mr-1" />
-                            Create image
-                          </Button>
-                        </div>
-                        
-                        <div className="flex items-center">
-                          <Button type="button" size="sm" variant="ghost" className="rounded-full w-8 h-8 p-0">
-                            <Mic className="h-4 w-4" />
-                          </Button>
-                          <Button type="submit" size="sm" disabled={isLoading} className="ml-2 rounded-full w-8 h-8 p-0 bg-neutral-700">
-                            {isLoading ? "..." : "→"}
-                          </Button>
-                        </div>
+                        <Button type="submit" disabled={isLoading} size="sm" className="ml-2 bg-indigo-600 hover:bg-indigo-700">
+                          {isLoading ? "Loading..." : "Fetch Videos"}
+                        </Button>
                       </div>
                     </div>
                   </div>
@@ -252,7 +226,7 @@ const BatchTranscribe = () => {
                 </div>
                 
                 <div className="flex justify-end">
-                  <Button onClick={handleTranscribe} size="lg">
+                  <Button onClick={handleTranscribe} size="lg" className="bg-indigo-600 hover:bg-indigo-700">
                     <FileText className="mr-2 h-4 w-4" />
                     Transcribe Selected Videos
                   </Button>
