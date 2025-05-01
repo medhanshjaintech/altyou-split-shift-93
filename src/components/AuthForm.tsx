@@ -1,31 +1,47 @@
+
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ArrowRight } from 'lucide-react';
+import { toast } from 'sonner';
+
 interface AuthFormProps {
   visible: boolean;
 }
+
 const AuthForm = ({
   visible
 }: AuthFormProps) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(`${isLogin ? 'Logging in' : 'Signing up'} with:`, {
       email,
       password
     });
+    
+    // Show success toast
+    toast.success(isLogin ? 'Logged in successfully!' : 'Account created successfully!');
+    
+    // Navigate to dashboard after successful login
+    navigate('/dashboard');
   };
+
   if (!visible) return null;
-  return <div className={`fixed inset-0 flex flex-col items-center justify-center ${visible ? 'animate-slide-up' : 'opacity-0'}`}>
+
+  return (
+    <div className={`fixed inset-0 flex flex-col items-center justify-center ${visible ? 'animate-slide-up' : 'opacity-0'}`}>
       {/* Logo header */}
       <div className="mb-8 opacity-0 animate-slide-up" style={{
-      animationDelay: '300ms',
-      animationFillMode: 'forwards'
-    }}>
+        animationDelay: '300ms',
+        animationFillMode: 'forwards'
+      }}>
         <div className="text-5xl font-hanson tracking-wider text-white font-bold">
           altyou
         </div>
@@ -33,9 +49,9 @@ const AuthForm = ({
       
       {/* Auth card */}
       <div className="w-full max-w-md p-8 rounded-xl glass-card opacity-0 animate-slide-up" style={{
-      animationDelay: '500ms',
-      animationFillMode: 'forwards'
-    }}>
+        animationDelay: '500ms',
+        animationFillMode: 'forwards'
+      }}>
         <h2 className="text-2xl font-medium text-center mb-6 text-white">
           {isLogin ? 'Welcome back' : 'Create your account'}
         </h2>
@@ -63,6 +79,8 @@ const AuthForm = ({
           </button>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default AuthForm;
