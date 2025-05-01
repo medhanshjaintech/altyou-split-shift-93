@@ -27,10 +27,10 @@ const ChatArea = ({ messages, onSendMessage }: ChatAreaProps) => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-2">Chat with content</h2>
+      <h2 className="text-2xl font-bold mb-2 text-white">Chat with content</h2>
       
       {messages.length > 0 ? (
-        <ScrollArea className="h-[400px] border rounded-md p-4 bg-white dark:bg-gray-900 mb-4">
+        <ScrollArea className="h-[400px] border rounded-md p-4 bg-neutral-900 mb-4">
           <div className="space-y-4">
             {messages.map((message, index) => (
               <div
@@ -43,7 +43,7 @@ const ChatArea = ({ messages, onSendMessage }: ChatAreaProps) => {
                   className={`max-w-[80%] p-3 rounded-lg ${
                     message.role === "user"
                       ? "bg-primary text-primary-foreground"
-                      : "bg-muted"
+                      : "bg-neutral-800 text-white"
                   }`}
                 >
                   <p>{message.content}</p>
@@ -56,11 +56,11 @@ const ChatArea = ({ messages, onSendMessage }: ChatAreaProps) => {
           </div>
         </ScrollArea>
       ) : (
-        <div className="h-[400px] border rounded-md flex items-center justify-center bg-muted/20 mb-4">
+        <div className="h-[400px] border border-neutral-800 rounded-md flex items-center justify-center bg-neutral-900 mb-4">
           <div className="text-center">
-            <Bot className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-            <h3 className="text-lg font-medium mb-2">Start a conversation</h3>
-            <p className="text-muted-foreground max-w-xs mx-auto">
+            <Bot className="w-12 h-12 mx-auto mb-4 text-neutral-500" />
+            <h3 className="text-lg font-medium mb-2 text-white">Start a conversation</h3>
+            <p className="text-neutral-400 max-w-xs mx-auto">
               Select files from the sidebar and ask questions to chat with your content.
             </p>
           </div>
@@ -73,7 +73,7 @@ const ChatArea = ({ messages, onSendMessage }: ChatAreaProps) => {
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSend()}
-          className="flex-1"
+          className="flex-1 bg-neutral-800 border-neutral-700"
         />
         <Button onClick={handleSend}>
           <Send className="h-4 w-4" />

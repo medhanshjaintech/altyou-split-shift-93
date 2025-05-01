@@ -4,6 +4,9 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import KnowledgeSidebar from "@/components/KnowledgeSidebar";
 import ChatArea from "@/components/ChatArea";
 import PersonaSelector from "@/components/PersonaSelector";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 interface Message {
   role: "user" | "bot";
@@ -117,7 +120,7 @@ const KnowledgeBot = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen bg-[#121212]">
       <SidebarProvider defaultOpen={true}>
         <KnowledgeSidebar 
           files={knowledgeFiles}
@@ -128,6 +131,16 @@ const KnowledgeBot = () => {
 
         <div className="flex-1 p-6">
           <div className="max-w-4xl mx-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h1 className="text-2xl font-bold text-white">Knowledge Bot</h1>
+              <Button variant="outline" size="sm" asChild>
+                <Link to="/dashboard">
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Back to Dashboard
+                </Link>
+              </Button>
+            </div>
+            
             <div className="mb-6">
               <ChatArea 
                 messages={messages} 
