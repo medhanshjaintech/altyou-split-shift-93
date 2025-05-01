@@ -1,11 +1,18 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ChevronLeft, Download, BarChart2 } from 'lucide-react';
+import { ChevronLeft, Download, BarChart2, ArrowRightLeft, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
 import Sidebar from '@/components/Sidebar';
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from "@/components/ui/dialog";
 
 type AnalysisSection = {
   title: string;
@@ -18,6 +25,7 @@ const ContentAnalysisResult = () => {
   const { toast } = useToast();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [comparisonDialogOpen, setComparisonDialogOpen] = useState(false);
   
   // Extract channelName from location state or use default
   const channelName = location.state?.channelName || "PewDiePie";
@@ -40,6 +48,14 @@ const ContentAnalysisResult = () => {
       title: "Visual styles and cues",
       content: "The channel employs a consistent visual language with 5-7 recurring graphical elements. Color palette centers around purple/blue tones (#9b87f5, #6E59A5) for brand consistency. Text on screen rarely exceeds 5-7 words per frame and appears for average of 3.2 seconds. B-roll footage is used extensively during explanatory segments. Camera movement is minimal during key informational points but increases during transitional segments."
     }
+  ];
+
+  // Mock improvement points for comparison
+  const improvementPoints = [
+    "Your hook engagement time (first 15 seconds) averages 68% viewer retention compared to 81% for competitor channels. Consider introducing key information earlier in your videos.",
+    "Your videos use 20% less B-roll footage than top-performing channels in your niche. Increasing visual variety could improve engagement metrics.",
+    "Audio quality metrics show competitor channels have 30% less background noise. Consider using a noise reduction filter or upgrading microphone equipment.",
+    "Your video descriptions average 85 words versus 165 words for competitor channels. Longer descriptions with timestamps and relevant keywords may improve searchability."
   ];
 
   const toggleSidebar = () => {
@@ -75,15 +91,7 @@ const ContentAnalysisResult = () => {
   };
 
   const compareContent = () => {
-    toast({
-      title: "Content comparison",
-      description: "Redirecting to content comparison tool...",
-    });
-
-    // Navigate to content analyzer for comparison (in a real app, this could go to a comparison-specific page)
-    setTimeout(() => {
-      navigate('/content-analyser');
-    }, 1500);
+    setComparisonDialogOpen(true);
   };
 
   return (
@@ -154,6 +162,79 @@ const ContentAnalysisResult = () => {
             </div>
           </div>
         </ScrollArea>
+
+        {/* Content Comparison Dialog */}
+        <Dialog open={comparisonDialogOpen} onOpenChange={setComparisonDialogOpen}>
+          <DialogContent className="bg-neutral-800 border-neutral-700 text-white sm:max-w-4xl">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-bold text-center text-white mb-6">
+                Content Comparison
+              </DialogTitle>
+            </DialogHeader>
+            
+            {/* Comparison content */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Your channel */}
+              <div className="flex flex-col items-center">
+                <h3 className="text-xl font-semibold mb-4 italic text-gray-200">Your Channel</h3>
+                <div className="bg-neutral-700/50 w-full aspect-square rounded-md flex items-center justify-center mb-4">
+                  <div className="text-center p-4">
+                    <FileText className="h-12 w-12 text-indigo-400 mx-auto mb-2" />
+                    <div className="space-y-2">
+                      <p className="font-medium">Average View Duration: 6:42</p>
+                      <p className="font-medium">Engagement Rate: 7.2%</p>
+                      <p className="font-medium">Publishing Frequency: 1.5/week</p>
+                      <p className="font-medium">Avg. Likes per Video: 5.4K</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Competitor channel */}
+              <div className="flex flex-col items-center">
+                <h3 className="text-xl font-semibold mb-4 italic text-gray-200">Competitor Channel</h3>
+                <div className="bg-neutral-700/50 w-full aspect-square rounded-md flex items-center justify-center mb-4">
+                  <div className="text-center p-4">
+                    <FileText className="h-12 w-12 text-green-400 mx-auto mb-2" />
+                    <div className="space-y-2">
+                      <p className="font-medium">Average View Duration: 8:15</p>
+                      <p className="font-medium">Engagement Rate: 9.3%</p>
+                      <p className="font-medium">Publishing Frequency: 2/week</p>
+                      <p className="font-medium">Avg. Likes per Video: 7.8K</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Improvement points */}
+            <div className="mt-8">
+              <h3 className="text-xl font-semibold mb-4 italic text-gray-200">Points Where You Can Improve</h3>
+              <div className="bg-neutral-700/50 rounded-md p-6">
+                <ul className="space-y-4 text-gray-200">
+                  {improvementPoints.map((point, index) => (
+                    <li key={index} className="flex items-start">
+                      <span className="bg-indigo-600 text-white rounded-full h-5 w-5 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
+                        {index + 1}
+                      </span>
+                      <p>{point}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            
+            {/* Close button */}
+            <div className="mt-6 flex justify-center">
+              <Button 
+                onClick={() => setComparisonDialogOpen(false)}
+                className="bg-neutral-700 hover:bg-neutral-600 px-8"
+              >
+                Close Comparison
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </main>
     </div>
   );
