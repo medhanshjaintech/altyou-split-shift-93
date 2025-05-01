@@ -30,7 +30,7 @@ const AuthForm = ({
     <div className={`fixed inset-0 flex flex-col items-center justify-center ${visible ? 'animate-slide-up' : 'opacity-0'}`}>
       {/* Logo header */}
       <div className="mb-8 opacity-0 animate-slide-up" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
-        <div className="text-3xl font-hanson tracking-wider text-white">
+        <div className="text-3xl font-hanson tracking-wider text-white font-bold">
           altyou
         </div>
       </div>
