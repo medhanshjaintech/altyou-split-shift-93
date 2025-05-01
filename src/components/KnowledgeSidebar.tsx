@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { File, FileText } from "lucide-react";
+import { File, FileText, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
@@ -33,6 +33,13 @@ const KnowledgeSidebar = ({
   const transcriptions = files.filter(file => file.type === "transcription");
   const uploads = files.filter(file => file.type === "upload");
 
+  const handleFileUpload = () => {
+    // This would trigger a file upload in a real application
+    console.log("File upload triggered");
+    // For now we'll just show an alert
+    alert("File upload feature would open a file picker in a real application");
+  };
+
   return (
     <Sidebar variant="inset" side="left">
       <SidebarHeader>
@@ -41,10 +48,10 @@ const KnowledgeSidebar = ({
         </div>
       </SidebarHeader>
       <SidebarContent>
-        {/* Knowledge Base Files - Transcriptions */}
+        {/* Knowledge Base Files */}
         <div className="p-4">
           <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm font-medium text-sidebar-foreground/70">Transcriptions</h3>
+            <h3 className="text-sm font-medium text-sidebar-foreground/70">Knowledge Base</h3>
             <div className="flex gap-2">
               <Button 
                 variant="outline" 
@@ -86,7 +93,17 @@ const KnowledgeSidebar = ({
 
         {/* Uploads */}
         <div className="p-4">
-          <h3 className="text-sm font-medium mb-2 text-sidebar-foreground/70">Uploads</h3>
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-sm font-medium text-sidebar-foreground/70">Uploads</h3>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={handleFileUpload}
+              className="text-xs h-6 flex items-center gap-1"
+            >
+              <Upload className="h-3 w-3" /> Upload
+            </Button>
+          </div>
           <ScrollArea className="h-48">
             <div className="space-y-1">
               {uploads.map((file) => (
