@@ -22,85 +22,63 @@ const Sidebar = ({
     name: 'Content Analyzer Report',
     date: '2 days ago',
     image: '/lovable-uploads/d6514f20-6f3f-4b8e-a6d0-813ec1bf1539.png',
-    users: ['A', 'M']
+    users: ['A', 'M'],
+    color: 'from-indigo-500 to-purple-600'
   }, {
     id: 2,
     name: 'Podcast Transcription',
     date: '1 week ago',
-    image: null,
-    users: ['K', 'S']
+    image: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7',
+    users: ['K', 'S'],
+    color: 'from-pink-500 to-rose-500'
   }, {
     id: 3,
     name: 'Marketing Video Script',
     date: '2 weeks ago',
-    image: null,
-    users: ['R']
+    image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d',
+    users: ['R', 'J'],
+    color: 'from-amber-400 to-orange-500'
   }, {
     id: 4,
     name: 'YouTube Viral Clips',
     date: '3 weeks ago',
     image: 'https://images.unsplash.com/photo-1492321936769-b49830bc1d1e',
-    users: ['J', 'P', 'M']
+    users: ['J', 'P', 'M'],
+    color: 'from-emerald-500 to-teal-600'
   }, {
     id: 5,
     name: 'Q2 Sales Pitch',
     date: '1 month ago',
     image: 'https://images.unsplash.com/photo-1460574283810-2aab119d8511',
-    users: ['S']
-  }, {
-    id: 6,
-    name: 'Tech Conference Talk',
-    date: '1 month ago',
-    image: null,
-    users: ['A', 'R', 'T']
-  }, {
-    id: 7,
-    name: 'Product Launch Video',
-    date: '2 months ago',
-    image: 'https://images.unsplash.com/photo-1498936178812-4b2e558d2937',
-    users: ['D', 'L']
+    users: ['S', 'A'],
+    color: 'from-blue-500 to-cyan-500'
   }];
   
   const templates = [{
     id: 1,
     name: 'Social Media Post',
-    category: 'Content'
+    category: 'Content',
+    color: 'bg-gradient-to-r from-violet-600 to-indigo-600'
   }, {
     id: 2,
     name: 'Video Script Template',
-    category: 'Video'
+    category: 'Video',
+    color: 'bg-gradient-to-r from-amber-500 to-orange-600'
   }, {
     id: 3,
     name: 'Podcast Show Notes',
-    category: 'Audio'
+    category: 'Audio',
+    color: 'bg-gradient-to-r from-emerald-500 to-green-600'
   }, {
     id: 4,
-    name: 'YouTube Description',
-    category: 'Video'
+    name: 'Blog Post Outline',
+    category: 'Content',
+    color: 'bg-gradient-to-r from-blue-500 to-cyan-600'
   }, {
     id: 5,
-    name: 'Blog Post Outline',
-    category: 'Content'
-  }, {
-    id: 6,
     name: 'Email Newsletter',
-    category: 'Marketing'
-  }, {
-    id: 7,
-    name: 'Product Review Script',
-    category: 'Video'
-  }, {
-    id: 8,
-    name: 'Interview Questions',
-    category: 'Audio'
-  }, {
-    id: 9,
-    name: 'Landing Page Copy',
-    category: 'Marketing'
-  }, {
-    id: 10,
-    name: 'Short Video Script',
-    category: 'Video'
+    category: 'Marketing',
+    color: 'bg-gradient-to-r from-rose-500 to-pink-600'
   }];
   
   const handleNavigation = (path: string, section: 'dashboard' | 'projects' | 'templates' | 'knowledge-base') => {
@@ -168,17 +146,23 @@ const Sidebar = ({
             {activeSection === 'projects' && <div>
                 <h3 className="text-sm font-medium text-gray-400 mb-4">Sample Projects</h3>
                 <div className="space-y-4">
-                  {sampleProjects.map(project => <div key={project.id} className="rounded-md hover:bg-white/5 cursor-pointer overflow-hidden">
-                      {project.image && <div className="relative w-full h-28 mb-2">
+                  {sampleProjects.map(project => <div key={project.id} className="rounded-md hover:bg-white/5 cursor-pointer overflow-hidden transition-all duration-200 hover:scale-[1.02] group">
+                      <div className="relative w-full h-28 mb-2">
+                        {project.image ? (
                           <img src={project.image} alt={project.name} className="w-full h-full object-cover rounded-md" />
-                          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2">
-                            <p className="text-xs text-white font-medium uppercase">ALTYOU</p>
-                            <p className="text-xs text-gray-400">{project.date}</p>
+                        ) : (
+                          <div className={`w-full h-full rounded-md bg-gradient-to-r ${project.color} flex items-center justify-center`}>
+                            <span className="text-white font-medium opacity-80">{project.name.substring(0, 2)}</span>
                           </div>
-                        </div>}
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent rounded-md opacity-80 group-hover:opacity-100" />
+                        <div className="absolute bottom-0 left-0 right-0 p-2">
+                          <p className="text-xs text-white font-medium uppercase">ALTYOU</p>
+                          <p className="text-xs text-gray-300">{project.date}</p>
+                        </div>
+                      </div>
                       <div className="p-2">
-                        <p className="text-sm text-white font-medium">{project.name}</p>
-                        {!project.image && <p className="text-xs text-gray-500 mt-1">{project.date}</p>}
+                        <p className="text-sm text-white font-medium group-hover:text-indigo-400 transition-colors">{project.name}</p>
                         <div className="flex justify-between items-center mt-2">
                           <div className="flex -space-x-2">
                             {project.users.map((user, i) => <div key={i} className="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center text-xs text-white border-2 border-[#0A0A0A]">
@@ -194,9 +178,15 @@ const Sidebar = ({
             {activeSection === 'templates' && <div>
                 <h3 className="text-sm font-medium text-gray-400 mb-4">Ready-to-go Templates</h3>
                 <div className="space-y-3">
-                  {templates.map(template => <div key={template.id} className="p-2 rounded-md hover:bg-white/5 cursor-pointer">
-                      <p className="text-sm text-white">{template.name}</p>
-                      <p className="text-xs text-gray-500">{template.category}</p>
+                  {templates.map(template => <div 
+                      key={template.id} 
+                      className={`${template.color} p-3 rounded-md hover:shadow-lg cursor-pointer transition-all duration-200 hover:scale-[1.02]`}
+                    >
+                      <p className="text-sm font-medium text-white">{template.name}</p>
+                      <p className="text-xs text-white/80 mt-1">{template.category}</p>
+                      <button className="mt-2 px-3 py-1 bg-white/20 hover:bg-white/30 rounded-md text-xs text-white font-medium transition-colors">
+                        Use Template
+                      </button>
                     </div>)}
                 </div>
               </div>}
@@ -204,9 +194,9 @@ const Sidebar = ({
         </div>}
       
       {isOpen && <div className="absolute bottom-6 left-0 right-0 px-4">
-          <div className="p-4 rounded-lg bg-indigo-900/30 border border-indigo-800/50">
+          <div className="p-4 rounded-lg bg-gradient-to-r from-indigo-900/50 to-purple-900/50 border border-indigo-800/50 hover:from-indigo-800/50 hover:to-purple-800/50 transition-colors">
             <p className="text-sm text-white font-medium">Need help?</p>
-            <p className="text-xs text-gray-400 mt-1">Contact support for assistance with any issues.</p>
+            <p className="text-xs text-gray-300 mt-1">Contact support for assistance with any issues.</p>
           </div>
         </div>}
     </aside>;
