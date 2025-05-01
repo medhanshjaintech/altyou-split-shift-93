@@ -1,17 +1,21 @@
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ArrowRight } from 'lucide-react';
+
 interface AuthFormProps {
   visible: boolean;
 }
+
 const AuthForm = ({
   visible
 }: AuthFormProps) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(`${isLogin ? 'Logging in' : 'Signing up'} with:`, {
@@ -19,12 +23,15 @@ const AuthForm = ({
       password
     });
   };
+
   if (!visible) return null;
-  return <div className={`fixed inset-0 flex flex-col items-center justify-center ${visible ? 'animate-fade-in' : 'animate-fade-out'}`}>
+
+  return (
+    <div className={`fixed inset-0 flex flex-col items-center justify-center ${visible ? 'animate-fade-in' : 'animate-fade-out'}`}>
       {/* Logo header */}
       <div className={`mb-8 animate-slide-up [animation-delay:300ms] opacity-0`}>
-        <div className="text-3xl font-bold tracking-wider">
-          <span className="bg-gradient-to-r from-purple-400 to-indigo-500 bg-clip-text text-slate-50">
+        <div className="text-3xl font-hanson tracking-wider">
+          <span className="bg-gradient-to-r from-purple-400 to-indigo-500 bg-clip-text text-transparent">
             altyou
           </span>
         </div>
@@ -59,6 +66,8 @@ const AuthForm = ({
           </button>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default AuthForm;

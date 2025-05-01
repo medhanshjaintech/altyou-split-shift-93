@@ -34,7 +34,7 @@ const LogoAnimation = ({ onAnimationComplete }: LogoAnimationProps) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center overflow-hidden">
       {animationState === 'initial' && (
-        <div className="text-6xl font-bold animate-fade-in tracking-wider">
+        <div className="text-6xl font-hanson animate-fade-in tracking-wider">
           <span className="bg-gradient-to-r from-purple-400 to-indigo-500 bg-clip-text text-transparent">
             altyou
           </span>
@@ -43,12 +43,12 @@ const LogoAnimation = ({ onAnimationComplete }: LogoAnimationProps) => {
       
       {animationState === 'split' && (
         <div className="flex items-center space-x-1">
-          <div className="text-6xl font-bold animate-slide-left tracking-wider">
+          <div className="text-6xl font-hanson animate-slide-left tracking-wider">
             <span className="bg-gradient-to-r from-purple-400 to-indigo-300 bg-clip-text text-transparent">
               alt
             </span>
           </div>
-          <div className="text-6xl font-bold animate-slide-right tracking-wider">
+          <div className="text-6xl font-hanson animate-slide-right tracking-wider">
             <span className="bg-gradient-to-r from-indigo-400 to-purple-300 bg-clip-text text-transparent">
               you
             </span>
