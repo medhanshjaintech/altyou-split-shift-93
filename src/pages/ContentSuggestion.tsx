@@ -43,7 +43,7 @@ const ContentSuggestion = () => {
           </div>
           
           <div className="flex flex-col w-full max-w-2xl mx-auto">
-            <h2 className="text-white text-3xl md:text-4xl font-medium mb-12 text-center px-0">What would you like to talk about today?</h2>
+            <h2 className="text-white text-3xl md:text-4xl font-medium mb-12 text-center py-[17px] px-[8px]">What would you like to talk about today?</h2>
             
             <div className="w-full flex items-center mb-8">
               <Input placeholder="Enter a topic..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} onKeyDown={handleKeyDown} className="bg-white/10 border-0 text-white h-14 text-lg focus-visible:ring-white/40 placeholder:text-white/50 rounded-md" />
