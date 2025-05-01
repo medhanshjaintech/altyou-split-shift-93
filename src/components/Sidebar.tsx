@@ -46,7 +46,7 @@ const Sidebar = ({
   return <aside className={cn("fixed left-0 top-0 h-screen bg-[#0A0A0A] transition-all duration-300 ease-in-out z-10 border-r border-white/10", isOpen ? "w-64" : "w-16")}>
       <div className="flex items-center justify-between p-4">
         <div className={cn("flex items-center", !isOpen && "justify-center w-full")}>
-          {isOpen ? <span className="font-hanson tracking-wider text-white font-bold text-3xl">altyou</span> : <span className="text-xl font-hanson tracking-wider text-white font-bold">a</span>}
+          {isOpen ? <span className="font-hanson tracking-wider text-white text-3xl font-extrabold">altyou</span> : <span className="text-xl font-hanson tracking-wider text-white font-bold">a</span>}
         </div>
         
         <button onClick={toggleSidebar} className="text-gray-400 hover:text-white transition-colors">
