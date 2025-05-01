@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TrendingUp, ArrowRight, FileText } from 'lucide-react';
@@ -7,16 +8,19 @@ import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+
 interface SearchResult {
   title: string;
   summary: string;
-  articles: string[];
+  articles: Array<{
+    title: string;
+    summary: string;
+  }>;
   impactFactor: string;
 }
+
 const ContentSuggestion = () => {
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -24,6 +28,7 @@ const ContentSuggestion = () => {
 
   // Mock trending topics
   const trendingTopics = ["AI in Healthcare", "Sustainable Living", "Web3 Development", "Remote Work Productivity", "Digital Minimalism", "Future of Education", "Mental Health Awareness", "Smart Home Technology"];
+  
   const handleSearch = () => {
     if (!searchQuery.trim()) {
       toast({
@@ -42,22 +47,37 @@ const ContentSuggestion = () => {
 
     // Simulate API delay
     setTimeout(() => {
-      // Mock search result data
+      // Mock search result data with more detailed articles
       const mockResult: SearchResult = {
         title: searchQuery,
-        summary: "Will give a summarized form info on which creator can make content both for long form and short form",
-        articles: ["The History and Mysteries Behind the Topic", "Scientific Evidence and Research Findings", "Cultural Impact and Popular Media Representations"],
-        impactFactor: "High relevance with significant engagement potential across platforms"
+        summary: "This topic has high engagement rates across social media platforms and is currently trending in online discussions. Content on this subject typically receives 30% more views than average.",
+        articles: [
+          {
+            title: "The Evolution and Future Trends",
+            summary: "Exploring the historical development and anticipated future directions of this field, highlighting key innovations and breakthroughs."
+          },
+          {
+            title: "Practical Applications in Everyday Life",
+            summary: "Examining real-world implementations and how they impact daily experiences, with case studies from industry leaders."
+          },
+          {
+            title: "Comparative Analysis with Alternative Approaches",
+            summary: "Contrasting different methodologies and solutions, providing a balanced perspective on strengths and limitations."
+          }
+        ],
+        impactFactor: "High engagement potential with 65% audience retention. Trending across Instagram and TikTok with significant growth in search volume over the past 30 days."
       };
       setSearchResult(mockResult);
       setIsLoading(false);
     }, 1500);
   };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleSearch();
     }
   };
+
   const handleGenerateScript = () => {
     toast({
       title: "Generating script",
@@ -65,17 +85,18 @@ const ContentSuggestion = () => {
     });
     // In a real implementation, this would trigger script generation
   };
+
   return <div className="fixed inset-0 bg-[#121212] flex items-center justify-center">
       <ScrollArea className="h-full w-full">
         <div className="container mx-auto max-w-7xl px-6 py-[210px]">
           <div className="absolute top-10 left-10">
-            
+            <h1 className="text-white text-2xl font-bold">Content Suggestion</h1>
           </div>
           
           <div className="flex flex-col w-full max-w-3xl mx-auto">
-            <h2 className="text-white text-4xl font-medium mb-8 text-center md:text-4xl">What would you like to talk about today?</h2>
+            <h2 className="text-white text-5xl font-medium mb-8 text-center md:text-5xl">What would you like to talk about today?</h2>
             
-            <div className="w-full flex items-center mb-4">
+            <div className="w-full flex items-center mb-2">
               <Input placeholder="Enter a topic..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} onKeyDown={handleKeyDown} className="bg-white/10 border-0 text-white h-14 text-lg focus-visible:ring-white/40 placeholder:text-white/50 rounded-md" />
               <Button variant="ghost" size="icon" className="ml-4 text-white h-14 w-14" onClick={handleSearch}>
                 <ArrowRight className="h-6 w-6" />
@@ -110,8 +131,7 @@ const ContentSuggestion = () => {
             {searchResult && <div className="mt-12">
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-white text-3xl font-medium">
-                    {searchResult.title} 
-                    <span className="text-white/50 text-lg font-normal ml-4">Topic Name</span>
+                    {searchResult.title}
                   </h2>
                 </div>
 
@@ -119,7 +139,6 @@ const ContentSuggestion = () => {
                   <div className="md:col-span-2">
                     <div className="space-y-6">
                       <Card className="bg-white/10 border-0 text-white p-6 rounded-md">
-                        <h3 className="text-lg text-white/70 mb-4">With impact factor and relevance</h3>
                         <p className="text-white/90">{searchResult.impactFactor}</p>
                       </Card>
                       
@@ -127,17 +146,26 @@ const ContentSuggestion = () => {
                         <div className="flex gap-2 items-start">
                           <FileText className="h-5 w-5 text-[#1E88E5] mt-1" />
                           <div>
-                            <h3 className="text-lg font-medium mb-2">Articles on topic</h3>
-                            <ul className="list-disc list-inside text-white/80 space-y-2">
-                              {searchResult.articles.map((article, index) => <li key={index}>{article}</li>)}
-                            </ul>
+                            <h3 className="text-lg font-medium mb-2">Suggested Articles</h3>
+                            <div className="space-y-4">
+                              {searchResult.articles.map((article, index) => (
+                                <div key={index} className="border-l-2 border-[#1E88E5]/60 pl-3">
+                                  <h4 className="font-medium text-white">{article.title}</h4>
+                                  <p className="text-white/80 text-sm mt-1">{article.summary}</p>
+                                </div>
+                              ))}
+                            </div>
                           </div>
                         </div>
                       </Card>
 
                       <Card className="bg-white/10 border-0 text-white p-6 rounded-md">
                         <h3 className="text-lg mb-2">Additional Reference Material</h3>
-                        <p className="text-white/70">Related resources and reference materials about this topic.</p>
+                        <ul className="list-disc list-inside text-white/70 space-y-2">
+                          <li>Latest research papers from industry experts</li>
+                          <li>Competitor content analysis and gap identification</li>
+                          <li>Social media engagement metrics and audience demographics</li>
+                        </ul>
                       </Card>
                     </div>
                   </div>
@@ -167,4 +195,5 @@ const ContentSuggestion = () => {
       </ScrollArea>
     </div>;
 };
+
 export default ContentSuggestion;
