@@ -33,7 +33,7 @@ const KnowledgeSidebar = ({
   return <Sidebar variant="inset" side="left">
       <SidebarHeader>
         <div className="p-2">
-          <h3 className="text-xl font-bold text-gray-50">altyou</h3>
+          <h3 className="font-hanson tracking-wider text-white text-3xl font-extrabold">altyou</h3>
         </div>
       </SidebarHeader>
       <SidebarContent>
