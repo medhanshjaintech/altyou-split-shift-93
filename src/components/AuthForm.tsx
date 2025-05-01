@@ -27,19 +27,17 @@ const AuthForm = ({
   if (!visible) return null;
 
   return (
-    <div className={`fixed inset-0 flex flex-col items-center justify-center ${visible ? 'animate-fade-in' : 'animate-fade-out'}`}>
+    <div className={`fixed inset-0 flex flex-col items-center justify-center ${visible ? 'animate-slide-up' : 'opacity-0'}`}>
       {/* Logo header */}
-      <div className={`mb-8 animate-slide-up [animation-delay:300ms] opacity-0`}>
-        <div className="text-3xl font-hanson tracking-wider">
-          <span className="bg-gradient-to-r from-purple-400 to-indigo-500 bg-clip-text text-transparent">
-            altyou
-          </span>
+      <div className="mb-8 opacity-0 animate-slide-up" style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}>
+        <div className="text-3xl font-hanson tracking-wider text-white">
+          altyou
         </div>
       </div>
       
       {/* Auth card */}
-      <div className="w-full max-w-md p-8 rounded-xl glass-card animate-slide-up [animation-delay:500ms] opacity-0">
-        <h2 className="text-2xl font-medium text-center mb-6">
+      <div className="w-full max-w-md p-8 rounded-xl glass-card opacity-0 animate-slide-up" style={{ animationDelay: '500ms', animationFillMode: 'forwards' }}>
+        <h2 className="text-2xl font-medium text-center mb-6 text-white">
           {isLogin ? 'Welcome back' : 'Create your account'}
         </h2>
         
