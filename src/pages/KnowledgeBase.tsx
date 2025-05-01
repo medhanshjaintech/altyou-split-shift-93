@@ -93,11 +93,11 @@ const KnowledgeBase = () => {
               <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
             </div>
             
-            <Tabs defaultValue="all">
-              <TabsList className="mb-4">
-                <TabsTrigger value="all">All Files ({knowledgeFiles.length})</TabsTrigger>
-                <TabsTrigger value="transcriptions">Transcriptions ({transcriptions.length})</TabsTrigger>
-                <TabsTrigger value="uploads">Uploads ({uploads.length})</TabsTrigger>
+            <Tabs defaultValue="all" className="text-white">
+              <TabsList className="mb-4 bg-neutral-800">
+                <TabsTrigger value="all" className="data-[state=active]:bg-indigo-600 text-white data-[state=active]:text-white">All Files ({knowledgeFiles.length})</TabsTrigger>
+                <TabsTrigger value="transcriptions" className="data-[state=active]:bg-indigo-600 text-white data-[state=active]:text-white">Transcriptions ({transcriptions.length})</TabsTrigger>
+                <TabsTrigger value="uploads" className="data-[state=active]:bg-indigo-600 text-white data-[state=active]:text-white">Uploads ({uploads.length})</TabsTrigger>
               </TabsList>
 
               <TabsContent value="all" className="space-y-4">
