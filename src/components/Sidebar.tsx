@@ -1,16 +1,21 @@
 import { useState } from 'react';
-import { LayoutDashboard, Folder, LayoutTemplate, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, Folder, LayoutTemplate, ChevronLeft, ChevronRight, Bot } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useNavigate } from 'react-router-dom';
+
 interface SidebarProps {
   isOpen: boolean;
   toggleSidebar: () => void;
 }
+
 const Sidebar = ({
   isOpen,
   toggleSidebar
 }: SidebarProps) => {
-  const [activeSection, setActiveSection] = useState<'dashboard' | 'projects' | 'templates'>('dashboard');
+  const navigate = useNavigate();
+  const [activeSection, setActiveSection] = useState<'dashboard' | 'projects' | 'templates' | 'knowledge-bot'>('dashboard');
+  
   const sampleProjects = [{
     id: 1,
     name: 'Content Analyzer Report',
@@ -30,6 +35,7 @@ const Sidebar = ({
     image: null,
     users: ['R']
   }];
+  
   const templates = [{
     id: 1,
     name: 'Social Media Post',
@@ -43,6 +49,12 @@ const Sidebar = ({
     name: 'Podcast Show Notes',
     category: 'Audio'
   }];
+  
+  const handleNavigation = (path: string, section: 'dashboard' | 'projects' | 'templates' | 'knowledge-bot') => {
+    setActiveSection(section);
+    navigate(path);
+  };
+  
   return <aside className={cn("fixed left-0 top-0 h-screen bg-[#0A0A0A] transition-all duration-300 ease-in-out z-10 border-r border-white/10", isOpen ? "w-64" : "w-16")}>
       <div className="flex items-center justify-between p-4">
         <div className={cn("flex items-center", !isOpen && "justify-center w-full")}>
@@ -56,19 +68,44 @@ const Sidebar = ({
       
       <div className="mt-8">
         <nav>
-          <button className={cn("flex items-center w-full px-4 py-3 transition-colors", activeSection === 'dashboard' ? "bg-white/10 border-l-2 border-indigo-500" : "hover:bg-white/5 border-l-2 border-transparent", !isOpen && "justify-center")} onClick={() => setActiveSection('dashboard')}>
+          <button 
+            className={cn("flex items-center w-full px-4 py-3 transition-colors", 
+              activeSection === 'dashboard' ? "bg-white/10 border-l-2 border-indigo-500" : "hover:bg-white/5 border-l-2 border-transparent", 
+              !isOpen && "justify-center")} 
+            onClick={() => handleNavigation('/dashboard', 'dashboard')}
+          >
             <LayoutDashboard size={20} className="text-gray-400" />
             {isOpen && <span className="ml-3 text-white">Dashboard</span>}
           </button>
           
-          <button className={cn("flex items-center w-full px-4 py-3 transition-colors", activeSection === 'projects' ? "bg-white/10 border-l-2 border-indigo-500" : "hover:bg-white/5 border-l-2 border-transparent", !isOpen && "justify-center")} onClick={() => setActiveSection('projects')}>
+          <button 
+            className={cn("flex items-center w-full px-4 py-3 transition-colors", 
+              activeSection === 'projects' ? "bg-white/10 border-l-2 border-indigo-500" : "hover:bg-white/5 border-l-2 border-transparent", 
+              !isOpen && "justify-center")} 
+            onClick={() => handleNavigation('/dashboard', 'projects')}
+          >
             <Folder size={20} className="text-gray-400" />
             {isOpen && <span className="ml-3 text-white">Sample Projects</span>}
           </button>
           
-          <button className={cn("flex items-center w-full px-4 py-3 transition-colors", activeSection === 'templates' ? "bg-white/10 border-l-2 border-indigo-500" : "hover:bg-white/5 border-l-2 border-transparent", !isOpen && "justify-center")} onClick={() => setActiveSection('templates')}>
+          <button 
+            className={cn("flex items-center w-full px-4 py-3 transition-colors", 
+              activeSection === 'templates' ? "bg-white/10 border-l-2 border-indigo-500" : "hover:bg-white/5 border-l-2 border-transparent", 
+              !isOpen && "justify-center")} 
+            onClick={() => handleNavigation('/dashboard', 'templates')}
+          >
             <LayoutTemplate size={20} className="text-gray-400" />
             {isOpen && <span className="ml-3 text-white">Templates</span>}
+          </button>
+          
+          <button 
+            className={cn("flex items-center w-full px-4 py-3 transition-colors", 
+              activeSection === 'knowledge-bot' ? "bg-white/10 border-l-2 border-indigo-500" : "hover:bg-white/5 border-l-2 border-transparent", 
+              !isOpen && "justify-center")} 
+            onClick={() => handleNavigation('/knowledge-bot', 'knowledge-bot')}
+          >
+            <Bot size={20} className="text-gray-400" />
+            {isOpen && <span className="ml-3 text-white">Knowledge Bot</span>}
           </button>
         </nav>
       </div>
@@ -121,4 +158,5 @@ const Sidebar = ({
         </div>}
     </aside>;
 };
+
 export default Sidebar;
