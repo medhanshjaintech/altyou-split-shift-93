@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { FileText, Youtube, ArrowLeft, Search, Plus, Mic, Video } from 'lucide-react';
+import { FileText, Youtube, ArrowLeft, Search, Plus, Mic, Video, Download } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,6 +19,13 @@ interface VideoItem {
   selected: boolean;
 }
 
+interface TranscriptionItem {
+  videoId: string;
+  videoTitle: string;
+  content: string;
+  isCompleted: boolean;
+}
+
 const BatchTranscribe = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -26,6 +33,9 @@ const BatchTranscribe = () => {
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [videos, setVideos] = useState<VideoItem[]>([]);
+  const [transcriptions, setTranscriptions] = useState<TranscriptionItem[]>([]);
+  const [isTranscribing, setIsTranscribing] = useState(false);
+  const [showResults, setShowResults] = useState(false);
   
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -48,6 +58,7 @@ const BatchTranscribe = () => {
     }
     
     setIsLoading(true);
+    setShowResults(false);
     
     // Mock fetching videos - in a real app this would call an API
     setTimeout(() => {
@@ -119,9 +130,102 @@ const BatchTranscribe = () => {
       return;
     }
     
+    setIsTranscribing(true);
+    setTranscriptions([]);
+    
     toast({
       title: "Starting transcription",
       description: `Transcribing ${selectedVideos.length} videos. This may take some time.`,
+    });
+    
+    // Mock transcription process
+    let completedCount = 0;
+    
+    selectedVideos.forEach((video, index) => {
+      // Create mock transcriptions for each selected video
+      const mockTranscription: TranscriptionItem = {
+        videoId: video.id,
+        videoTitle: video.title,
+        content: '',
+        isCompleted: false
+      };
+      
+      setTranscriptions(prev => [...prev, mockTranscription]);
+      
+      // Simulate transcription process with delay
+      setTimeout(() => {
+        // Mock SRT content
+        const srtContent = generateMockSRT(video.title);
+        
+        setTranscriptions(prev => 
+          prev.map(t => 
+            t.videoId === video.id 
+              ? { ...t, content: srtContent, isCompleted: true } 
+              : t
+          )
+        );
+        
+        completedCount++;
+        if (completedCount === selectedVideos.length) {
+          setIsTranscribing(false);
+          setShowResults(true);
+          toast({
+            title: "Transcription complete",
+            description: `Successfully transcribed ${selectedVideos.length} videos.`,
+          });
+        }
+      }, 2000 + (index * 1000)); // Stagger the completion times
+    });
+  };
+  
+  const generateMockSRT = (title: string): string => {
+    // Generate a mock SRT file with timestamps and content based on the video title
+    return `1
+00:00:01,000 --> 00:00:04,000
+Welcome to this video about ${title.toLowerCase()}
+
+2
+00:00:05,000 --> 00:00:08,500
+Today we'll explore key concepts and practical applications
+
+3
+00:00:09,000 --> 00:00:15,000
+Let's start by understanding the fundamentals of this topic
+
+4
+00:00:16,000 --> 00:00:22,000
+The most important thing to remember is to practice regularly
+
+5
+00:00:23,000 --> 00:00:28,000
+Let me demonstrate some techniques that you can use right away
+
+6
+00:00:29,000 --> 00:00:35,000
+These strategies have been proven effective by experts in the field
+
+7
+00:00:36,000 --> 00:00:42,000
+Remember to apply these principles in your daily workflow
+
+8
+00:00:43,000 --> 00:00:48,000
+Thank you for watching this tutorial on ${title.toLowerCase()}`;
+  };
+  
+  const downloadTranscription = (videoId: string, title: string, content: string) => {
+    // Create a file from the transcription content
+    const element = document.createElement('a');
+    const file = new Blob([content], {type: 'text/plain'});
+    element.href = URL.createObjectURL(file);
+    element.download = `${title.replace(/[^a-zA-Z0-9 ]/g, '')}_transcription.srt`;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+    
+    toast({
+      title: "Download started",
+      description: "Your transcription file is being downloaded.",
     });
   };
   
@@ -175,7 +279,7 @@ const BatchTranscribe = () => {
               </div>
             </div>
             
-            {videos.length > 0 && (
+            {!showResults && videos.length > 0 && (
               <div className="mb-6">
                 <h3 className="text-xl font-semibold text-white mb-4">
                   {videos.length === 1 ? "1 Video Found" : `${videos.length} Videos Found`}
@@ -226,9 +330,89 @@ const BatchTranscribe = () => {
                 </div>
                 
                 <div className="flex justify-end">
-                  <Button onClick={handleTranscribe} size="lg" className="bg-indigo-600 hover:bg-indigo-700">
+                  <Button 
+                    onClick={handleTranscribe} 
+                    size="lg" 
+                    className="bg-indigo-600 hover:bg-indigo-700"
+                    disabled={isTranscribing}
+                  >
                     <FileText className="mr-2 h-4 w-4" />
-                    Transcribe Selected Videos
+                    {isTranscribing ? "Transcribing..." : "Transcribe Selected Videos"}
+                  </Button>
+                </div>
+              </div>
+            )}
+            
+            {showResults && (
+              <div className="mb-6">
+                <h3 className="text-xl font-semibold text-white mb-4">Transcription Results</h3>
+                
+                <div className="space-y-6 mb-8">
+                  {transcriptions.map((transcription) => (
+                    <Card key={transcription.videoId} className="bg-neutral-800 border-neutral-700">
+                      <CardContent className="p-6">
+                        <div className="mb-4">
+                          <h4 className="text-lg font-medium text-white mb-2">{transcription.videoTitle}</h4>
+                          <div className="flex items-center space-x-2 mb-4">
+                            <Youtube className="text-red-500 h-4 w-4" />
+                            <span className="text-sm text-neutral-400">Transcription {transcription.isCompleted ? 'completed' : 'in progress...'}</span>
+                          </div>
+                        </div>
+                        
+                        {transcription.isCompleted ? (
+                          <>
+                            <div className="bg-neutral-900 rounded-md p-3 mb-4 h-64 overflow-auto font-mono text-sm text-neutral-300">
+                              <pre>{transcription.content}</pre>
+                            </div>
+                            
+                            <div className="flex justify-end">
+                              <Button
+                                onClick={() => downloadTranscription(
+                                  transcription.videoId,
+                                  transcription.videoTitle,
+                                  transcription.content
+                                )}
+                                size="sm"
+                                className="bg-indigo-600 hover:bg-indigo-700"
+                              >
+                                <Download className="mr-2 h-4 w-4" />
+                                Download SRT
+                              </Button>
+                            </div>
+                          </>
+                        ) : (
+                          <div className="flex items-center justify-center h-32 bg-neutral-900 rounded-md">
+                            <div className="text-neutral-400">Transcribing...</div>
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+                
+                <div className="flex justify-between">
+                  <Button 
+                    onClick={() => {
+                      setShowResults(false);
+                      setTranscriptions([]);
+                    }} 
+                    variant="outline" 
+                    size="sm"
+                  >
+                    Back to Videos
+                  </Button>
+                  
+                  <Button 
+                    onClick={() => {
+                      setVideos([]);
+                      setTranscriptions([]);
+                      setYoutubeUrl('');
+                      setShowResults(false);
+                    }} 
+                    variant="outline" 
+                    size="sm"
+                  >
+                    Start New Batch
                   </Button>
                 </div>
               </div>
