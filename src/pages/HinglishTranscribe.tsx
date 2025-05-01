@@ -1,4 +1,3 @@
-
 import { useState, useRef } from 'react';
 import { FileText, Youtube, ArrowLeft, Play, Upload, Download, Database, File } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -387,9 +386,10 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
                       </div>
                     ) : (
                       <>
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                          {/* Media Player Side */}
+                        <div className="grid grid-cols-1 gap-6">
+                          {/* Combined Media Player and Hinglish Editor */}
                           <div className="bg-neutral-900 rounded-md overflow-hidden">
+                            {/* Media Player */}
                             <div className="aspect-video relative">
                               {transcriptionData.mediaType === 'video' ? (
                                 <div className="w-full h-full flex items-center justify-center">
@@ -421,16 +421,7 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
                               )}
                             </div>
                             
-                            <div className="p-3">
-                              <h5 className="text-sm font-medium text-white mb-2">English Transcript</h5>
-                              <div className="h-40 overflow-y-auto p-2 bg-neutral-800 rounded text-xs text-neutral-300 font-mono">
-                                <pre>{transcriptionData.content.english}</pre>
-                              </div>
-                            </div>
-                          </div>
-                          
-                          {/* Hinglish Editor Side */}
-                          <div className="bg-neutral-900 rounded-md overflow-hidden">
+                            {/* Hinglish Editor */}
                             <div className="p-4">
                               <h5 className="text-sm font-medium text-white mb-2">Hinglish Transcript Editor</h5>
                               <div className="h-80 mb-4">
