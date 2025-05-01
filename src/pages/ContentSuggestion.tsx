@@ -44,7 +44,7 @@ const ContentSuggestion = () => {
             <h2 className="text-white text-2xl md:text-3xl font-medium mb-12 text-center">What would you like to talk about today?</h2>
             
             <div className="w-full flex items-center mb-20">
-              <Input className="bg-white/10 border-0 text-white h-14 text-lg focus-visible:ring-white/40 placeholder:text-white/50" placeholder="Enter a topic..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} onKeyDown={handleKeyDown} />
+              <Input placeholder="Enter a topic..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} onKeyDown={handleKeyDown} className="bg-white/10 border-0 text-white h-14 text-lg focus-visible:ring-white/40 placeholder:text-white/50 rounded-none" />
               <Button variant="ghost" size="icon" className="ml-4 text-white h-14 w-14" onClick={handleSearch}>
                 <ArrowRight className="h-6 w-6" />
               </Button>
