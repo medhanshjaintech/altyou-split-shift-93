@@ -15,7 +15,7 @@ const Dashboard = () => {
 
   // Your 8 primary tools
   const tools = [
-    { id: 1, name: 'Batch Transcribe', icon: FileText, description: 'Convert audio and video files to text', comingSoon: false },
+    { id: 1, name: 'Batch Transcribe', icon: FileText, description: 'Convert audio and video files to text', comingSoon: false, path: '/batch-transcribe' },
     { id: 2, name: 'SRT File - Hinglish', icon: FileText, description: 'Generate subtitle files with Hinglish text', comingSoon: false },
     { id: 3, name: 'Knowledge Bot', icon: Bot, description: 'AI assistant trained on your content', comingSoon: false },
     { id: 4, name: 'Content Suggestion Engine', icon: Search, description: 'Get AI-powered content ideas', comingSoon: false },
@@ -82,10 +82,16 @@ const Dashboard = () => {
   ];
 
   const handleToolClick = (toolId: number) => {
-    toast({
-      title: "Coming soon!",
-      description: "This feature will be available shortly.",
-    });
+    const tool = tools.find(t => t.id === toolId);
+    
+    if (tool?.path) {
+      navigate(tool.path);
+    } else {
+      toast({
+        title: "Coming soon!",
+        description: "This feature will be available shortly.",
+      });
+    }
   };
 
   const toggleSidebar = () => {
