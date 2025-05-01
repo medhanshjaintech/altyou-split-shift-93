@@ -20,12 +20,24 @@ const ScriptBuilder = () => {
   const location = useLocation();
   const { toast } = useToast();
   const [isGenerating, setIsGenerating] = useState(false);
-  const [scriptUploaded, setScriptUploaded] = useState(false);
+  // Setting scriptUploaded to true by default to skip upload requirement
+  const [scriptUploaded, setScriptUploaded] = useState(true);
   const [generatedScript, setGeneratedScript] = useState<string | null>(null);
   
-  // Mock data for previously uploaded scripts
+  // Mock data for previously uploaded scripts - adding some default scripts
   const [previousScripts, setPreviousScripts] = useState<ScriptFile[]>([
-    // Empty initially - will be populated if the user has previously uploaded scripts
+    {
+      id: 'script-123456',
+      name: 'Sample Script 1.txt',
+      size: '24.5 KB',
+      uploadDate: '2025-04-28 14:25'
+    },
+    {
+      id: 'script-234567',
+      name: 'Sample Script 2.txt',
+      size: '18.3 KB',
+      uploadDate: '2025-04-29 09:10'
+    }
   ]);
 
   const searchTopic = location.state?.searchQuery || "Content Topic";
@@ -53,7 +65,7 @@ const ScriptBuilder = () => {
         uploadDate: new Date().toLocaleString()
       }));
       
-      setPreviousScripts([...newScripts]);
+      setPreviousScripts([...previousScripts, ...newScripts]);
       setScriptUploaded(true);
       
       toast({
@@ -64,14 +76,6 @@ const ScriptBuilder = () => {
   };
   
   const handleGenerateScript = () => {
-    if (!scriptUploaded && previousScripts.length === 0) {
-      toast({
-        title: "Missing scripts",
-        description: "Please upload at least one script to generate content based on your style."
-      });
-      return;
-    }
-    
     setIsGenerating(true);
     toast({
       title: "Generating script",
@@ -121,8 +125,6 @@ END OF SCENE 1`;
       setIsGenerating(false);
     }, 3000);
   };
-  
-  const needsUpload = previousScripts.length === 0 && !scriptUploaded;
 
   return (
     <div className="fixed inset-0 bg-[#121212] flex items-center justify-center">
@@ -146,72 +148,48 @@ END OF SCENE 1`;
               We'll generate a script for "{searchTopic}" that matches your unique voice.
             </p>
             
-            {needsUpload ? (
-              <Card className="bg-white/5 border-dashed border-2 border-white/20 text-center p-12 rounded-lg mb-8">
-                <div className="flex flex-col items-center justify-center">
-                  <Upload className="h-12 w-12 text-white/30 mb-4" />
-                  <h3 className="text-white text-xl mb-2">Upload Your Scripts</h3>
-                  <p className="text-white/60 mb-6 max-w-md">
-                    To get started, please upload 8-10 of your previous scripts to help us analyze your writing style.
-                  </p>
-                  <label className="cursor-pointer">
-                    <input
-                      type="file"
-                      multiple
-                      accept=".txt,.docx,.pdf"
-                      className="hidden"
-                      onChange={handleFileUpload}
-                    />
-                    <Button className="bg-white/10 hover:bg-white/20 text-white border-0">
-                      Upload Scripts
-                    </Button>
-                  </label>
-                </div>
-              </Card>
-            ) : (
-              <Card className="bg-white/10 border-0 text-white p-6 rounded-lg mb-8">
-                <div className="flex items-start gap-4">
-                  <FileText className="h-5 w-5 text-blue-400 mt-1" />
-                  <div className="w-full">
-                    <div className="flex justify-between items-center mb-4">
-                      <h3 className="text-lg font-medium">Your Uploaded Scripts</h3>
-                      <label className="cursor-pointer">
-                        <input
-                          type="file"
-                          multiple
-                          accept=".txt,.docx,.pdf"
-                          className="hidden"
-                          onChange={handleFileUpload}
-                        />
-                        <Button size="sm" variant="ghost" className="text-white/70 hover:text-white border border-white/20 hover:bg-white/10">
-                          Upload More
-                        </Button>
-                      </label>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      {previousScripts.map(script => (
-                        <div key={script.id} className="flex justify-between items-center p-3 rounded-md hover:bg-white/5">
-                          <div className="flex items-center gap-3">
-                            <FileText className="h-4 w-4 text-white/50" />
-                            <span>{script.name}</span>
-                          </div>
-                          <div className="text-white/50 text-sm">
-                            {script.size} • {script.uploadDate}
-                          </div>
+            <Card className="bg-white/10 border-0 text-white p-6 rounded-lg mb-8">
+              <div className="flex items-start gap-4">
+                <FileText className="h-5 w-5 text-blue-400 mt-1" />
+                <div className="w-full">
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-lg font-medium">Your Uploaded Scripts</h3>
+                    <label className="cursor-pointer">
+                      <input
+                        type="file"
+                        multiple
+                        accept=".txt,.docx,.pdf"
+                        className="hidden"
+                        onChange={handleFileUpload}
+                      />
+                      <Button size="sm" variant="ghost" className="text-white/70 hover:text-white border border-white/20 hover:bg-white/10">
+                        Upload More
+                      </Button>
+                    </label>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    {previousScripts.map(script => (
+                      <div key={script.id} className="flex justify-between items-center p-3 rounded-md hover:bg-white/5">
+                        <div className="flex items-center gap-3">
+                          <FileText className="h-4 w-4 text-white/50" />
+                          <span>{script.name}</span>
                         </div>
-                      ))}
-                    </div>
+                        <div className="text-white/50 text-sm">
+                          {script.size} • {script.uploadDate}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              </Card>
-            )}
+              </div>
+            </Card>
             
             {!generatedScript && (
               <div className="flex justify-center mt-8">
                 <Button 
                   onClick={handleGenerateScript}
-                  disabled={isGenerating || (needsUpload && !scriptUploaded)} 
+                  disabled={isGenerating} 
                   className="bg-white/10 hover:bg-white/20 text-white border-0 w-64 h-12"
                 >
                   {isGenerating ? 'Generating Script...' : 'Generate Script'}
