@@ -1,6 +1,7 @@
 
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { X, UserCircle } from "lucide-react";
+import { X, UserCircle, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface Persona {
   id: string;
@@ -14,17 +15,31 @@ interface PersonaSelectorProps {
   activePersona: string | null;
   onPersonaSelect: (personaId: string) => void;
   onPersonaDelete: (personaId: string) => void;
+  onCreatePersona?: () => void;
 }
 
 const PersonaSelector = ({ 
   personas, 
   activePersona, 
   onPersonaSelect,
-  onPersonaDelete
+  onPersonaDelete,
+  onCreatePersona
 }: PersonaSelectorProps) => {
   return (
-    <div>
-      <p className="text-sm font-medium mb-3 text-muted-foreground">Already made personas</p>
+    <div className="bg-neutral-900/70 border border-neutral-800 rounded-lg p-6">
+      <div className="flex justify-between items-center mb-4">
+        <p className="text-md font-medium text-white">Select a Persona Style</p>
+        {onCreatePersona && (
+          <Button 
+            onClick={onCreatePersona} 
+            className="flex items-center bg-blue-600 hover:bg-blue-700 text-white"
+            size="sm"
+          >
+            <Plus className="mr-2 h-4 w-4" />
+            Create Persona
+          </Button>
+        )}
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {personas.map((persona) => (
           <div

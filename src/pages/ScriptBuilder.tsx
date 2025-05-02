@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ChevronLeft, Upload, FileText, Download, Edit } from 'lucide-react';
@@ -12,6 +11,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
 import PersonaSelector from '@/components/PersonaSelector';
+import PersonaCreationModal from '@/components/PersonaCreationModal';
 
 interface ScriptFile {
   id: string;
@@ -40,6 +40,7 @@ const ScriptBuilder = () => {
   const [context, setContext] = useState<string>('');
   const [instructions, setInstructions] = useState<string>('');
   const [activePersona, setActivePersona] = useState<string | null>(null);
+  const [isPersonaModalOpen, setIsPersonaModalOpen] = useState(false);
   
   // Mock personas for now - these would typically come from an API or context
   const [personas, setPersonas] = useState<Persona[]>([
@@ -249,6 +250,15 @@ END OF SCENE 1`;
     }
   };
 
+  const handleAddPersona = (newPersona: Persona) => {
+    setPersonas([...personas, newPersona]);
+    toast({
+      title: "Persona Created",
+      description: `${newPersona.name} has been added to your personas`
+    });
+    setIsPersonaModalOpen(false);
+  };
+
   return (
     <div className="fixed inset-0 bg-[#121212] flex items-center justify-center">
       <ScrollArea className="h-full w-full">
@@ -313,6 +323,7 @@ END OF SCENE 1`;
                   activePersona={activePersona}
                   onPersonaSelect={handlePersonaSelect}
                   onPersonaDelete={handlePersonaDelete}
+                  onCreatePersona={() => setIsPersonaModalOpen(true)}
                 />
               </div>
             </div>
@@ -440,6 +451,12 @@ END OF SCENE 1`;
           </div>
         </div>
       </ScrollArea>
+
+      <PersonaCreationModal
+        isOpen={isPersonaModalOpen}
+        onClose={() => setIsPersonaModalOpen(false)}
+        onAddPersona={handleAddPersona}
+      />
     </div>
   );
 };
