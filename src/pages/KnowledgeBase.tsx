@@ -4,14 +4,12 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import KnowledgeSidebar from "@/components/KnowledgeSidebar";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { ArrowLeft, FileText, File, Search, Plus, Trash2, Upload, Database } from "lucide-react";
+import { ArrowLeft, FileText, File, Search, Trash2, Upload, Database } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import PersonaSelector from "@/components/PersonaSelector";
-import PersonaCreationModal from "@/components/PersonaCreationModal";
 
 interface KnowledgeFile {
   id: string;
@@ -24,19 +22,10 @@ interface KnowledgeFile {
   associatedPersona?: string;
 }
 
-interface Persona {
-  id: string;
-  name: string;
-  description: string;
-  avatar?: string;
-  instructions?: string;
-}
-
 const KnowledgeBase = () => {
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
-  const [isPersonaModalOpen, setIsPersonaModalOpen] = useState(false);
   
   const [knowledgeFiles, setKnowledgeFiles] = useState<KnowledgeFile[]>([
     { id: "1", name: "Interview with Marketing Director.txt", type: "transcription", selected: false, dateAdded: "2025-05-01", duration: "32:15" },
@@ -52,33 +41,6 @@ const KnowledgeBase = () => {
     { id: "11", name: "Marketing Expert Analysis", type: "generated", selected: false, dateAdded: "2025-05-02", associatedPersona: "marketing-expert" },
     { id: "12", name: "Tech Guru Insights", type: "generated", selected: false, dateAdded: "2025-05-01", associatedPersona: "tech-guru" },
     { id: "13", name: "Business Strategy Review", type: "generated", selected: false, dateAdded: "2025-04-29", associatedPersona: "business-coach" },
-  ]);
-
-  const [personas, setPersonas] = useState<Persona[]>([
-    {
-      id: "tech-guru",
-      name: "Tech Guru",
-      description: "Technology expert with deep knowledge of latest trends",
-      avatar: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?auto=format&fit=crop&w=64&h=64"
-    },
-    {
-      id: "marketing-expert",
-      name: "Marketing Expert",
-      description: "Marketing specialist with insights on growth strategies",
-      avatar: "https://images.unsplash.com/photo-1582562124811-c09040d0a901?auto=format&fit=crop&w=64&h=64"
-    },
-    {
-      id: "content-creator",
-      name: "Content Creator",
-      description: "Creative specialist for engaging content development",
-      avatar: "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?auto=format&fit=crop&w=64&h=64"
-    },
-    {
-      id: "business-coach",
-      name: "Business Coach",
-      description: "Strategic advisor for business growth and development",
-      avatar: "https://images.unsplash.com/photo-1501286353178-1ec871214838?auto=format&fit=crop&w=64&h=64"
-    },
   ]);
 
   const toggleFileSelection = (fileId: string) => {
@@ -143,26 +105,6 @@ const KnowledgeBase = () => {
     toast({
       title: "Files Deleted",
       description: `${selectedFiles.length} file(s) have been deleted.`
-    });
-  };
-
-  const handleAddPersona = (newPersona: Persona) => {
-    setPersonas([...personas, newPersona]);
-    setIsPersonaModalOpen(false);
-    
-    toast({
-      title: "Persona Created",
-      description: `${newPersona.name} has been added to your personas`
-    });
-  };
-
-  const handleDeletePersona = (personaId: string) => {
-    setPersonas(personas.filter(persona => persona.id !== personaId));
-    
-    toast({
-      title: "Persona Deleted",
-      description: "The persona has been removed from your list",
-      variant: "destructive"
     });
   };
 
@@ -250,12 +192,6 @@ const KnowledgeBase = () => {
                 >
                   Generated ({generated.length})
                 </TabsTrigger>
-                <TabsTrigger 
-                  value="personas" 
-                  className="text-white data-[state=active]:bg-blue-700 data-[state=active]:text-white"
-                >
-                  Personas ({personas.length})
-                </TabsTrigger>
               </TabsList>
 
               {/* All Files Tab */}
@@ -283,7 +219,7 @@ const KnowledgeBase = () => {
                           <p className="text-sm text-gray-400">
                             {file.type === "transcription" ? `Duration: ${file.duration}` : 
                              file.type === "upload" ? `Size: ${file.size}` :
-                             `Generated with ${personas.find(p => p.id === file.associatedPersona)?.name || "Unknown"}`}
+                             `Generated content`}
                           </p>
                           <p className="text-xs text-gray-500 mt-1">Added: {file.dateAdded}</p>
                         </div>
@@ -359,62 +295,8 @@ const KnowledgeBase = () => {
                         <Database className="h-8 w-8 text-purple-400" />
                         <div className="flex-1 min-w-0">
                           <p className="text-white font-medium truncate">{file.name}</p>
-                          <p className="text-sm text-gray-400">
-                            Generated with {personas.find(p => p.id === file.associatedPersona)?.name || "Unknown"}
-                          </p>
+                          <p className="text-sm text-gray-400">Generated content</p>
                           <p className="text-xs text-gray-500 mt-1">Added: {file.dateAdded}</p>
-                        </div>
-                      </div>
-                    </Card>
-                  ))}
-                </div>
-              </TabsContent>
-
-              {/* Personas Tab */}
-              <TabsContent value="personas" className="space-y-4">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-xl font-semibold text-white">All Personas</h2>
-                  <Button 
-                    onClick={() => setIsPersonaModalOpen(true)} 
-                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
-                  >
-                    <Plus className="h-4 w-4" />
-                    Create Persona
-                  </Button>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {personas.map((persona) => (
-                    <Card
-                      key={persona.id}
-                      className="border border-neutral-700 bg-neutral-800 p-4"
-                    >
-                      <div className="relative">
-                        <Button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeletePersona(persona.id);
-                          }}
-                          variant="ghost" 
-                          size="sm"
-                          className="absolute top-0 right-0 h-8 w-8 rounded-full p-0 text-gray-400 hover:bg-red-900 hover:text-white"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                        <div className="flex items-center gap-3 mb-3">
-                          {persona.avatar && (
-                            <img 
-                              src={persona.avatar} 
-                              alt={persona.name} 
-                              className="h-12 w-12 rounded-full border border-neutral-600 object-cover"
-                            />
-                          )}
-                          <span className="font-medium text-white text-lg">{persona.name}</span>
-                        </div>
-                        <p className="text-sm text-gray-300 mb-3">{persona.description}</p>
-                        
-                        <div className="text-xs text-gray-400">
-                          {generated.filter(file => file.associatedPersona === persona.id).length} generated files
                         </div>
                       </div>
                     </Card>
@@ -425,12 +307,6 @@ const KnowledgeBase = () => {
           </div>
         </div>
       </SidebarProvider>
-
-      <PersonaCreationModal
-        isOpen={isPersonaModalOpen}
-        onClose={() => setIsPersonaModalOpen(false)}
-        onAddPersona={handleAddPersona}
-      />
     </div>
   );
 };

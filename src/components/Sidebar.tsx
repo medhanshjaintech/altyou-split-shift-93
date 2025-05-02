@@ -1,12 +1,25 @@
+
 import { useState } from 'react';
-import { LayoutDashboard, Folder, LayoutTemplate, ChevronLeft, ChevronRight, Database, User, Settings } from 'lucide-react';
+import { LayoutDashboard, Folder, LayoutTemplate, ChevronLeft, ChevronRight, Database, User, Settings, UserRound, Plus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import PersonaCreationModal from '@/components/PersonaCreationModal';
+import { useToast } from '@/hooks/use-toast';
+import { Avatar } from '@/components/ui/avatar';
 
 interface SidebarProps {
   isOpen: boolean;
   toggleSidebar: () => void;
+}
+
+interface Persona {
+  id: string;
+  name: string;
+  description: string;
+  avatar?: string;
+  instructions?: string;
 }
 
 const Sidebar = ({
@@ -14,7 +27,36 @@ const Sidebar = ({
   toggleSidebar
 }: SidebarProps) => {
   const navigate = useNavigate();
-  const [activeSection, setActiveSection] = useState<'dashboard' | 'projects' | 'templates' | 'knowledge-base'>('dashboard');
+  const { toast } = useToast();
+  const [activeSection, setActiveSection] = useState<'dashboard' | 'projects' | 'templates' | 'knowledge-base' | 'personas'>('dashboard');
+  const [isPersonaModalOpen, setIsPersonaModalOpen] = useState(false);
+  
+  const [personas, setPersonas] = useState<Persona[]>([
+    {
+      id: "tech-guru",
+      name: "Tech Guru",
+      description: "Technology expert with deep knowledge of latest trends",
+      avatar: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?auto=format&fit=crop&w=64&h=64"
+    },
+    {
+      id: "marketing-expert",
+      name: "Marketing Expert",
+      description: "Marketing specialist with insights on growth strategies",
+      avatar: "https://images.unsplash.com/photo-1582562124811-c09040d0a901?auto=format&fit=crop&w=64&h=64"
+    },
+    {
+      id: "content-creator",
+      name: "Content Creator",
+      description: "Creative specialist for engaging content development",
+      avatar: "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?auto=format&fit=crop&w=64&h=64"
+    },
+    {
+      id: "business-coach",
+      name: "Business Coach",
+      description: "Strategic advisor for business growth and development",
+      avatar: "https://images.unsplash.com/photo-1501286353178-1ec871214838?auto=format&fit=crop&w=64&h=64"
+    },
+  ]);
   
   const sampleProjects = [{
     id: 1,
@@ -80,9 +122,34 @@ const Sidebar = ({
     color: 'bg-gradient-to-r from-rose-500 to-pink-600'
   }];
   
-  const handleNavigation = (path: string, section: 'dashboard' | 'projects' | 'templates' | 'knowledge-base') => {
+  const handleNavigation = (path: string, section: 'dashboard' | 'projects' | 'templates' | 'knowledge-base' | 'personas') => {
     setActiveSection(section);
     navigate(path);
+  };
+
+  const handleAddPersona = (newPersona: Persona) => {
+    // Add avatar to new persona if not provided
+    const personaWithAvatar = {
+      ...newPersona,
+      avatar: newPersona.avatar || "/lovable-uploads/f5e90732-46bb-4f6a-82c4-c07cb1e98cb9.png"
+    };
+    
+    setPersonas([...personas, personaWithAvatar]);
+    toast({
+      title: "Persona Created",
+      description: `${newPersona.name} has been added to your personas`
+    });
+    setIsPersonaModalOpen(false);
+  };
+
+  const handleDeletePersona = (personaId: string) => {
+    setPersonas(personas.filter(persona => persona.id !== personaId));
+    
+    toast({
+      title: "Persona Deleted",
+      description: "The persona has been removed from your list",
+      variant: "destructive"
+    });
   };
   
   return <aside className={cn("fixed left-0 top-0 h-screen bg-[#0A0A0A] transition-all duration-300 ease-in-out z-10 border-r border-white/10", isOpen ? "w-64" : "w-16")}>
@@ -111,6 +178,11 @@ const Sidebar = ({
           <button className={cn("flex items-center w-full px-4 py-3 transition-colors", activeSection === 'knowledge-base' ? "bg-white/10 border-l-2 border-indigo-500" : "hover:bg-white/5 border-l-2 border-transparent", !isOpen && "justify-center")} onClick={() => handleNavigation('/knowledge-base', 'knowledge-base')}>
             <Database size={20} className="text-gray-400" />
             {isOpen && <span className="ml-3 text-white">Database</span>}
+          </button>
+          
+          <button className={cn("flex items-center w-full px-4 py-3 transition-colors", activeSection === 'personas' ? "bg-white/10 border-l-2 border-indigo-500" : "hover:bg-white/5 border-l-2 border-transparent", !isOpen && "justify-center")} onClick={() => setActiveSection('personas')}>
+            <UserRound size={20} className="text-gray-400" />
+            {isOpen && <span className="ml-3 text-white">Personas</span>}
           </button>
         </nav>
       </div>
@@ -157,6 +229,45 @@ const Sidebar = ({
                     </div>)}
                 </div>
               </div>}
+              
+            {activeSection === 'personas' && <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-sm font-medium text-gray-400">My Personas</h3>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => setIsPersonaModalOpen(true)}
+                    className="h-7 px-2 text-xs flex items-center gap-1 text-white border-white/20 bg-neutral-800 hover:bg-blue-700"
+                  >
+                    <Plus className="h-3 w-3" /> Create
+                  </Button>
+                </div>
+                <div className="space-y-3">
+                  {personas.map(persona => (
+                    <div key={persona.id} className="flex items-start gap-2 p-2 text-sm rounded-md text-white hover:bg-blue-900/30 group">
+                      <div className="h-8 w-8 rounded-full overflow-hidden flex-shrink-0">
+                        <img 
+                          src={persona.avatar} 
+                          alt={persona.name} 
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium truncate">{persona.name}</p>
+                        <p className="text-xs text-gray-400 truncate">{persona.description}</p>
+                      </div>
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        onClick={() => handleDeletePersona(persona.id)}
+                        className="opacity-0 group-hover:opacity-100 h-6 w-6 p-0 hover:bg-red-900/20 hover:text-red-500"
+                      >
+                        ×
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>}
           </ScrollArea>
         </div>}
       
@@ -173,6 +284,12 @@ const Sidebar = ({
             </button>
           </div>
         </div>}
+      
+      <PersonaCreationModal
+        isOpen={isPersonaModalOpen}
+        onClose={() => setIsPersonaModalOpen(false)}
+        onAddPersona={handleAddPersona}
+      />
     </aside>;
 };
 
