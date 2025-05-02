@@ -10,6 +10,7 @@ import PersonasModal from '@/components/PersonasModal';
 interface SidebarProps {
   isOpen: boolean;
   toggleSidebar: () => void;
+  openProjectsWindow?: () => void; // New prop to open projects window
 }
 
 interface Persona {
@@ -22,7 +23,8 @@ interface Persona {
 
 const Sidebar = ({
   isOpen,
-  toggleSidebar
+  toggleSidebar,
+  openProjectsWindow
 }: SidebarProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -60,6 +62,8 @@ const Sidebar = ({
     setActiveSection(section);
     if (section === 'personas') {
       setIsPersonasModalOpen(true);
+    } else if (section === 'projects' && openProjectsWindow) {
+      openProjectsWindow(); // Open projects window if provided
     } else {
       navigate(path);
     }
@@ -85,7 +89,7 @@ const Sidebar = ({
               {isOpen && <span className="ml-3 text-white">Dashboard</span>}
             </button>
             
-            <button className={cn("flex items-center w-full px-4 py-3 transition-colors", activeSection === 'projects' ? "bg-white/10 border-l-2 border-indigo-500" : "hover:bg-white/5 border-l-2 border-transparent", !isOpen && "justify-center")} onClick={() => handleNavigation('/dashboard', 'projects')}>
+            <button className={cn("flex items-center w-full px-4 py-3 transition-colors", activeSection === 'projects' ? "bg-white/10 border-l-2 border-indigo-500" : "hover:bg-white/5 border-l-2 border-transparent", !isOpen && "justify-center")} onClick={() => handleNavigation('', 'projects')}>
               <Folder size={20} className="text-gray-400" />
               {isOpen && <span className="ml-3 text-white">My Projects</span>}
             </button>

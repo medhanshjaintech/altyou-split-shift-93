@@ -195,7 +195,11 @@ const Dashboard = () => {
   };
 
   return <div className="flex min-h-screen bg-[#121212]">
-      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      <Sidebar 
+        isOpen={isSidebarOpen} 
+        toggleSidebar={toggleSidebar} 
+        openProjectsWindow={openProjectsWindow}
+      />
       
       <main className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-16'}`}>
         <ScrollArea className="h-screen">
