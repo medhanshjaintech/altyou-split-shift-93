@@ -230,7 +230,6 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
   // Add a new function to handle copying the SRT content
   const copySRT = () => {
     if (!hinglishText) return;
-    
     navigator.clipboard.writeText(hinglishText).then(() => {
       toast({
         title: "Copied to clipboard",
@@ -244,7 +243,6 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
       });
     });
   };
-
   return <div className="flex min-h-screen bg-[#121212]">
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       
@@ -406,7 +404,7 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
                       </div>}
                     
                     <div className="border-t border-neutral-700 p-4 flex justify-between items-center">
-                      <Button onClick={() => setTranscriptionData(null)} variant="outline" size="sm" className="border-neutral-600 text-neutral-300">
+                      <Button onClick={() => setTranscriptionData(null)} variant="outline" size="sm" className="border-neutral-600 bg-zinc-800 hover:bg-zinc-700 text-zinc-100">
                         Start New Transcription
                       </Button>
                       
@@ -423,5 +421,4 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
       </main>
     </div>;
 };
-
 export default HinglishTranscribe;
