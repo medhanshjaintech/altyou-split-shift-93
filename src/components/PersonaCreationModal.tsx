@@ -12,6 +12,7 @@ interface Persona {
   name: string;
   description: string;
   avatar?: string;
+  instructions?: string;
 }
 
 interface DatabaseFile {
@@ -59,6 +60,7 @@ const PersonaCreationModal = ({
       id: `persona-${Date.now()}`,
       name: name.trim(),
       description: description.trim(),
+      instructions: instructions.trim(),
       avatar: "/placeholder.svg"
     };
     
@@ -71,6 +73,9 @@ const PersonaCreationModal = ({
     setDatabaseFiles(prevFiles =>
       prevFiles.map(file => ({ ...file, selected: false }))
     );
+    
+    // Close the modal
+    onClose();
   };
 
   const handleFileUpload = () => {
@@ -151,10 +156,12 @@ const PersonaCreationModal = ({
         </div>
         
         <DialogFooter>
-          <Button variant="outline" onClick={onClose} className="border-white/20 bg-neutral-800 hover:bg-neutral-700">
+          <Button variant="outline" onClick={onClose} className="border-white/20 bg-neutral-800 hover:bg-neutral-700 text-white">
             Cancel
           </Button>
-          <Button onClick={handleSubmit}>Create Persona</Button>
+          <Button onClick={handleSubmit} className="bg-blue-600 hover:bg-blue-700 text-white">
+            Create Persona
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import ChatArea from "@/components/ChatArea";
 import PersonaSelector from "@/components/PersonaSelector";
 import PersonaCreationModal from "@/components/PersonaCreationModal";
+import { toast } from "@/hooks/use-toast";
 
 interface Message {
   role: "user" | "bot";
@@ -17,6 +18,7 @@ interface Persona {
   id: string;
   name: string;
   description: string;
+  instructions?: string;
   avatar?: string;
 }
 
@@ -83,6 +85,10 @@ const KnowledgeBot = () => {
 
   const handleAddPersona = (newPersona: Persona) => {
     setPersonas([...personas, newPersona]);
+    toast({
+      title: "Persona Created",
+      description: `${newPersona.name} has been added to your personas`
+    });
     setIsPersonaModalOpen(false);
   };
 
@@ -103,7 +109,10 @@ const KnowledgeBot = () => {
           <div>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold text-white">Select a Persona</h2>
-              <Button onClick={() => setIsPersonaModalOpen(true)} className="flex items-center">
+              <Button 
+                onClick={() => setIsPersonaModalOpen(true)} 
+                className="flex items-center bg-blue-600 hover:bg-blue-700 text-white"
+              >
                 <Plus className="mr-2 h-4 w-4" />
                 Create Persona
               </Button>
@@ -123,6 +132,7 @@ const KnowledgeBot = () => {
                   variant="outline" 
                   onClick={() => setActivePersona(null)}
                   size="sm"
+                  className="text-white border-white/20 bg-neutral-800 hover:bg-neutral-700"
                 >
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Back to Personas
