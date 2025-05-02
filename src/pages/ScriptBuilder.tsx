@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ChevronLeft, Upload, FileText, Download, Edit } from 'lucide-react';
@@ -9,12 +10,21 @@ import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
+import { Textarea } from '@/components/ui/textarea';
+import PersonaSelector from '@/components/PersonaSelector';
 
 interface ScriptFile {
   id: string;
   name: string;
   size: string;
   uploadDate: string;
+}
+
+interface Persona {
+  id: string;
+  name: string;
+  description: string;
+  avatar?: string;
 }
 
 const ScriptBuilder = () => {
@@ -27,6 +37,31 @@ const ScriptBuilder = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedScript, setEditedScript] = useState<string>('');
   const [topic, setTopic] = useState<string>('');
+  const [context, setContext] = useState<string>('');
+  const [instructions, setInstructions] = useState<string>('');
+  const [activePersona, setActivePersona] = useState<string | null>(null);
+  
+  // Mock personas for now - these would typically come from an API or context
+  const [personas, setPersonas] = useState<Persona[]>([
+    {
+      id: 'persona-1',
+      name: 'Professional',
+      description: 'Formal, business-oriented writing style',
+      avatar: '/placeholder.svg'
+    },
+    {
+      id: 'persona-2',
+      name: 'Casual',
+      description: 'Conversational, friendly tone for general audiences',
+      avatar: '/placeholder.svg'
+    },
+    {
+      id: 'persona-3',
+      name: 'Technical',
+      description: 'Detailed, precise language for technical content',
+      avatar: '/placeholder.svg'
+    }
+  ]);
   
   // Mock data for previously uploaded scripts - adding some default scripts
   const [previousScripts, setPreviousScripts] = useState<ScriptFile[]>([
@@ -186,6 +221,17 @@ END OF SCENE 1`;
     setEditedScript(generatedScript || '');
     setIsEditing(false);
   };
+  
+  const handlePersonaSelect = (personaId: string) => {
+    setActivePersona(personaId === activePersona ? null : personaId);
+  };
+  
+  const handlePersonaDelete = (personaId: string) => {
+    setPersonas(personas.filter(persona => persona.id !== personaId));
+    if (activePersona === personaId) {
+      setActivePersona(null);
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-[#121212] flex items-center justify-center">
@@ -205,17 +251,54 @@ END OF SCENE 1`;
           <div className="w-full max-w-5xl mx-auto pt-16">
             <h2 className="text-white text-4xl font-medium mb-6">Script Builder</h2>
             
-            <div className="mb-8">
-              <label htmlFor="topic" className="block text-white/70 mb-2">
-                Script Topic
-              </label>
-              <Input 
-                id="topic"
-                value={topic} 
-                onChange={(e) => setTopic(e.target.value)} 
-                placeholder="Enter your script topic..."
-                className="bg-white/10 border-0 text-white focus-visible:ring-white/30"
-              />
+            <div className="space-y-6 mb-10">
+              <div>
+                <label htmlFor="topic" className="block text-white/70 mb-2">
+                  Topic
+                </label>
+                <Input 
+                  id="topic"
+                  value={topic} 
+                  onChange={(e) => setTopic(e.target.value)} 
+                  placeholder="Enter your topic..."
+                  className="bg-white/10 border-0 text-white focus-visible:ring-white/30"
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="context" className="block text-white/70 mb-2">
+                  Context
+                </label>
+                <Textarea
+                  id="context"
+                  value={context}
+                  onChange={(e) => setContext(e.target.value)}
+                  placeholder="Provide context for your script..."
+                  className="bg-white/10 border-0 text-white focus-visible:ring-white/30 min-h-[100px]"
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="instructions" className="block text-white/70 mb-2">
+                  Instructions (Optional)
+                </label>
+                <Textarea
+                  id="instructions"
+                  value={instructions}
+                  onChange={(e) => setInstructions(e.target.value)}
+                  placeholder="Add any specific instructions for generating your script..."
+                  className="bg-white/10 border-0 text-white focus-visible:ring-white/30 min-h-[100px]"
+                />
+              </div>
+              
+              <div className="mt-6">
+                <PersonaSelector
+                  personas={personas}
+                  activePersona={activePersona}
+                  onPersonaSelect={handlePersonaSelect}
+                  onPersonaDelete={handlePersonaDelete}
+                />
+              </div>
             </div>
             
             <p className="text-white/70 mb-8">
@@ -268,7 +351,7 @@ END OF SCENE 1`;
                   disabled={isGenerating} 
                   className="bg-white/10 hover:bg-white/20 text-white border-0 w-64 h-12"
                 >
-                  {isGenerating ? 'Generating Script...' : 'Generate Script'}
+                  {isGenerating ? 'Generating Script...' : 'Generate with AI'}
                 </Button>
               </div>
             )}
