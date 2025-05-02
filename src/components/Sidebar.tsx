@@ -12,7 +12,7 @@ const Sidebar = ({
   toggleSidebar
 }: SidebarProps) => {
   const navigate = useNavigate();
-  const [activeSection, setActiveSection] = useState<'dashboard' | 'projects' | 'templates' | 'knowledge-base'>('dashboard');
+  const [activeSection, setActiveSection] = useState<'dashboard' | 'projects' | 'templates' | 'knowledge-bot'>('dashboard');
   const sampleProjects = [{
     id: 1,
     name: 'Content Analyzer Report',
@@ -75,7 +75,7 @@ const Sidebar = ({
     category: 'Marketing',
     color: 'bg-gradient-to-r from-rose-500 to-pink-600'
   }];
-  const handleNavigation = (path: string, section: 'dashboard' | 'projects' | 'templates' | 'knowledge-base') => {
+  const handleNavigation = (path: string, section: 'dashboard' | 'projects' | 'templates' | 'knowledge-bot') => {
     setActiveSection(section);
     navigate(path);
   };
@@ -102,11 +102,9 @@ const Sidebar = ({
             {isOpen && <span className="ml-3 text-white">Sample Projects</span>}
           </button>
           
-          
-          
-          <button className={cn("flex items-center w-full px-4 py-3 transition-colors", activeSection === 'knowledge-base' ? "bg-white/10 border-l-2 border-indigo-500" : "hover:bg-white/5 border-l-2 border-transparent", !isOpen && "justify-center")} onClick={() => handleNavigation('/knowledge-base', 'knowledge-base')}>
+          <button className={cn("flex items-center w-full px-4 py-3 transition-colors", activeSection === 'knowledge-bot' ? "bg-white/10 border-l-2 border-indigo-500" : "hover:bg-white/5 border-l-2 border-transparent", !isOpen && "justify-center")} onClick={() => handleNavigation('/knowledge-bot', 'knowledge-bot')}>
             <Database size={20} className="text-gray-400" />
-            {isOpen && <span className="ml-3 text-white">Knowledge Base</span>}
+            {isOpen && <span className="ml-3 text-white">Knowledge Bot</span>}
           </button>
         </nav>
       </div>

@@ -30,11 +30,11 @@ const Dashboard = () => {
     path: '/hinglish-transcribe'
   }, {
     id: 3,
-    name: 'Knowledge Base',
+    name: 'Knowledge Bot',
     icon: Database,
-    description: 'Access and manage your content library',
+    description: 'Chat with your content using AI',
     comingSoon: false,
-    path: '/knowledge-base'
+    path: '/knowledge-bot'
   }, {
     id: 4,
     name: 'Content Suggestion Engine',
