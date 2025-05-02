@@ -1,4 +1,3 @@
-
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Upload, FileText, Link as LinkIcon, Play, ChevronLeft, X, UserCircle, Plus } from 'lucide-react';
@@ -17,6 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from '@/components/ui/dialog';
 
 interface Persona {
@@ -167,11 +167,17 @@ const ViralReelCutter = () => {
     setPersonas([...personas, newPersona]);
     setActivePersona(newPersona.id);
     setIsPersonaModalOpen(false);
+    setIsPersonaDialogOpen(true); // Show persona dialog again after creating
     
     toast({
       title: "Persona Created",
       description: `${newPersona.name} has been added to your personas`,
     });
+  };
+
+  const handleCreatePersona = () => {
+    setIsPersonaDialogOpen(false);
+    setIsPersonaModalOpen(true);
   };
 
   const handleDeletePersona = (personaId: string) => {
@@ -379,9 +385,12 @@ const ViralReelCutter = () => {
 
       {/* Persona Selection Dialog */}
       <Dialog open={isPersonaDialogOpen} onOpenChange={setIsPersonaDialogOpen}>
-        <DialogContent className="bg-neutral-900 text-white border border-neutral-700 max-w-2xl">
+        <DialogContent className="bg-neutral-900 text-white border border-neutral-700 max-w-3xl">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-white">Select a Persona for Your Content</DialogTitle>
+            <DialogDescription className="text-gray-300">
+              Choose a persona to process your content with. Each persona will generate different styles of content.
+            </DialogDescription>
           </DialogHeader>
           
           <div className="py-4">
@@ -394,10 +403,7 @@ const ViralReelCutter = () => {
               activePersona={activePersona}
               onPersonaSelect={(personaId) => setActivePersona(personaId)}
               onPersonaDelete={handleDeletePersona}
-              onCreatePersona={() => {
-                setIsPersonaDialogOpen(false);
-                setIsPersonaModalOpen(true);
-              }}
+              onCreatePersona={handleCreatePersona}
             />
           </div>
           
@@ -412,9 +418,9 @@ const ViralReelCutter = () => {
             <Button 
               onClick={handleProcessWithPersona}
               disabled={!activePersona}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white"
             >
-              Proceed
+              Process with Selected Persona
             </Button>
           </DialogFooter>
         </DialogContent>
