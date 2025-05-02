@@ -79,10 +79,26 @@ const ScriptBuilder = () => {
     }
   ]);
 
-  // Check if we have a topic from the location state (coming from Content Suggestion)
+  // Initialize values based on navigation source
   useEffect(() => {
     if (location.state?.searchQuery) {
       setTopic(location.state.searchQuery);
+      
+      // Only set mock context and instructions if coming from content suggestion
+      if (location.state?.from === 'content-suggestion') {
+        // Mock context data based on topic
+        setContext(`This topic is currently trending across multiple platforms with high engagement rates. 
+Recent analytics show a 30% increase in content consumption related to this subject in the past month.
+The target audience is primarily 25-45 year olds with interests in technology and personal development.`);
+        
+        // Mock instructions data
+        setInstructions(`Please create a script that:
+- Provides a comprehensive overview of the topic
+- Includes practical examples and applications
+- Addresses common misconceptions
+- Uses an approachable, conversational tone
+- Concludes with actionable takeaways`);
+      }
     }
   }, [location.state]);
   

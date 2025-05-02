@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TrendingUp, ArrowRight, FileText, ChevronLeft, Download } from 'lucide-react';
@@ -83,8 +82,13 @@ const ContentSuggestion = () => {
       title: "Opening script builder",
       description: "Taking you to the script builder tool..."
     });
-    // Navigate to the script builder page with the search query as state
-    navigate('/script-builder', { state: { searchQuery: searchResult?.title || searchQuery } });
+    // Navigate to the script builder page with the search query and source information
+    navigate('/script-builder', { 
+      state: { 
+        searchQuery: searchResult?.title || searchQuery,
+        from: 'content-suggestion' 
+      } 
+    });
   };
 
   const handleBackToDashboard = () => {
