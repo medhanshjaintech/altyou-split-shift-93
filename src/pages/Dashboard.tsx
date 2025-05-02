@@ -168,24 +168,11 @@ const Dashboard = () => {
             </div>
             
             {/* Gen AI Tools Section (Previously Popular Features) */}
-            <h2 className="text-xl font-semibold text-white mb-4">Gen AI Tools</h2>
+            
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               {genAITools.map(tool => <Card key={tool.id} className={`${tool.color} border-0 overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-all`}>
-                  <div className="p-6 flex flex-col h-[200px] relative">
-                    <div className="absolute top-4 right-4 h-12 w-12 rounded-full bg-white/10 flex items-center justify-center">
-                      <tool.icon className="h-6 w-6 text-white" />
-                    </div>
-                    
-                    <div className="mt-6">
-                      <h3 className="text-xl font-bold text-white mb-2">{tool.name}</h3>
-                      <p className="text-white/80 text-sm mb-6">{tool.description}</p>
-                      
-                      <button className="mt-auto px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-white text-sm font-medium transition-colors">
-                        {tool.buttonText}
-                      </button>
-                    </div>
-                  </div>
+                  
                 </Card>)}
             </div>
             
