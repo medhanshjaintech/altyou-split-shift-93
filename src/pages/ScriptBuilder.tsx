@@ -288,40 +288,9 @@ END OF SCENE 1`;
               </div>
             </div>
             
-            <p className="text-white/70 mb-8">
-              Upload 8-10 of your previous scripts to help us understand your style and tone. 
-              We'll generate a script that matches your unique voice.
-            </p>
             
-            <Card className="bg-white/10 border-0 text-white p-6 rounded-lg mb-8">
-              <div className="flex items-start gap-4">
-                <FileText className="h-5 w-5 text-blue-400 mt-1" />
-                <div className="w-full">
-                  <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-lg font-medium">Your Uploaded Scripts</h3>
-                    <label className="cursor-pointer">
-                      <input type="file" multiple accept=".txt,.docx,.pdf" className="hidden" onChange={handleFileUpload} />
-                      <Button size="sm" variant="ghost" className="text-white/70 hover:text-white border border-white/20 hover:bg-white/10">
-                        <Upload className="h-4 w-4 mr-1" />
-                        Upload More
-                      </Button>
-                    </label>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    {previousScripts.map(script => <div key={script.id} className="flex justify-between items-center p-3 rounded-md hover:bg-white/5">
-                        <div className="flex items-center gap-3">
-                          <FileText className="h-4 w-4 text-white/50" />
-                          <span>{script.name}</span>
-                        </div>
-                        <div className="text-white/50 text-sm">
-                          {script.size} • {script.uploadDate}
-                        </div>
-                      </div>)}
-                  </div>
-                </div>
-              </div>
-            </Card>
+            
+            
             
             {!generatedScript && <div className="flex justify-center mt-8">
                 <Button onClick={handleGenerateScript} disabled={isGenerating} className="bg-white/10 hover:bg-white/20 text-white border-0 w-64 h-12">
