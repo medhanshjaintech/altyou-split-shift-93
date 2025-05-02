@@ -24,6 +24,7 @@ interface Persona {
   name: string;
   description: string;
   avatar?: string;
+  instructions?: string;
 }
 
 const ViralReelCutter = () => {
@@ -164,7 +165,7 @@ const ViralReelCutter = () => {
   };
 
   const handleAddPersona = (newPersona: Persona) => {
-    setPersonas([...personas, newPersona]);
+    setPersonas(prev => [...prev, newPersona]);
     setActivePersona(newPersona.id);
     setIsPersonaModalOpen(false);
     setIsPersonaDialogOpen(true); // Show persona dialog again after creating
@@ -394,14 +395,10 @@ const ViralReelCutter = () => {
           </DialogHeader>
           
           <div className="py-4">
-            <p className="text-gray-300 mb-6">
-              Choose a persona to process your content with. Each persona will generate different styles of content.
-            </p>
-            
             <PersonaSelector 
               personas={personas}
               activePersona={activePersona}
-              onPersonaSelect={(personaId) => setActivePersona(personaId)}
+              onPersonaSelect={setActivePersona}
               onPersonaDelete={handleDeletePersona}
               onCreatePersona={handleCreatePersona}
             />
