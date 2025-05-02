@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TrendingUp, ArrowRight, FileText, ChevronLeft, Download } from 'lucide-react';
@@ -82,11 +83,37 @@ const ContentSuggestion = () => {
       title: "Opening script builder",
       description: "Taking you to the script builder tool..."
     });
+    
+    // Create context from search result
+    let contextContent = '';
+    let instructionsContent = '';
+    
+    if (searchResult) {
+      // Generate context from search result
+      contextContent = `This script is based on content suggestions for "${searchResult.title}". The content has high engagement potential with ${searchResult.impactFactor.split('.')[0]}.
+
+Summary: ${searchResult.summary}
+
+Suggested topics:
+${searchResult.articles.map(article => `- ${article.title}: ${article.summary}`).join('\n')}`;
+
+      // Generate instructions
+      instructionsContent = `Based on content suggestions for "${searchResult.title}":
+
+1. Focus on high engagement potential aspects
+2. Structure content for optimal retention
+3. Include practical examples and applications
+4. Consider contrasting different methodologies
+5. Address the key points from suggested topics`;
+    }
+    
     // Navigate to the script builder page with the search query and source information
     navigate('/script-builder', { 
       state: { 
         searchQuery: searchResult?.title || searchQuery,
-        from: 'content-suggestion' 
+        from: 'content-suggestion',
+        context: contextContent,
+        instructions: instructionsContent
       } 
     });
   };
