@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TrendingUp, ArrowRight, FileText, ChevronLeft } from 'lucide-react';
+import { TrendingUp, ArrowRight, FileText, ChevronLeft, Download } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -89,6 +89,47 @@ const ContentSuggestion = () => {
 
   const handleBackToDashboard = () => {
     navigate('/dashboard');
+  };
+  
+  const handleDownloadContent = () => {
+    if (!searchResult) return;
+    
+    // Create content for download
+    const content = `# ${searchResult.title}
+    
+## Impact Factor
+${searchResult.impactFactor}
+
+## Content Summary
+${searchResult.summary}
+
+## Suggested Articles
+${searchResult.articles.map((article, index) => 
+  `### ${index + 1}. ${article.title}
+${article.summary}
+`).join('\n')}
+
+## Additional Reference Material
+- Latest research papers from industry experts
+- Competitor content analysis and gap identification
+- Social media engagement metrics and audience demographics
+`;
+
+    // Create a blob and trigger download
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${searchResult.title.replace(/\s+/g, '-').toLowerCase()}-content-ideas.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    toast({
+      title: "Content downloaded",
+      description: "Your content ideas have been downloaded successfully."
+    });
   };
 
   return <div className="fixed inset-0 bg-[#121212] flex items-center justify-center">
@@ -190,9 +231,16 @@ const ContentSuggestion = () => {
                   </div>
                 </div>
 
-                <div className="mt-8 flex justify-end">
+                <div className="mt-8 flex justify-end space-x-4">
+                  <Button 
+                    onClick={handleDownloadContent} 
+                    className="bg-white/10 hover:bg-white/20 text-white border-0 flex items-center gap-2"
+                  >
+                    <Download className="h-4 w-4" />
+                    Download Content
+                  </Button>
                   <Button onClick={handleGenerateScript} className="bg-white/10 hover:bg-white/20 text-white border-0">
-                    Generate Script
+                    Generate with AI
                   </Button>
                 </div>
               </div>}
