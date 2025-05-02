@@ -32,7 +32,7 @@ const ScriptBuilder = () => {
   const location = useLocation();
   const { toast } = useToast();
   const [isGenerating, setIsGenerating] = useState(false);
-  const [scriptUploaded, setScriptUploaded] = useState(true);
+  const [scriptUploaded, setScriptUploaded] = useState<boolean>(false);
   const [generatedScript, setGeneratedScript] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedScript, setEditedScript] = useState<string>('');
@@ -64,7 +64,7 @@ const ScriptBuilder = () => {
     }
   ]);
   
-  // Mock data for previously uploaded scripts - adding some default scripts
+  // Mock data for previously uploaded scripts
   const [previousScripts, setPreviousScripts] = useState<ScriptFile[]>([
     {
       id: 'script-123456',
@@ -82,31 +82,46 @@ const ScriptBuilder = () => {
 
   // Initialize values based on navigation source
   useEffect(() => {
+    // From content suggestion
     if (location.state?.searchQuery) {
       setTopic(location.state.searchQuery);
       
-      // Only set mock context and instructions if coming from content suggestion
-      if (location.state?.from === 'content-suggestion') {
-        // Mock context data based on topic
-        setContext(`This topic is currently trending across multiple platforms with high engagement rates. 
-Recent analytics show a 30% increase in content consumption related to this subject in the past month.
-The target audience is primarily 25-45 year olds with interests in technology and personal development.`);
+      // Set context and instructions if provided
+      if (location.state.context) {
+        setContext(location.state.context);
+      }
+      
+      if (location.state.instructions) {
+        setInstructions(location.state.instructions);
+      }
+
+      // If coming from content analysis with transcript
+      if (location.state?.from === 'content-analysis' && location.state?.hasTranscriptFile) {
+        // Add transcript file to previousScripts
+        const newTranscriptFile: ScriptFile = {
+          id: `transcript-${Date.now()}`,
+          name: location.state.fileName || 'transcript.txt',
+          size: '32.7 KB', // Mock size
+          uploadDate: new Date().toLocaleString()
+        };
         
-        // Mock instructions data
-        setInstructions(`Please create a script that:
-- Provides a comprehensive overview of the topic
-- Includes practical examples and applications
-- Addresses common misconceptions
-- Uses an approachable, conversational tone
-- Concludes with actionable takeaways`);
+        setPreviousScripts(prev => [newTranscriptFile, ...prev]);
+        setScriptUploaded(true);
+        
+        toast({
+          title: "Transcript loaded",
+          description: "The analyzed video transcript has been loaded for script generation."
+        });
       }
     }
-  }, [location.state]);
+  }, [location.state, toast]);
   
   const handleBackNavigation = () => {
     // Navigate back to the appropriate page
     if (location.state?.from === 'content-suggestion') {
       navigate('/content-suggestion');
+    } else if (location.state?.from === 'content-analysis') {
+      navigate('/content-analysis-result');
     } else {
       navigate('/dashboard');
     }
