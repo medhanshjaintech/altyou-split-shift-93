@@ -1,5 +1,6 @@
+
 import { useState } from 'react';
-import { FileText, Youtube, ArrowLeft, Search, Plus, Mic, Video, Download, Database } from 'lucide-react';
+import { FileText, Youtube, ArrowLeft, Search, Plus, Mic, Video, Download, Database, Calendar, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,6 +11,21 @@ import { toast } from '@/components/ui/sonner';
 import Sidebar from '@/components/Sidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 interface VideoItem {
   id: string;
@@ -17,6 +33,7 @@ interface VideoItem {
   thumbnail: string;
   duration: string;
   selected: boolean;
+  uploadDate: Date;
 }
 
 interface TranscriptionItem {
@@ -37,6 +54,8 @@ const BatchTranscribe = () => {
   const [transcriptions, setTranscriptions] = useState<TranscriptionItem[]>([]);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [videoLimit, setVideoLimit] = useState<number>(10);
+  const [dateFilter, setDateFilter] = useState<string>("all");
   
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -71,7 +90,8 @@ const BatchTranscribe = () => {
           title: 'How to Master AI Tools in 2024',
           thumbnail: 'https://i.ytimg.com/vi/sample-id-1/maxresdefault.jpg',
           duration: '12:34',
-          selected: false
+          selected: false,
+          uploadDate: new Date(2024, 4, 1) // May 1, 2024
         };
         setVideos([mockVideo]);
       } else {
@@ -82,28 +102,48 @@ const BatchTranscribe = () => {
             title: 'How to Master AI Tools in 2024',
             thumbnail: 'https://i.ytimg.com/vi/sample-id-1/maxresdefault.jpg',
             duration: '12:34',
-            selected: false
+            selected: false,
+            uploadDate: new Date(2024, 4, 1) // May 1, 2024
           },
           {
             id: 'sample-id-2',
             title: 'Creating Content with AI - Tips & Tricks',
             thumbnail: 'https://i.ytimg.com/vi/sample-id-2/maxresdefault.jpg',
             duration: '8:21',
-            selected: false
+            selected: false,
+            uploadDate: new Date(2024, 3, 15) // April 15, 2024
           },
           {
             id: 'sample-id-3',
             title: 'The Future of AI Content Creation',
             thumbnail: 'https://i.ytimg.com/vi/sample-id-3/maxresdefault.jpg',
             duration: '15:47',
-            selected: false
+            selected: false,
+            uploadDate: new Date(2024, 2, 20) // March 20, 2024
           },
           {
             id: 'sample-id-4',
             title: 'YouTube SEO Strategies for 2024',
             thumbnail: 'https://i.ytimg.com/vi/sample-id-4/maxresdefault.jpg',
             duration: '10:02',
-            selected: false
+            selected: false,
+            uploadDate: new Date(2024, 1, 10) // Feb 10, 2024
+          },
+          {
+            id: 'sample-id-5',
+            title: 'How to Grow Your YouTube Channel',
+            thumbnail: 'https://i.ytimg.com/vi/sample-id-5/maxresdefault.jpg',
+            duration: '14:25',
+            selected: false,
+            uploadDate: new Date(2023, 11, 5) // Dec 5, 2023
+          },
+          {
+            id: 'sample-id-6',
+            title: 'Using AI for Video Editing',
+            thumbnail: 'https://i.ytimg.com/vi/sample-id-6/maxresdefault.jpg',
+            duration: '18:37',
+            selected: false,
+            uploadDate: new Date(2023, 10, 15) // Nov 15, 2023
           }
         ];
         setVideos(mockVideos);
@@ -117,6 +157,17 @@ const BatchTranscribe = () => {
     setVideos(videos.map(video => 
       video.id === id ? { ...video, selected: !video.selected } : video
     ));
+  };
+
+  const toggleSelectAll = () => {
+    // Check if all videos are currently selected
+    const allSelected = videos.every(video => video.selected);
+    
+    // Toggle selection state for all videos
+    setVideos(videos.map(video => ({
+      ...video,
+      selected: !allSelected
+    })));
   };
   
   const handleTranscribe = () => {
@@ -246,6 +297,77 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
       description: `"${videoTitle}" has been sent to your Knowledge Base.`,
     });
   };
+
+  const handleDateFilterChange = (value: string) => {
+    setDateFilter(value);
+  };
+
+  const handleVideoLimitChange = (value: string) => {
+    setVideoLimit(parseInt(value));
+  };
+
+  const getFilteredVideos = () => {
+    let filteredVideos = [...videos];
+    
+    // Apply date filters
+    const now = new Date();
+    
+    switch (dateFilter) {
+      case "7days":
+        const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        filteredVideos = filteredVideos.filter(video => video.uploadDate >= sevenDaysAgo);
+        break;
+      case "28days":
+        const twentyEightDaysAgo = new Date(now.getTime() - 28 * 24 * 60 * 60 * 1000);
+        filteredVideos = filteredVideos.filter(video => video.uploadDate >= twentyEightDaysAgo);
+        break;
+      case "90days":
+        const ninetyDaysAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+        filteredVideos = filteredVideos.filter(video => video.uploadDate >= ninetyDaysAgo);
+        break;
+      case "365days":
+        const yearAgo = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+        filteredVideos = filteredVideos.filter(video => video.uploadDate >= yearAgo);
+        break;
+      case "2024":
+        filteredVideos = filteredVideos.filter(video => 
+          video.uploadDate.getFullYear() === 2024
+        );
+        break;
+      case "2023":
+        filteredVideos = filteredVideos.filter(video => 
+          video.uploadDate.getFullYear() === 2023
+        );
+        break;
+      case "april":
+        filteredVideos = filteredVideos.filter(video => 
+          video.uploadDate.getMonth() === 3 && video.uploadDate.getFullYear() === 2024
+        );
+        break;
+      case "march":
+        filteredVideos = filteredVideos.filter(video => 
+          video.uploadDate.getMonth() === 2 && video.uploadDate.getFullYear() === 2024
+        );
+        break;
+      case "february":
+        filteredVideos = filteredVideos.filter(video => 
+          video.uploadDate.getMonth() === 1 && video.uploadDate.getFullYear() === 2024
+        );
+        break;
+      default:
+        // "all" or any other value - no filtering
+        break;
+    }
+    
+    // Apply video limit
+    if (videoLimit > 0) {
+      filteredVideos = filteredVideos.slice(0, videoLimit);
+    }
+    
+    return filteredVideos;
+  };
+  
+  const filteredVideos = getFilteredVideos();
   
   return (
     <div className="flex min-h-screen bg-[#121212]">
@@ -299,12 +421,89 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
             
             {!showResults && videos.length > 0 && (
               <div className="mb-6">
-                <h3 className="text-xl font-semibold text-white mb-4">
-                  {videos.length === 1 ? "1 Video Found" : `${videos.length} Videos Found`}
-                </h3>
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-xl font-semibold text-white">
+                    {filteredVideos.length === 1 ? "1 Video Found" : `${filteredVideos.length} Videos Found`}
+                  </h3>
+                  
+                  <div className="flex space-x-3">
+                    {/* Video limit dropdown */}
+                    <Select value={videoLimit.toString()} onValueChange={handleVideoLimitChange}>
+                      <SelectTrigger className="w-[120px] bg-neutral-800 border-neutral-700 text-white">
+                        <SelectValue placeholder="Show" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-neutral-900 border-neutral-700 text-white">
+                        <SelectItem value="10">Show 10</SelectItem>
+                        <SelectItem value="20">Show 20</SelectItem>
+                        <SelectItem value="50">Show 50</SelectItem>
+                        <SelectItem value="100">Show All</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    
+                    {/* Date range dropdown */}
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" className="bg-neutral-800 border-neutral-700 text-white hover:bg-neutral-700">
+                          <Calendar className="mr-2 h-4 w-4" />
+                          Date Range
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-48 bg-neutral-900 border-neutral-700 text-white">
+                        <DropdownMenuGroup>
+                          <DropdownMenuItem onClick={() => handleDateFilterChange("7days")}>
+                            Last 7 days
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleDateFilterChange("28days")}>
+                            Last 28 days
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleDateFilterChange("90days")}>
+                            Last 90 days
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleDateFilterChange("365days")}>
+                            Last 365 days
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleDateFilterChange("all")}>
+                            Lifetime
+                          </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                        <DropdownMenuSeparator className="bg-neutral-800" />
+                        <DropdownMenuGroup>
+                          <DropdownMenuItem onClick={() => handleDateFilterChange("2024")}>
+                            2024
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleDateFilterChange("2023")}>
+                            2023
+                          </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                        <DropdownMenuSeparator className="bg-neutral-800" />
+                        <DropdownMenuGroup>
+                          <DropdownMenuItem onClick={() => handleDateFilterChange("april")}>
+                            April
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleDateFilterChange("march")}>
+                            March
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleDateFilterChange("february")}>
+                            February
+                          </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                    
+                    {/* Select All button */}
+                    <Button 
+                      variant="outline" 
+                      onClick={toggleSelectAll}
+                      className="bg-neutral-800 border-neutral-700 text-white hover:bg-neutral-700"
+                    >
+                      <Check className="mr-2 h-4 w-4" />
+                      {videos.every(video => video.selected) ? "Unselect All" : "Select All"}
+                    </Button>
+                  </div>
+                </div>
                 
                 <div className="space-y-4 mb-8">
-                  {videos.map((video) => (
+                  {filteredVideos.map((video) => (
                     <Card key={video.id} className="bg-neutral-800 border-neutral-700">
                       <CardContent className="p-4">
                         <div className="flex items-center gap-4">
@@ -338,6 +537,9 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
                             >
                               {video.title}
                             </label>
+                            <div className="text-sm text-gray-400 mt-1">
+                              {video.uploadDate.toLocaleDateString()}
+                            </div>
                           </div>
                           
                           <Youtube className="text-red-500 h-5 w-5" />
