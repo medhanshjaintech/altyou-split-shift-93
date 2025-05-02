@@ -85,12 +85,17 @@ Based on content analysis for ${channelName}:
 4. Incorporate strategic emotional shifts with humor as tension release
 5. Include mid-point twist that recontextualizes the initial premise`;
 
+    // Create context from analysis sections
+    const contextContent = analysisSections.map(section => 
+      `${section.title}: ${section.content}`
+    ).join("\n\n");
+
     // Navigate to script builder with pre-filled data
     navigate('/script-builder', {
       state: {
         from: 'content-analysis',
         searchQuery: `${channelName} Content Script`,
-        context: `This script is based on content analysis of ${channelName}'s channel. The analysis shows effective patterns in hooks, script flow, language tone, and visual cues that drive high engagement.`,
+        context: `This script is based on content analysis of ${channelName}'s channel. The analysis shows effective patterns in hooks, script flow, language tone, and visual cues that drive high engagement.\n\n${contextContent}`,
         instructions: customInstructions,
         hasTranscriptFile: true,
         fileName: `${channelName}-transcript.txt`
