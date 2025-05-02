@@ -31,25 +31,25 @@ const KnowledgeBot = () => {
       id: "tech-guru",
       name: "Tech Guru",
       description: "Technology expert with deep knowledge of latest trends",
-      avatar: "/placeholder.svg"
+      avatar: "/lovable-uploads/f5e90732-46bb-4f6a-82c4-c07cb1e98cb9.png"
     },
     {
       id: "marketing-expert",
       name: "Marketing Expert",
       description: "Marketing specialist with insights on growth strategies",
-      avatar: "/placeholder.svg"
+      avatar: "/lovable-uploads/f5e90732-46bb-4f6a-82c4-c07cb1e98cb9.png"
     },
     {
       id: "content-creator",
       name: "Content Creator",
       description: "Creative specialist for engaging content development",
-      avatar: "/placeholder.svg"
+      avatar: "/lovable-uploads/f5e90732-46bb-4f6a-82c4-c07cb1e98cb9.png"
     },
     {
       id: "business-coach",
       name: "Business Coach",
       description: "Strategic advisor for business growth and development",
-      avatar: "/placeholder.svg"
+      avatar: "/lovable-uploads/f5e90732-46bb-4f6a-82c4-c07cb1e98cb9.png"
     },
   ]);
 
@@ -84,12 +84,34 @@ const KnowledgeBot = () => {
   };
 
   const handleAddPersona = (newPersona: Persona) => {
-    setPersonas([...personas, newPersona]);
+    // Add avatar to new persona if not provided
+    const personaWithAvatar = {
+      ...newPersona,
+      avatar: newPersona.avatar || "/lovable-uploads/f5e90732-46bb-4f6a-82c4-c07cb1e98cb9.png"
+    };
+    
+    setPersonas([...personas, personaWithAvatar]);
     toast({
       title: "Persona Created",
       description: `${newPersona.name} has been added to your personas`
     });
     setIsPersonaModalOpen(false);
+  };
+
+  const handleDeletePersona = (personaId: string) => {
+    setPersonas(personas.filter(persona => persona.id !== personaId));
+    
+    // If active persona is deleted, reset active persona
+    if (activePersona === personaId) {
+      setActivePersona(null);
+      setMessages([]);
+    }
+    
+    toast({
+      title: "Persona Deleted",
+      description: "The persona has been removed from your list",
+      variant: "destructive"
+    });
   };
 
   return (
@@ -122,6 +144,7 @@ const KnowledgeBot = () => {
               personas={personas}
               activePersona={activePersona}
               onPersonaSelect={handlePersonaSelect}
+              onPersonaDelete={handleDeletePersona}
             />
           </div>
         ) : (

@@ -61,7 +61,7 @@ const PersonaCreationModal = ({
       name: name.trim(),
       description: description.trim(),
       instructions: instructions.trim(),
-      avatar: "/placeholder.svg"
+      avatar: "/lovable-uploads/f5e90732-46bb-4f6a-82c4-c07cb1e98cb9.png"
     };
     
     onAddPersona(newPersona);
@@ -73,9 +73,6 @@ const PersonaCreationModal = ({
     setDatabaseFiles(prevFiles =>
       prevFiles.map(file => ({ ...file, selected: false }))
     );
-    
-    // Close the modal
-    onClose();
   };
 
   const handleFileUpload = () => {
@@ -93,48 +90,49 @@ const PersonaCreationModal = ({
         
         <div className="grid gap-6 py-4">
           <div className="grid grid-cols-1 gap-2">
-            <Label htmlFor="name">Persona Name</Label>
+            <Label htmlFor="name" className="text-white">Persona Name</Label>
             <Input
               id="name"
               placeholder="E.g., Finance Expert"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="bg-neutral-800 border-neutral-700"
+              className="bg-neutral-800 border-neutral-700 text-white"
             />
           </div>
           
           <div className="grid grid-cols-1 gap-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description" className="text-white">Description</Label>
             <Textarea
               id="description"
               placeholder="Briefly describe what this persona specializes in..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="bg-neutral-800 border-neutral-700"
+              className="bg-neutral-800 border-neutral-700 text-white"
             />
           </div>
           
           <div className="grid grid-cols-1 gap-2">
-            <Label htmlFor="instructions">Custom Instructions</Label>
+            <Label htmlFor="instructions" className="text-white">Custom Instructions</Label>
             <Textarea
               id="instructions"
               placeholder="Add specific instructions for how the persona should behave..."
               value={instructions}
               onChange={(e) => setInstructions(e.target.value)}
-              className="bg-neutral-800 border-neutral-700 min-h-[100px]"
+              className="bg-neutral-800 border-neutral-700 text-white min-h-[100px]"
             />
           </div>
           
           <div>
             <div className="flex items-center justify-between mb-2">
-              <Label>Select Content from Database</Label>
+              <Label className="text-white">Select Content from Database</Label>
               <Button 
                 variant="outline" 
                 size="sm" 
                 onClick={handleFileUpload} 
-                className="text-xs flex items-center gap-1 text-white bg-neutral-800 hover:bg-neutral-700"
+                className="text-xs flex items-center gap-1 text-white border-neutral-600 bg-neutral-800 hover:bg-neutral-700"
               >
-                <Upload className="h-3 w-3" /> Upload New
+                <Upload className="h-3 w-3" /> 
+                <span className="text-white">Upload New</span>
               </Button>
             </div>
             
