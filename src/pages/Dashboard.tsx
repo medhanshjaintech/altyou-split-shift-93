@@ -6,6 +6,7 @@ import { useToast } from '@/hooks/use-toast';
 import Sidebar from '@/components/Sidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import ProjectCard from '@/components/ProjectCard';
+
 const Dashboard = () => {
   const {
     toast
@@ -30,11 +31,11 @@ const Dashboard = () => {
     path: '/hinglish-transcribe'
   }, {
     id: 3,
-    name: 'Knowledge Bot',
+    name: 'Database',
     icon: Database,
-    description: 'Chat with your content using AI',
+    description: 'Manage your knowledge base and personas',
     comingSoon: false,
-    path: '/knowledge-bot'
+    path: '/knowledge-base'
   }, {
     id: 4,
     name: 'Content Suggestion Engine',
@@ -65,10 +66,11 @@ const Dashboard = () => {
     path: '/viral-reel-cutter'
   }, {
     id: 8,
-    name: 'Bonus',
+    name: 'Knowledge Bot',
     icon: Star,
-    description: 'Special features and upcoming tools',
-    comingSoon: true
+    description: 'Chat with your content using AI personas',
+    comingSoon: false,
+    path: '/knowledge-bot'
   }];
 
   // Gen AI tools (replacing featuredTools)
@@ -118,6 +120,7 @@ const Dashboard = () => {
     userInitial: 'M',
     avatarColor: 'bg-blue-500'
   }];
+  
   const handleToolClick = (toolId: number) => {
     const tool = tools.find(t => t.id === toolId);
     if (tool?.path) {
@@ -134,9 +137,11 @@ const Dashboard = () => {
       });
     }
   };
+  
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+  
   return <div className="flex min-h-screen bg-[#121212]">
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       
@@ -169,7 +174,6 @@ const Dashboard = () => {
             
             {/* Gen AI Tools Section (Previously Popular Features) */}
             
-            
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               {genAITools.map(tool => <Card key={tool.id} className={`${tool.color} border-0 overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-all`}>
                   
@@ -187,4 +191,5 @@ const Dashboard = () => {
       </main>
     </div>;
 };
+
 export default Dashboard;

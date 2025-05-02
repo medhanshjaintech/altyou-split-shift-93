@@ -3,16 +3,19 @@ import { LayoutDashboard, Folder, LayoutTemplate, ChevronLeft, ChevronRight, Dat
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useNavigate } from 'react-router-dom';
+
 interface SidebarProps {
   isOpen: boolean;
   toggleSidebar: () => void;
 }
+
 const Sidebar = ({
   isOpen,
   toggleSidebar
 }: SidebarProps) => {
   const navigate = useNavigate();
-  const [activeSection, setActiveSection] = useState<'dashboard' | 'projects' | 'templates' | 'knowledge-bot'>('dashboard');
+  const [activeSection, setActiveSection] = useState<'dashboard' | 'projects' | 'templates' | 'knowledge-base'>('dashboard');
+  
   const sampleProjects = [{
     id: 1,
     name: 'Content Analyzer Report',
@@ -49,6 +52,7 @@ const Sidebar = ({
     users: ['S', 'A'],
     color: 'from-blue-500 to-cyan-500'
   }];
+  
   const templates = [{
     id: 1,
     name: 'Social Media Post',
@@ -75,10 +79,12 @@ const Sidebar = ({
     category: 'Marketing',
     color: 'bg-gradient-to-r from-rose-500 to-pink-600'
   }];
-  const handleNavigation = (path: string, section: 'dashboard' | 'projects' | 'templates' | 'knowledge-bot') => {
+  
+  const handleNavigation = (path: string, section: 'dashboard' | 'projects' | 'templates' | 'knowledge-base') => {
     setActiveSection(section);
     navigate(path);
   };
+  
   return <aside className={cn("fixed left-0 top-0 h-screen bg-[#0A0A0A] transition-all duration-300 ease-in-out z-10 border-r border-white/10", isOpen ? "w-64" : "w-16")}>
       <div className="flex items-center justify-between p-4">
         <div className={cn("flex items-center", !isOpen && "justify-center w-full")}>
@@ -102,7 +108,7 @@ const Sidebar = ({
             {isOpen && <span className="ml-3 text-white">My Projects</span>}
           </button>
           
-          <button className={cn("flex items-center w-full px-4 py-3 transition-colors", activeSection === 'knowledge-bot' ? "bg-white/10 border-l-2 border-indigo-500" : "hover:bg-white/5 border-l-2 border-transparent", !isOpen && "justify-center")} onClick={() => handleNavigation('/knowledge-bot', 'knowledge-bot')}>
+          <button className={cn("flex items-center w-full px-4 py-3 transition-colors", activeSection === 'knowledge-base' ? "bg-white/10 border-l-2 border-indigo-500" : "hover:bg-white/5 border-l-2 border-transparent", !isOpen && "justify-center")} onClick={() => handleNavigation('/knowledge-base', 'knowledge-base')}>
             <Database size={20} className="text-gray-400" />
             {isOpen && <span className="ml-3 text-white">Database</span>}
           </button>
@@ -169,4 +175,5 @@ const Sidebar = ({
         </div>}
     </aside>;
 };
+
 export default Sidebar;
