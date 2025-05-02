@@ -149,7 +149,7 @@ Based on content analysis for ${channelName}:
                 <Button 
                   onClick={downloadReport}
                   disabled={isGeneratingPDF}
-                  className="bg-neutral-700 hover:bg-neutral-600 px-8 py-2 text-white"
+                  className="bg-neutral-700 hover:bg-neutral-600 text-white px-8 py-2"
                 >
                   <Download className="h-4 w-4 mr-2" />
                   Download report
