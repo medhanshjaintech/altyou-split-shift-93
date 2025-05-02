@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { FileText, ArrowLeft, Play, Upload, Download, Database, File, X, Link as LinkIcon } from 'lucide-react';
+import { FileText, ArrowLeft, Play, Upload, Download, Database, File, X, Link as LinkIcon, Copy } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -226,6 +226,25 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
     setTranscriptionData(null);
     setMediaLink('');
   };
+
+  // Add a new function to handle copying the SRT content
+  const copySRT = () => {
+    if (!hinglishText) return;
+    
+    navigator.clipboard.writeText(hinglishText).then(() => {
+      toast({
+        title: "Copied to clipboard",
+        description: "SRT content has been copied to your clipboard."
+      });
+    }).catch(err => {
+      toast({
+        title: "Error",
+        description: "Could not copy text: " + err,
+        variant: "destructive"
+      });
+    });
+  };
+
   return <div className="flex min-h-screen bg-[#121212]">
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       
@@ -357,10 +376,7 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
                             </div>
                             
                             <div className="flex justify-center">
-                              <Button onClick={downloadSRT} className="bg-neutral-700 hover:bg-neutral-600 text-white">
-                                <Download className="mr-2 h-4 w-4" />
-                                Download SRT
-                              </Button>
+                              
                             </div>
                           </div>
                         </div>
@@ -368,7 +384,19 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
                         {/* Right side - SRT Editor */}
                         <div>
                           <div className="p-6">
-                            <h3 className="text-sm font-medium text-neutral-400 mb-3">SRT file with timestamps</h3>
+                            <div className="flex items-center justify-between mb-3">
+                              <h3 className="text-sm font-medium text-neutral-400">SRT file with timestamps</h3>
+                              <div className="flex space-x-2">
+                                <Button onClick={copySRT} size="sm" variant="ghost" className="text-neutral-300 hover:bg-neutral-700">
+                                  <Copy className="mr-2 h-4 w-4" />
+                                  Copy
+                                </Button>
+                                <Button onClick={downloadSRT} size="sm" variant="ghost" className="text-neutral-300 hover:bg-neutral-700">
+                                  <Download className="mr-2 h-4 w-4" />
+                                  Download SRT
+                                </Button>
+                              </div>
+                            </div>
                             
                             <div className="bg-neutral-700 rounded-md h-[400px]">
                               <Textarea value={hinglishText} onChange={handleHinglishTextChange} className="h-full resize-none font-mono text-sm bg-neutral-700 border-none text-white" />
@@ -395,4 +423,5 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
       </main>
     </div>;
 };
+
 export default HinglishTranscribe;
