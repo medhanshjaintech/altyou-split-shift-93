@@ -1,11 +1,18 @@
+
 import { useState } from "react";
-import { ArrowLeft, Plus } from "lucide-react";
+import { ArrowLeft, Plus, Database, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import ChatArea from "@/components/ChatArea";
 import PersonaSelector from "@/components/PersonaSelector";
 import PersonaCreationModal from "@/components/PersonaCreationModal";
 import { toast } from "@/hooks/use-toast";
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 
 interface Message {
   role: "user" | "bot";
@@ -19,6 +26,14 @@ interface Persona {
   description: string;
   instructions?: string;
   avatar?: string;
+}
+
+interface KnowledgeFile {
+  id: string;
+  name: string;
+  type: "transcription" | "upload";
+  selected: boolean;
+  dateAdded: string;
 }
 
 const KnowledgeBot = () => {
@@ -50,6 +65,13 @@ const KnowledgeBot = () => {
       description: "Strategic advisor for business growth and development",
       avatar: "https://images.unsplash.com/photo-1501286353178-1ec871214838?auto=format&fit=crop&w=64&h=64"
     },
+  ]);
+  
+  const [knowledgeFiles, setKnowledgeFiles] = useState<KnowledgeFile[]>([
+    { id: "1", name: "Interview with Marketing Director.txt", type: "transcription", selected: true, dateAdded: "2025-05-01" },
+    { id: "2", name: "Product Demo Walkthrough.mp3", type: "transcription", selected: false, dateAdded: "2025-04-28" },
+    { id: "3", name: "Marketing Strategy 2025.pdf", type: "upload", selected: true, dateAdded: "2025-04-25" },
+    { id: "4", name: "Sales Pitch Presentation.docx", type: "upload", selected: false, dateAdded: "2025-04-20" },
   ]);
 
   const handleSendMessage = (message: string) => {
@@ -113,6 +135,22 @@ const KnowledgeBot = () => {
     });
   };
 
+  const handleFileUpload = () => {
+    // In a real app, this would trigger a file upload dialog
+    toast({
+      title: "File Upload",
+      description: "File upload functionality would be implemented here"
+    });
+  };
+
+  const toggleFileSelection = (fileId: string) => {
+    setKnowledgeFiles(prevFiles =>
+      prevFiles.map(file =>
+        file.id === fileId ? { ...file, selected: !file.selected } : file
+      )
+    );
+  };
+
   return (
     <div className="min-h-screen bg-[#121212]">
       <div className="max-w-6xl mx-auto p-6">
@@ -163,6 +201,63 @@ const KnowledgeBot = () => {
                   {personas.find(p => p.id === activePersona)?.name}
                 </h2>
               </div>
+              
+              {/* Database Dropdown Menu */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="text-white border-white/20 bg-neutral-800 hover:bg-neutral-700">
+                    <Database className="mr-2 h-4 w-4" />
+                    Database
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-64 bg-neutral-900 border-neutral-700 text-white">
+                  <div className="p-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full mb-2 flex justify-center gap-2 text-white border-white/20 bg-neutral-800 hover:bg-neutral-700"
+                      onClick={handleFileUpload}
+                    >
+                      <Upload className="h-4 w-4" />
+                      Upload New File
+                    </Button>
+                    
+                    <div className="text-sm font-medium mb-2 text-gray-300">Transcriptions</div>
+                    {knowledgeFiles.filter(file => file.type === "transcription").map(file => (
+                      <DropdownMenuItem 
+                        key={file.id} 
+                        className={`flex items-center gap-2 rounded-md cursor-pointer ${file.selected ? "bg-blue-800/50" : ""}`}
+                        onClick={() => toggleFileSelection(file.id)}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={file.selected}
+                          onChange={() => toggleFileSelection(file.id)}
+                          className="h-3 w-3"
+                        />
+                        <span className="truncate">{file.name}</span>
+                      </DropdownMenuItem>
+                    ))}
+                    
+                    <div className="text-sm font-medium my-2 text-gray-300">Uploads</div>
+                    {knowledgeFiles.filter(file => file.type === "upload").map(file => (
+                      <DropdownMenuItem 
+                        key={file.id} 
+                        className={`flex items-center gap-2 rounded-md cursor-pointer ${file.selected ? "bg-blue-800/50" : ""}`}
+                        onClick={() => toggleFileSelection(file.id)}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={file.selected}
+                          onChange={() => toggleFileSelection(file.id)}
+                          className="h-3 w-3"
+                        />
+                        <span className="truncate">{file.name}</span>
+                      </DropdownMenuItem>
+                    ))}
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
             
             <ChatArea 
