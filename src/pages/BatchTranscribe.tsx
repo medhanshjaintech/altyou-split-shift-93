@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { FileText, Youtube, ArrowLeft, Search, Plus, Mic, Video, Download, Database, Calendar, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -281,6 +280,21 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
     });
   };
   
+  const downloadAllTranscriptions = () => {
+    transcriptions.filter(t => t.isCompleted).forEach((transcription) => {
+      downloadTranscription(
+        transcription.videoId,
+        transcription.videoTitle,
+        transcription.content
+      );
+    });
+    
+    toast({
+      title: "Downloads started",
+      description: `Started downloading ${transcriptions.filter(t => t.isCompleted).length} transcription files.`,
+    });
+  };
+
   const sendToKnowledgeBase = (videoId: string, videoTitle: string, content: string) => {
     // Mark the transcription as added to knowledge base
     setTranscriptions(prev => 
@@ -294,7 +308,7 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
     // Display success toast
     toast({
       title: "Success",
-      description: `"${videoTitle}" has been sent to your Knowledge Base.`,
+      description: `"${videoTitle}" has been sent to your Database.`,
     });
   };
 
@@ -566,7 +580,20 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
             
             {showResults && (
               <div className="mb-6">
-                <h3 className="text-xl font-semibold text-white mb-4">Transcription Results</h3>
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-xl font-semibold text-white">Transcription Results</h3>
+                  
+                  <Button 
+                    onClick={downloadAllTranscriptions} 
+                    size="sm" 
+                    variant="outline"
+                    className="border-indigo-600/50 text-indigo-400 hover:bg-indigo-600/20"
+                    disabled={!transcriptions.some(t => t.isCompleted)}
+                  >
+                    <Download className="mr-2 h-4 w-4" />
+                    Download All SRTs
+                  </Button>
+                </div>
                 
                 <div className="space-y-6 mb-8">
                   {transcriptions.map((transcription) => (
@@ -617,8 +644,8 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
                               >
                                 <Database className="mr-2 h-4 w-4" />
                                 {transcription.addedToKnowledgeBase 
-                                  ? "Added to Knowledge Base" 
-                                  : "Send to Knowledge Base"}
+                                  ? "Added to Database" 
+                                  : "Send to Database"}
                               </Button>
                             </div>
                           </>
