@@ -1,6 +1,6 @@
 
 import { useState, useRef } from 'react';
-import { FileText, Youtube, ArrowLeft, Play, Upload, Download, Database, File } from 'lucide-react';
+import { FileText, ArrowLeft, Play, Upload, Download, Database, File, X, Link as LinkIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,7 +10,6 @@ import { toast } from '@/components/ui/sonner';
 import Sidebar from '@/components/Sidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 
 interface TranscriptionData {
@@ -30,7 +29,7 @@ const HinglishTranscribe = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [youtubeUrl, setYoutubeUrl] = useState('');
+  const [mediaLink, setMediaLink] = useState('');
   const [isUploadingFile, setIsUploadingFile] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
@@ -45,7 +44,7 @@ const HinglishTranscribe = () => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setYoutubeUrl(e.target.value);
+    setMediaLink(e.target.value);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,13 +74,13 @@ const HinglishTranscribe = () => {
     }
   };
   
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleImportFromLink = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!youtubeUrl) {
+    if (!mediaLink) {
       toast({
         title: "Error",
-        description: "Please enter a YouTube URL or upload a file",
+        description: "Please enter a media link",
         variant: "destructive",
       });
       return;
@@ -89,11 +88,11 @@ const HinglishTranscribe = () => {
     
     setIsLoading(true);
     
-    // Mock fetching video info from YouTube
+    // Mock fetching video info from YouTube or other platforms
     setTimeout(() => {
       // Mock video data
       const mockVideoTitle = "How to Master AI Tools in 2024";
-      const mockVideoUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+      const mockVideoUrl = mediaLink;
       
       // Start transcription process
       startTranscription(mockVideoTitle, mockVideoUrl, 'video');
@@ -264,6 +263,12 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
       fileInputRef.current.click();
     }
   };
+  
+  // Function to close the transcription modal and start a new one
+  const handleCloseTranscription = () => {
+    setTranscriptionData(null);
+    setMediaLink('');
+  };
 
   return (
     <div className="flex min-h-screen bg-[#121212]">
@@ -291,73 +296,99 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
             </div>
             
             {!transcriptionData ? (
-              <div className="max-w-4xl mx-auto mb-12">
-                <div className="text-center mb-8">
-                  <h2 className="text-4xl font-bold text-white mb-10">What should I transcribe for you?</h2>
+              <div className="max-w-lg mx-auto mb-12">
+                <div className="bg-neutral-800 border border-neutral-700 rounded-md p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center">
+                      <LinkIcon className="h-5 w-5 text-indigo-400 mr-2" />
+                      <h2 className="text-lg font-medium text-white">Import from Link</h2>
+                    </div>
+                    <Button variant="ghost" size="sm" className="text-neutral-400 hover:text-white">
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
                   
-                  <Tabs defaultValue="youtube" className="w-full max-w-3xl mx-auto">
-                    <TabsList className="grid w-full grid-cols-2 mb-8">
-                      <TabsTrigger value="youtube">YouTube URL</TabsTrigger>
-                      <TabsTrigger value="file">Upload File</TabsTrigger>
-                    </TabsList>
+                  <p className="text-neutral-300 text-sm mb-6">
+                    Import audio and videos from YouTube, Dropbox, Google Drive, 
+                    Facebook, Vimeo, X, audio/video URLs, and dozens more 
+                    platforms and services. The link must be publicly accessible.
+                  </p>
+                  
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-neutral-300 mb-2">Media Link</label>
+                    <Input
+                      type="text"
+                      placeholder="https://www.youtube.com/watch?v="
+                      value={mediaLink}
+                      onChange={handleInputChange}
+                      className="bg-blue-50 border border-blue-100 text-neutral-800"
+                    />
+                  </div>
+                  
+                  <Button 
+                    className="w-full bg-blue-500 hover:bg-blue-600 text-white flex items-center justify-center gap-2"
+                    disabled={isLoading}
+                    onClick={handleImportFromLink}
+                  >
+                    {isLoading ? "Importing..." : (
+                      <>
+                        <span>+</span>
+                        <span>IMPORT</span>
+                      </>
+                    )}
+                  </Button>
+                  
+                  <div className="mt-6">
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="block text-sm font-medium text-neutral-300">Audio / Video File</label>
+                      <Button variant="ghost" size="sm" className="text-neutral-400 hover:text-white p-0 h-auto">
+                        <Upload className="h-4 w-4" />
+                      </Button>
+                    </div>
                     
-                    <TabsContent value="youtube" className="mt-4">
-                      <form onSubmit={handleSubmit} className="max-w-3xl mx-auto">
-                        <div className="relative">
-                          <div className="bg-neutral-800 border border-neutral-700 rounded-xl overflow-hidden">
-                            <div className="flex items-center px-4 py-3">
-                              <Input
-                                type="text"
-                                placeholder="Paste YouTube video URL"
-                                value={youtubeUrl}
-                                onChange={handleInputChange}
-                                className="bg-transparent border-0 text-white text-base focus-visible:ring-0 focus-visible:ring-offset-0 px-2"
-                              />
-                              <Button type="submit" disabled={isLoading} size="sm" className="ml-2 bg-indigo-600 hover:bg-indigo-700">
-                                {isLoading ? "Loading..." : "Transcribe"}
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      </form>
-                    </TabsContent>
-                    
-                    <TabsContent value="file" className="mt-4">
-                      <div className="max-w-3xl mx-auto">
-                        <div className="bg-neutral-800 border border-neutral-700 rounded-xl overflow-hidden p-8">
-                          <div className="flex flex-col items-center justify-center text-center">
-                            <input
-                              type="file"
-                              ref={fileInputRef}
-                              onChange={handleFileChange}
-                              accept="audio/*,video/*"
-                              className="hidden"
-                            />
-                            
-                            <div 
-                              className="w-32 h-32 rounded-full bg-neutral-700 flex items-center justify-center mb-4 cursor-pointer"
-                              onClick={handleFileButtonClick}
-                            >
-                              <Upload className="h-12 w-12 text-indigo-400" />
-                            </div>
-                            
-                            <h3 className="text-xl font-medium text-white mb-2">Upload Audio or Video File</h3>
-                            <p className="text-sm text-neutral-400 mb-6">
-                              Supports MP3, WAV, MP4, and other common formats
-                            </p>
-                            
-                            <Button 
-                              onClick={handleFileButtonClick}
-                              disabled={isUploadingFile}
-                              className="bg-indigo-600 hover:bg-indigo-700"
-                            >
-                              {isUploadingFile ? "Uploading..." : "Select File"}
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </TabsContent>
-                  </Tabs>
+                    <div 
+                      className="border-2 border-dashed border-neutral-600 rounded-md p-6 bg-blue-50 text-center cursor-pointer hover:bg-blue-100 transition"
+                      onClick={handleFileButtonClick}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                          const input = fileInputRef.current;
+                          if (input) {
+                            input.files = e.dataTransfer.files;
+                            const event = new Event('change', { bubbles: true });
+                            input.dispatchEvent(event);
+                          }
+                        }
+                      }}
+                      onDragOver={(e) => e.preventDefault()}
+                    >
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        accept="audio/*,video/*"
+                        className="hidden"
+                      />
+                      
+                      <p className="text-neutral-700 font-medium mb-2">Drag & Drop</p>
+                      <p className="text-neutral-600 text-sm mb-4">
+                        MP3, MP4, M4A, MOV, AAC, WAV,<br/>
+                        OGG, FLAC, WEBM, AMR, WAV
+                      </p>
+                      <div className="text-neutral-400">- OR -</div>
+                      <Button
+                        variant="outline" 
+                        size="sm"
+                        className="mt-4"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleFileButtonClick();
+                        }}
+                      >
+                        BROWSE FILES
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               </div>
             ) : (
@@ -365,11 +396,21 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
                 <Card className="bg-neutral-800 border-neutral-700 overflow-hidden">
                   <CardContent className="p-0">
                     <div className="border-b border-neutral-700 p-4">
-                      <h4 className="text-lg font-medium text-white">{transcriptionData.title}</h4>
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-lg font-medium text-white">{transcriptionData.title}</h4>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="text-neutral-400 hover:text-white"
+                          onClick={handleCloseTranscription}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
                       {transcriptionData.mediaType === 'video' ? (
                         <div className="flex items-center space-x-2">
-                          <Youtube className="text-red-500 h-4 w-4" />
-                          <span className="text-sm text-neutral-400">YouTube Video</span>
+                          <File className="text-blue-500 h-4 w-4" />
+                          <span className="text-sm text-neutral-400">Video File</span>
                         </div>
                       ) : (
                         <div className="flex items-center space-x-2">
