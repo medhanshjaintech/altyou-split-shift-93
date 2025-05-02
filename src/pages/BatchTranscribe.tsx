@@ -295,6 +295,33 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
     });
   };
 
+  const sendAllToDatabase = () => {
+    const completedTranscriptions = transcriptions.filter(t => t.isCompleted && !t.addedToKnowledgeBase);
+    
+    if (completedTranscriptions.length === 0) {
+      toast({
+        title: "No new transcriptions to add",
+        description: "All completed transcriptions have already been added to the database",
+      });
+      return;
+    }
+    
+    // Mark all completed transcriptions as added to database
+    setTranscriptions(prev => 
+      prev.map(t => 
+        (t.isCompleted && !t.addedToKnowledgeBase) 
+          ? { ...t, addedToKnowledgeBase: true } 
+          : t
+      )
+    );
+    
+    // Display success toast
+    toast({
+      title: "Success",
+      description: `${completedTranscriptions.length} transcriptions added to Database.`,
+    });
+  };
+
   const sendToKnowledgeBase = (videoId: string, videoTitle: string, content: string) => {
     // Mark the transcription as added to knowledge base
     setTranscriptions(prev => 
@@ -583,16 +610,38 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-xl font-semibold text-white">Transcription Results</h3>
                   
-                  <Button 
-                    onClick={downloadAllTranscriptions} 
-                    size="sm" 
-                    variant="outline"
-                    className="border-indigo-600/50 text-indigo-400 hover:bg-indigo-600/20"
-                    disabled={!transcriptions.some(t => t.isCompleted)}
-                  >
-                    <Download className="mr-2 h-4 w-4" />
-                    Download All SRTs
-                  </Button>
+                  <div className="flex items-center space-x-3">
+                    <Button 
+                      onClick={toggleSelectAll}
+                      variant="outline" 
+                      className="bg-neutral-800 border-neutral-700 text-white hover:bg-neutral-700"
+                    >
+                      <Check className="mr-2 h-4 w-4" />
+                      {transcriptions.every(t => t.addedToKnowledgeBase) ? "Unselect All" : "Select All"}
+                    </Button>
+                    
+                    <Button 
+                      onClick={sendAllToDatabase} 
+                      size="sm" 
+                      variant="outline-white"
+                      className="border-white/50 text-white hover:bg-white/10"
+                      disabled={!transcriptions.some(t => t.isCompleted && !t.addedToKnowledgeBase)}
+                    >
+                      <Database className="mr-2 h-4 w-4" />
+                      Send to Database
+                    </Button>
+                    
+                    <Button 
+                      onClick={downloadAllTranscriptions} 
+                      size="sm" 
+                      variant="monochrome"
+                      className="text-black bg-white hover:bg-white/90"
+                      disabled={!transcriptions.some(t => t.isCompleted)}
+                    >
+                      <Download className="mr-2 h-4 w-4" />
+                      Download SRT
+                    </Button>
+                  </div>
                 </div>
                 
                 <div className="space-y-6 mb-8">
@@ -608,47 +657,9 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
                         </div>
                         
                         {transcription.isCompleted ? (
-                          <>
-                            <div className="bg-neutral-900 rounded-md p-3 mb-4 h-64 overflow-auto font-mono text-sm text-neutral-300">
-                              <pre>{transcription.content}</pre>
-                            </div>
-                            
-                            <div className="flex justify-end space-x-3">
-                              <Button
-                                onClick={() => downloadTranscription(
-                                  transcription.videoId,
-                                  transcription.videoTitle,
-                                  transcription.content
-                                )}
-                                size="sm"
-                                variant="outline"
-                                className="border-indigo-600/50 text-indigo-400 hover:bg-indigo-600/20"
-                              >
-                                <Download className="mr-2 h-4 w-4" />
-                                Download SRT
-                              </Button>
-                              
-                              <Button
-                                onClick={() => sendToKnowledgeBase(
-                                  transcription.videoId,
-                                  transcription.videoTitle,
-                                  transcription.content
-                                )}
-                                size="sm"
-                                className={`${
-                                  transcription.addedToKnowledgeBase 
-                                    ? "bg-green-600 hover:bg-green-700" 
-                                    : "bg-indigo-600 hover:bg-indigo-700"
-                                }`}
-                                disabled={transcription.addedToKnowledgeBase}
-                              >
-                                <Database className="mr-2 h-4 w-4" />
-                                {transcription.addedToKnowledgeBase 
-                                  ? "Added to Database" 
-                                  : "Send to Database"}
-                              </Button>
-                            </div>
-                          </>
+                          <div className="bg-neutral-900 rounded-md p-3 mb-4 h-64 overflow-auto font-mono text-sm text-neutral-300">
+                            <pre>{transcription.content}</pre>
+                          </div>
                         ) : (
                           <div className="flex items-center justify-center h-32 bg-neutral-900 rounded-md">
                             <div className="text-neutral-400">Transcribing...</div>
