@@ -1,3 +1,4 @@
+
 import { useState, useRef } from 'react';
 import { FileText, ArrowLeft, Play, Upload, Download, Database, File, X, Link as LinkIcon, Copy } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -410,7 +411,7 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
                       
                       <Button onClick={sendToKnowledgeBase} size="sm" className={`${transcriptionData.addedToKnowledgeBase ? "bg-green-600 hover:bg-green-700" : "bg-indigo-600 hover:bg-indigo-700"}`} disabled={transcriptionData.addedToKnowledgeBase}>
                         <Database className="mr-2 h-4 w-4" />
-                        {transcriptionData.addedToKnowledgeBase ? "Added to Knowledge Base" : "Send to Knowledge Base"}
+                        {transcriptionData.addedToKnowledgeBase ? "Added to Database" : "Send to Database"}
                       </Button>
                     </div>
                   </CardContent>
