@@ -433,7 +433,8 @@ Thank you for watching this tutorial on ${title.toLowerCase()}`;
                         <SelectValue placeholder="Show" />
                       </SelectTrigger>
                       <SelectContent className="bg-neutral-900 border-neutral-700 text-white">
-                        <SelectItem value="10">Show 10</SelectItem>
+                        <SelectItem value="5">Show 5</SelectItem>
+                        <SelectItem value="10">Top 10</SelectItem>
                         <SelectItem value="20">Show 20</SelectItem>
                         <SelectItem value="50">Show 50</SelectItem>
                         <SelectItem value="100">Show All</SelectItem>
