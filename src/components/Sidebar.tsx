@@ -1,103 +1,84 @@
-
 import { useState } from 'react';
 import { LayoutDashboard, Folder, LayoutTemplate, ChevronLeft, ChevronRight, Database, User, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useNavigate } from 'react-router-dom';
-
 interface SidebarProps {
   isOpen: boolean;
   toggleSidebar: () => void;
 }
-
 const Sidebar = ({
   isOpen,
   toggleSidebar
 }: SidebarProps) => {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState<'dashboard' | 'projects' | 'templates' | 'knowledge-base'>('dashboard');
-  
-  const sampleProjects = [
-    {
-      id: 1,
-      name: 'Content Analyzer Report',
-      date: '2 days ago',
-      image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d',
-      users: ['A', 'M'],
-      color: 'from-indigo-500 to-purple-600'
-    }, 
-    {
-      id: 2,
-      name: 'Podcast Transcription',
-      date: '1 week ago',
-      image: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7',
-      users: ['K', 'S'],
-      color: 'from-pink-500 to-rose-500'
-    }, 
-    {
-      id: 3,
-      name: 'Marketing Video Script',
-      date: '2 weeks ago',
-      image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d',
-      users: ['R', 'J'],
-      color: 'from-amber-400 to-orange-500'
-    }, 
-    {
-      id: 4,
-      name: 'YouTube Viral Clips',
-      date: '3 weeks ago',
-      image: 'https://images.unsplash.com/photo-1492321936769-b49830bc1d1e',
-      users: ['J', 'P', 'M'],
-      color: 'from-emerald-500 to-teal-600'
-    }, 
-    {
-      id: 5,
-      name: 'Q2 Sales Pitch',
-      date: '1 month ago',
-      image: 'https://images.unsplash.com/photo-1460574283810-2aab119d8511',
-      users: ['S', 'A'],
-      color: 'from-blue-500 to-cyan-500'
-    }
-  ];
-  
-  const templates = [
-    {
-      id: 1,
-      name: 'Social Media Post',
-      category: 'Content',
-      color: 'bg-gradient-to-r from-violet-600 to-indigo-600'
-    }, 
-    {
-      id: 2,
-      name: 'Video Script Template',
-      category: 'Video',
-      color: 'bg-gradient-to-r from-amber-500 to-orange-600'
-    }, 
-    {
-      id: 3,
-      name: 'Podcast Show Notes',
-      category: 'Audio',
-      color: 'bg-gradient-to-r from-emerald-500 to-green-600'
-    }, 
-    {
-      id: 4,
-      name: 'Blog Post Outline',
-      category: 'Content',
-      color: 'bg-gradient-to-r from-blue-500 to-cyan-600'
-    }, 
-    {
-      id: 5,
-      name: 'Email Newsletter',
-      category: 'Marketing',
-      color: 'bg-gradient-to-r from-rose-500 to-pink-600'
-    }
-  ];
-  
+  const sampleProjects = [{
+    id: 1,
+    name: 'Content Analyzer Report',
+    date: '2 days ago',
+    image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d',
+    users: ['A', 'M'],
+    color: 'from-indigo-500 to-purple-600'
+  }, {
+    id: 2,
+    name: 'Podcast Transcription',
+    date: '1 week ago',
+    image: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7',
+    users: ['K', 'S'],
+    color: 'from-pink-500 to-rose-500'
+  }, {
+    id: 3,
+    name: 'Marketing Video Script',
+    date: '2 weeks ago',
+    image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d',
+    users: ['R', 'J'],
+    color: 'from-amber-400 to-orange-500'
+  }, {
+    id: 4,
+    name: 'YouTube Viral Clips',
+    date: '3 weeks ago',
+    image: 'https://images.unsplash.com/photo-1492321936769-b49830bc1d1e',
+    users: ['J', 'P', 'M'],
+    color: 'from-emerald-500 to-teal-600'
+  }, {
+    id: 5,
+    name: 'Q2 Sales Pitch',
+    date: '1 month ago',
+    image: 'https://images.unsplash.com/photo-1460574283810-2aab119d8511',
+    users: ['S', 'A'],
+    color: 'from-blue-500 to-cyan-500'
+  }];
+  const templates = [{
+    id: 1,
+    name: 'Social Media Post',
+    category: 'Content',
+    color: 'bg-gradient-to-r from-violet-600 to-indigo-600'
+  }, {
+    id: 2,
+    name: 'Video Script Template',
+    category: 'Video',
+    color: 'bg-gradient-to-r from-amber-500 to-orange-600'
+  }, {
+    id: 3,
+    name: 'Podcast Show Notes',
+    category: 'Audio',
+    color: 'bg-gradient-to-r from-emerald-500 to-green-600'
+  }, {
+    id: 4,
+    name: 'Blog Post Outline',
+    category: 'Content',
+    color: 'bg-gradient-to-r from-blue-500 to-cyan-600'
+  }, {
+    id: 5,
+    name: 'Email Newsletter',
+    category: 'Marketing',
+    color: 'bg-gradient-to-r from-rose-500 to-pink-600'
+  }];
   const handleNavigation = (path: string, section: 'dashboard' | 'projects' | 'templates' | 'knowledge-base') => {
     setActiveSection(section);
     navigate(path);
   };
-  
   return <aside className={cn("fixed left-0 top-0 h-screen bg-[#0A0A0A] transition-all duration-300 ease-in-out z-10 border-r border-white/10", isOpen ? "w-64" : "w-16")}>
       <div className="flex items-center justify-between p-4">
         <div className={cn("flex items-center", !isOpen && "justify-center w-full")}>
@@ -121,10 +102,7 @@ const Sidebar = ({
             {isOpen && <span className="ml-3 text-white">Sample Projects</span>}
           </button>
           
-          <button className={cn("flex items-center w-full px-4 py-3 transition-colors", activeSection === 'templates' ? "bg-white/10 border-l-2 border-indigo-500" : "hover:bg-white/5 border-l-2 border-transparent", !isOpen && "justify-center")} onClick={() => handleNavigation('/dashboard', 'templates')}>
-            <LayoutTemplate size={20} className="text-gray-400" />
-            {isOpen && <span className="ml-3 text-white">Templates</span>}
-          </button>
+          
           
           <button className={cn("flex items-center w-full px-4 py-3 transition-colors", activeSection === 'knowledge-base' ? "bg-white/10 border-l-2 border-indigo-500" : "hover:bg-white/5 border-l-2 border-transparent", !isOpen && "justify-center")} onClick={() => handleNavigation('/knowledge-base', 'knowledge-base')}>
             <Database size={20} className="text-gray-400" />
@@ -180,18 +158,12 @@ const Sidebar = ({
       
       {isOpen && <div className="absolute bottom-6 left-0 right-0 px-4">
           <div className="space-y-2">
-            <button 
-              className="flex items-center w-full px-4 py-3 rounded-md hover:bg-white/5 transition-colors"
-              onClick={() => navigate('/profile')}
-            >
+            <button className="flex items-center w-full px-4 py-3 rounded-md hover:bg-white/5 transition-colors" onClick={() => navigate('/profile')}>
               <User size={20} className="text-gray-400" />
               <span className="ml-3 text-white">Profile</span>
             </button>
             
-            <button 
-              className="flex items-center w-full px-4 py-3 rounded-md hover:bg-white/5 transition-colors"
-              onClick={() => navigate('/settings')}
-            >
+            <button className="flex items-center w-full px-4 py-3 rounded-md hover:bg-white/5 transition-colors" onClick={() => navigate('/settings')}>
               <Settings size={20} className="text-gray-400" />
               <span className="ml-3 text-white">Settings</span>
             </button>
@@ -199,5 +171,4 @@ const Sidebar = ({
         </div>}
     </aside>;
 };
-
 export default Sidebar;
