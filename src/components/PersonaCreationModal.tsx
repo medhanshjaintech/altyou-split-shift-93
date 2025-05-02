@@ -123,7 +123,12 @@ const PersonaCreationModal = ({
           <div>
             <div className="flex items-center justify-between mb-2">
               <Label>Select Content from Database</Label>
-              <Button variant="outline" size="sm" onClick={handleFileUpload} className="text-xs flex items-center gap-1">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={handleFileUpload} 
+                className="text-xs flex items-center gap-1 text-white bg-neutral-800 hover:bg-neutral-700"
+              >
                 <Upload className="h-3 w-3" /> Upload New
               </Button>
             </div>
