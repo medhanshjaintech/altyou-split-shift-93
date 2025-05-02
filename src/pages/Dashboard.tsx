@@ -10,7 +10,6 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
-
 interface Project {
   id: number;
   title: string;
@@ -19,7 +18,6 @@ interface Project {
   userInitial?: string;
   avatarColor?: string;
 }
-
 const Dashboard = () => {
   const {
     toast
@@ -136,7 +134,6 @@ const Dashboard = () => {
     userInitial: 'M',
     avatarColor: 'bg-blue-500'
   }];
-  
   const handleToolClick = (toolId: number) => {
     const tool = tools.find(t => t.id === toolId);
     if (tool?.path) {
@@ -153,15 +150,12 @@ const Dashboard = () => {
       });
     }
   };
-  
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-  
   const openProjectsWindow = () => {
     setIsProjectsWindowOpen(true);
   };
-
   const openProject = (project: Project) => {
     toast({
       title: "Opening project",
@@ -169,7 +163,6 @@ const Dashboard = () => {
     });
     // Navigate to project view or set up project opening logic
   };
-
   const handleEditProject = (project: Project) => {
     // Implement edit project functionality
     toast({
@@ -177,12 +170,10 @@ const Dashboard = () => {
       description: `Editing project: ${project.title}`
     });
   };
-
   const confirmDeleteProject = (project: Project) => {
     setSelectedProject(project);
     setIsDeleteConfirmOpen(true);
   };
-
   const handleDeleteProject = () => {
     if (selectedProject) {
       toast({
@@ -193,13 +184,8 @@ const Dashboard = () => {
       // In a real app, you would remove the project from the list
     }
   };
-
   return <div className="flex min-h-screen bg-[#121212]">
-      <Sidebar 
-        isOpen={isSidebarOpen} 
-        toggleSidebar={toggleSidebar} 
-        openProjectsWindow={openProjectsWindow}
-      />
+      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} openProjectsWindow={openProjectsWindow} />
       
       <main className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-16'}`}>
         <ScrollArea className="h-screen">
@@ -207,14 +193,7 @@ const Dashboard = () => {
             <div className="flex justify-between items-center mb-8">
               <h1 className="text-3xl font-bold text-white">What do you want to do?</h1>
               <div className="flex space-x-3">
-                <Button 
-                  variant="outline" 
-                  className="bg-indigo-600/20 border-indigo-500/30 text-indigo-400 hover:bg-indigo-600/30"
-                  onClick={openProjectsWindow}
-                >
-                  <Grid className="mr-2 h-4 w-4" />
-                  All Projects
-                </Button>
+                
               </div>
             </div>
 
@@ -245,17 +224,9 @@ const Dashboard = () => {
             <h2 className="text-xl font-semibold text-white mb-4">Recent Projects</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 pb-8">
-              {recentProjects.map(project => (
-                <div key={project.id} onClick={() => openProjectsWindow()}>
-                  <ProjectCard 
-                    image={project.image}
-                    title={project.title}
-                    editedTime={project.editedTime}
-                    userInitial={project.userInitial}
-                    avatarColor={project.avatarColor}
-                  />
-                </div>
-              ))}
+              {recentProjects.map(project => <div key={project.id} onClick={() => openProjectsWindow()}>
+                  <ProjectCard image={project.image} title={project.title} editedTime={project.editedTime} userInitial={project.userInitial} avatarColor={project.avatarColor} />
+                </div>)}
             </div>
           </div>
         </ScrollArea>
@@ -273,20 +244,11 @@ const Dashboard = () => {
           
           <ScrollArea className="h-[60vh] pr-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
-              {recentProjects.map(project => (
-                <div key={project.id} className="bg-[#262626] rounded-lg overflow-hidden">
+              {recentProjects.map(project => <div key={project.id} className="bg-[#262626] rounded-lg overflow-hidden">
                   <div className="relative h-40">
-                    {project.image ? (
-                      <img
-                        src={project.image}
-                        alt={project.title}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className={`w-full h-full ${project.avatarColor || 'bg-indigo-600'} flex items-center justify-center`}>
+                    {project.image ? <img src={project.image} alt={project.title} className="w-full h-full object-cover" /> : <div className={`w-full h-full ${project.avatarColor || 'bg-indigo-600'} flex items-center justify-center`}>
                         <span className="text-white text-xl">{project.userInitial || project.title.charAt(0)}</span>
-                      </div>
-                    )}
+                      </div>}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent">
                       <div className="absolute bottom-0 left-0 p-3">
                         <p className="text-xs text-white/70">Last edited {project.editedTime}</p>
@@ -297,45 +259,27 @@ const Dashboard = () => {
                     <div className="flex justify-between items-center">
                       <h3 className="text-lg font-medium text-white">{project.title}</h3>
                       <div className="flex -space-x-2">
-                        {project.userInitial && (
-                          <div className={`w-7 h-7 rounded-full ${project.avatarColor} flex items-center justify-center text-xs text-white border-2 border-[#1A1A1A]`}>
+                        {project.userInitial && <div className={`w-7 h-7 rounded-full ${project.avatarColor} flex items-center justify-center text-xs text-white border-2 border-[#1A1A1A]`}>
                             {project.userInitial}
-                          </div>
-                        )}
+                          </div>}
                       </div>
                     </div>
                     
                     <div className="flex justify-between mt-4 space-x-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        className="bg-white/5 border-white/10 hover:bg-white/10 text-white flex-1"
-                        onClick={() => openProject(project)}
-                      >
+                      <Button variant="outline" size="sm" className="bg-white/5 border-white/10 hover:bg-white/10 text-white flex-1" onClick={() => openProject(project)}>
                         <ExternalLink className="mr-2 h-4 w-4" />
                         Open
                       </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="bg-white/5 border-white/10 hover:bg-white/10 text-white"
-                        onClick={() => handleEditProject(project)}
-                      >
+                      <Button variant="outline" size="sm" className="bg-white/5 border-white/10 hover:bg-white/10 text-white" onClick={() => handleEditProject(project)}>
                         <Edit className="mr-2 h-4 w-4" />
                         Edit
                       </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        className="bg-white/5 border-white/10 hover:bg-red-900/20 text-red-400 hover:text-red-300"
-                        onClick={() => confirmDeleteProject(project)}
-                      >
+                      <Button variant="outline" size="sm" className="bg-white/5 border-white/10 hover:bg-red-900/20 text-red-400 hover:text-red-300" onClick={() => confirmDeleteProject(project)}>
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>
-                </div>
-              ))}
+                </div>)}
             </div>
           </ScrollArea>
         </DialogContent>
@@ -356,10 +300,7 @@ const Dashboard = () => {
             <AlertDialogCancel className="bg-transparent border border-neutral-700 text-white hover:bg-neutral-800 hover:text-white">
               Cancel
             </AlertDialogCancel>
-            <AlertDialogAction
-              className="bg-red-600 hover:bg-red-700 text-white"
-              onClick={handleDeleteProject}
-            >
+            <AlertDialogAction className="bg-red-600 hover:bg-red-700 text-white" onClick={handleDeleteProject}>
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -367,5 +308,4 @@ const Dashboard = () => {
       </AlertDialog>
     </div>;
 };
-
 export default Dashboard;
