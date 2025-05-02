@@ -1,9 +1,10 @@
-import { useState } from 'react';
+
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Upload, FileText, Link as LinkIcon, Play, ChevronLeft } from 'lucide-react';
+import { Upload, FileText, Link as LinkIcon, Play, ChevronLeft, X } from 'lucide-react';
 import Sidebar from '@/components/Sidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
@@ -17,21 +18,35 @@ const ViralReelCutter = () => {
   const [uploadType, setUploadType] = useState<'transcription' | 'audio' | 'youtube' | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>, type: 'transcription' | 'audio') => {
-    const file = event.target.files?.[0];
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (!file) return;
 
-    setUploadType(type);
+    // Check file type and set appropriate upload type
+    if (file.type.includes('audio')) {
+      setUploadType('audio');
+    } else if (file.name.endsWith('.txt') || file.name.endsWith('.srt')) {
+      setUploadType('transcription');
+    } else {
+      toast({
+        title: "Invalid file type",
+        description: "Please upload an audio file or a transcript (.txt, .srt) file",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setSelectedFileName(file.name);
     setYoutubeUrl('');
     
     // Clear file input to allow re-upload of the same file
-    event.target.value = '';
+    e.target.value = '';
   };
 
   const handleYoutubeUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,38 +101,38 @@ const ViralReelCutter = () => {
     }, 3000);
   };
 
+  const handleFileButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
   };
 
-  const handleDrop = (e: React.DragEvent, type: 'transcription' | 'audio') => {
+  const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     
     const file = e.dataTransfer.files?.[0];
     if (!file) return;
     
-    // Check if file type matches the expected type
-    if (type === 'transcription' && !file.name.endsWith('.txt') && !file.name.endsWith('.srt')) {
+    // Check if file type matches the expected types
+    if (file.type.includes('audio')) {
+      setUploadType('audio');
+      setSelectedFileName(file.name);
+      setYoutubeUrl('');
+    } else if (file.name.endsWith('.txt') || file.name.endsWith('.srt')) {
+      setUploadType('transcription');
+      setSelectedFileName(file.name);
+      setYoutubeUrl('');
+    } else {
       toast({
         title: "Invalid file type",
-        description: "Please upload a .txt or .srt file for transcription",
+        description: "Please upload an audio file or a transcript (.txt, .srt) file",
         variant: "destructive",
       });
-      return;
     }
-    
-    if (type === 'audio' && !file.type.startsWith('audio/')) {
-      toast({
-        title: "Invalid file type",
-        description: "Please upload an audio file",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    setUploadType(type);
-    setSelectedFileName(file.name);
-    setYoutubeUrl('');
   };
 
   const resetSelection = () => {
@@ -152,147 +167,114 @@ const ViralReelCutter = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-              {/* Transcription Upload Card */}
-              <Card 
-                className={cn(
-                  "p-6 cursor-pointer bg-neutral-800 border-0 transition hover:bg-neutral-700",
-                  uploadType === 'transcription' && "ring-2 ring-indigo-500"
-                )}
-                onDragOver={handleDragOver}
-                onDrop={(e) => handleDrop(e, 'transcription')}
-              >
-                <div className="flex flex-col items-center text-center h-full">
-                  <div className="h-16 w-16 rounded-full bg-indigo-600/20 flex items-center justify-center mb-6">
-                    <FileText className="h-8 w-8 text-indigo-400" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-white mb-2">Upload Transcription</h3>
-                  <p className="text-sm text-gray-400 mb-4">Upload .txt or .srt transcript files</p>
-                  
-                  {selectedFileName && uploadType === 'transcription' ? (
-                    <div className="mt-2 w-full">
-                      <div className="bg-neutral-700 p-2 rounded flex items-center justify-between">
-                        <span className="text-sm text-white truncate max-w-[80%]">{selectedFileName}</span>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            resetSelection();
-                          }}
-                          className="text-gray-400 hover:text-white"
-                        >
-                          ✕
-                        </Button>
-                      </div>
+            {/* New Upload UI similar to Hinglish SRT tool */}
+            <div className="max-w-lg mx-auto mb-12">
+              <Card className="bg-neutral-800 border border-neutral-700">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center">
+                      <LinkIcon className="h-5 w-5 text-indigo-400 mr-2" />
+                      <h2 className="text-lg font-medium text-white">Import from Link</h2>
                     </div>
-                  ) : (
-                    <label className="w-full">
-                      <input
-                        type="file"
-                        accept=".txt,.srt"
-                        className="hidden"
-                        onChange={(e) => handleFileUpload(e, 'transcription')}
-                      />
-                      <div className="border-2 border-dashed border-gray-600 rounded-lg p-4 text-center cursor-pointer hover:border-gray-400 transition">
-                        <Upload className="h-6 w-6 mx-auto mb-2 text-gray-400" />
-                        <p className="text-sm text-gray-400">Drag & drop or click to browse</p>
-                      </div>
-                    </label>
-                  )}
-                </div>
-              </Card>
-
-              {/* Audio Upload Card */}
-              <Card 
-                className={cn(
-                  "p-6 cursor-pointer bg-neutral-800 border-0 transition hover:bg-neutral-700",
-                  uploadType === 'audio' && "ring-2 ring-indigo-500"
-                )}
-                onDragOver={handleDragOver}
-                onDrop={(e) => handleDrop(e, 'audio')}
-              >
-                <div className="flex flex-col items-center text-center h-full">
-                  <div className="h-16 w-16 rounded-full bg-indigo-600/20 flex items-center justify-center mb-6">
-                    <Play className="h-8 w-8 text-indigo-400" />
                   </div>
-                  <h3 className="text-lg font-semibold text-white mb-2">Upload Audio</h3>
-                  <p className="text-sm text-gray-400 mb-4">Upload MP3 or other audio files</p>
                   
-                  {selectedFileName && uploadType === 'audio' ? (
-                    <div className="mt-2 w-full">
-                      <div className="bg-neutral-700 p-2 rounded flex items-center justify-between">
-                        <span className="text-sm text-white truncate max-w-[80%]">{selectedFileName}</span>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            resetSelection();
-                          }}
-                          className="text-gray-400 hover:text-white"
-                        >
-                          ✕
-                        </Button>
-                      </div>
-                    </div>
-                  ) : (
-                    <label className="w-full">
-                      <input
-                        type="file"
-                        accept="audio/*"
-                        className="hidden"
-                        onChange={(e) => handleFileUpload(e, 'audio')}
-                      />
-                      <div className="border-2 border-dashed border-gray-600 rounded-lg p-4 text-center cursor-pointer hover:border-gray-400 transition">
-                        <Upload className="h-6 w-6 mx-auto mb-2 text-gray-400" />
-                        <p className="text-sm text-gray-400">Drag & drop or click to browse</p>
-                      </div>
-                    </label>
-                  )}
-                </div>
-              </Card>
-
-              {/* YouTube Link Card */}
-              <Card 
-                className={cn(
-                  "p-6 bg-neutral-800 border-0 transition hover:bg-neutral-700",
-                  uploadType === 'youtube' && "ring-2 ring-indigo-500"
-                )}
-              >
-                <div className="flex flex-col items-center text-center h-full">
-                  <div className="h-16 w-16 rounded-full bg-indigo-600/20 flex items-center justify-center mb-6">
-                    <LinkIcon className="h-8 w-8 text-indigo-400" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-white mb-2">YouTube URL</h3>
-                  <p className="text-sm text-gray-400 mb-4">Paste a YouTube video link</p>
+                  <p className="text-neutral-300 text-sm mb-6">
+                    Import audio and videos from YouTube, Dropbox, Google Drive, 
+                    and other platforms. The link must be publicly accessible.
+                  </p>
                   
-                  <div className="w-full">
-                    <Input
-                      type="text"
-                      placeholder="https://youtube.com/..."
-                      value={youtubeUrl}
-                      onChange={handleYoutubeUrlChange}
-                      className="bg-neutral-700 border-neutral-600 text-white placeholder:text-gray-400"
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-neutral-300 mb-2">Media Link</label>
+                    <Input 
+                      type="text" 
+                      placeholder="https://www.youtube.com/watch?v=" 
+                      value={youtubeUrl} 
+                      onChange={handleYoutubeUrlChange} 
+                      className="bg-blue-50 border border-blue-100 text-neutral-800" 
                     />
-                    {youtubeUrl && (
-                      <div className="mt-2 text-xs text-green-400 text-left">
-                        YouTube URL detected
+                  </div>
+                  
+                  <Button 
+                    className="w-full bg-blue-500 hover:bg-blue-600 text-white flex items-center justify-center gap-2" 
+                    disabled={!youtubeUrl}
+                    onClick={handleProcessContent}
+                  >
+                    <span>+</span>
+                    <span>IMPORT</span>
+                  </Button>
+                  
+                  <div className="mt-6">
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="block text-sm font-medium text-neutral-300">Audio / Transcript File</label>
+                      <Button variant="ghost" size="sm" className="text-neutral-400 hover:text-white p-0 h-auto">
+                        <Upload className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    
+                    <div 
+                      onClick={handleFileButtonClick}
+                      onDrop={handleDrop}
+                      onDragOver={handleDragOver}
+                      className="border-2 border-dashed border-neutral-600 rounded-md p-6 text-center cursor-pointer transition bg-zinc-800"
+                    >
+                      <input 
+                        type="file" 
+                        ref={fileInputRef} 
+                        onChange={handleFileChange} 
+                        accept="audio/*,.txt,.srt" 
+                        className="hidden" 
+                      />
+                      
+                      <p className="font-medium mb-2 text-zinc-100">Drag & Drop</p>
+                      <p className="text-sm mb-4 text-zinc-100">
+                        MP3, MP4, M4A, AAC, WAV,<br />
+                        OGG, FLAC, TXT, SRT
+                      </p>
+                      <div className="text-neutral-400">- OR -</div>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="mt-4" 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleFileButtonClick();
+                        }}
+                      >
+                        BROWSE FILES
+                      </Button>
+                    </div>
+
+                    {selectedFileName && (
+                      <div className="mt-4 p-3 bg-neutral-700 rounded-md flex justify-between items-center">
+                        <div className="flex items-center">
+                          <FileText className="h-4 w-4 text-indigo-400 mr-2" />
+                          <span className="text-white text-sm truncate max-w-[250px]">{selectedFileName}</span>
+                        </div>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          onClick={resetSelection} 
+                          className="text-neutral-400 hover:text-white p-1 h-auto"
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    )}
+
+                    {selectedFileName && (
+                      <div className="mt-4">
+                        <Button 
+                          onClick={handleProcessContent} 
+                          disabled={isProcessing}
+                          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+                        >
+                          {isProcessing ? "Processing..." : "Process Content"}
+                        </Button>
                       </div>
                     )}
                   </div>
-                </div>
+                </CardContent>
               </Card>
-            </div>
-
-            <div className="flex justify-center mb-8">
-              <Button 
-                onClick={handleProcessContent} 
-                disabled={isProcessing || (!selectedFileName && !youtubeUrl)}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white px-10 py-6 text-lg"
-              >
-                {isProcessing ? "Processing..." : "Process Content"}
-              </Button>
             </div>
 
             <div className="bg-neutral-800/50 rounded-lg p-6 mb-8">
