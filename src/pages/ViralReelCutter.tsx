@@ -1,7 +1,7 @@
 
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Upload, FileText, Link as LinkIcon, Play, ChevronLeft, X } from 'lucide-react';
+import { Upload, FileText, Link as LinkIcon, Play, ChevronLeft, X, UserCircle, Plus } from 'lucide-react';
 import Sidebar from '@/components/Sidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Card, CardContent } from '@/components/ui/card';
@@ -9,6 +9,22 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import PersonaSelector from '@/components/PersonaSelector';
+import PersonaCreationModal from '@/components/PersonaCreationModal';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog';
+
+interface Persona {
+  id: string;
+  name: string;
+  description: string;
+  avatar?: string;
+}
 
 const ViralReelCutter = () => {
   const navigate = useNavigate();
@@ -19,6 +35,37 @@ const ViralReelCutter = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // Persona selection state
+  const [isPersonaDialogOpen, setIsPersonaDialogOpen] = useState(false);
+  const [isPersonaModalOpen, setIsPersonaModalOpen] = useState(false);
+  const [activePersona, setActivePersona] = useState<string | null>(null);
+  const [personas, setPersonas] = useState<Persona[]>([
+    {
+      id: "tech-guru",
+      name: "Tech Guru",
+      description: "Technology expert with deep knowledge of latest trends",
+      avatar: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?auto=format&fit=crop&w=64&h=64"
+    },
+    {
+      id: "marketing-expert",
+      name: "Marketing Expert",
+      description: "Marketing specialist with insights on growth strategies",
+      avatar: "https://images.unsplash.com/photo-1582562124811-c09040d0a901?auto=format&fit=crop&w=64&h=64"
+    },
+    {
+      id: "content-creator",
+      name: "Content Creator",
+      description: "Creative specialist for engaging content development",
+      avatar: "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?auto=format&fit=crop&w=64&h=64"
+    },
+    {
+      id: "business-coach",
+      name: "Business Coach",
+      description: "Strategic advisor for business growth and development",
+      avatar: "https://images.unsplash.com/photo-1501286353178-1ec871214838?auto=format&fit=crop&w=64&h=64"
+    },
+  ]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -55,7 +102,7 @@ const ViralReelCutter = () => {
     setSelectedFileName(null);
   };
 
-  const handleProcessContent = () => {
+  const openPersonaDialog = () => {
     if (!uploadType) {
       toast({
         title: "No content selected",
@@ -64,13 +111,27 @@ const ViralReelCutter = () => {
       });
       return;
     }
+    
+    setIsPersonaDialogOpen(true);
+  };
 
+  const handleProcessWithPersona = () => {
+    if (!activePersona) {
+      toast({
+        title: "No persona selected",
+        description: "Please select a persona or create a new one",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsPersonaDialogOpen(false);
     setIsProcessing(true);
     
     // Simulate processing delay
     toast({
       title: "Processing content",
-      description: `Your ${uploadType === 'youtube' ? 'YouTube video' : uploadType === 'audio' ? 'audio file' : 'transcription'} is being processed.`,
+      description: `Your ${uploadType === 'youtube' ? 'YouTube video' : uploadType === 'audio' ? 'audio file' : 'transcription'} is being processed with ${personas.find(p => p.id === activePersona)?.name} persona.`,
     });
     
     setTimeout(() => {
@@ -95,10 +156,36 @@ const ViralReelCutter = () => {
       navigate('/viral-reel-results', { 
         state: { 
           videoTitle,
-          contentType: uploadType
+          contentType: uploadType,
+          personaName: personas.find(p => p.id === activePersona)?.name
         }
       });
     }, 3000);
+  };
+
+  const handleAddPersona = (newPersona: Persona) => {
+    setPersonas([...personas, newPersona]);
+    setActivePersona(newPersona.id);
+    setIsPersonaModalOpen(false);
+    
+    toast({
+      title: "Persona Created",
+      description: `${newPersona.name} has been added to your personas`,
+    });
+  };
+
+  const handleDeletePersona = (personaId: string) => {
+    setPersonas(personas.filter(persona => persona.id !== personaId));
+    
+    if (activePersona === personaId) {
+      setActivePersona(null);
+    }
+    
+    toast({
+      title: "Persona Deleted",
+      description: "The persona has been removed from your list",
+      variant: "destructive"
+    });
   };
 
   const handleFileButtonClick = () => {
@@ -197,7 +284,7 @@ const ViralReelCutter = () => {
                   <Button 
                     className="w-full bg-blue-500 hover:bg-blue-600 text-white flex items-center justify-center gap-2" 
                     disabled={!youtubeUrl}
-                    onClick={handleProcessContent}
+                    onClick={openPersonaDialog}
                   >
                     <span>+</span>
                     <span>IMPORT</span>
@@ -264,7 +351,7 @@ const ViralReelCutter = () => {
                     {selectedFileName && (
                       <div className="mt-4">
                         <Button 
-                          onClick={handleProcessContent} 
+                          onClick={openPersonaDialog} 
                           disabled={isProcessing}
                           className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
                         >
@@ -289,6 +376,59 @@ const ViralReelCutter = () => {
           </div>
         </ScrollArea>
       </main>
+
+      {/* Persona Selection Dialog */}
+      <Dialog open={isPersonaDialogOpen} onOpenChange={setIsPersonaDialogOpen}>
+        <DialogContent className="bg-neutral-900 text-white border border-neutral-700 max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-white">Select a Persona for Your Content</DialogTitle>
+          </DialogHeader>
+          
+          <div className="py-4">
+            <p className="text-gray-300 mb-6">
+              Choose a persona to process your content with. Each persona will generate different styles of content.
+            </p>
+            
+            <PersonaSelector 
+              personas={personas}
+              activePersona={activePersona}
+              onPersonaSelect={(personaId) => setActivePersona(personaId)}
+              onPersonaDelete={handleDeletePersona}
+              onCreatePersona={() => {
+                setIsPersonaDialogOpen(false);
+                setIsPersonaModalOpen(true);
+              }}
+            />
+          </div>
+          
+          <DialogFooter>
+            <Button 
+              variant="outline" 
+              onClick={() => setIsPersonaDialogOpen(false)}
+              className="border-white/20 bg-neutral-800 hover:bg-neutral-700 text-white"
+            >
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleProcessWithPersona}
+              disabled={!activePersona}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              Proceed
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Persona Creation Modal */}
+      <PersonaCreationModal
+        isOpen={isPersonaModalOpen}
+        onClose={() => {
+          setIsPersonaModalOpen(false);
+          setIsPersonaDialogOpen(true);
+        }}
+        onAddPersona={handleAddPersona}
+      />
     </div>
   );
 };
