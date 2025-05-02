@@ -1,12 +1,11 @@
 
 import { useState } from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import KnowledgeSidebar from "@/components/KnowledgeSidebar";
-import ChatArea from "@/components/ChatArea";
-import PersonaSelector from "@/components/PersonaSelector";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import ChatArea from "@/components/ChatArea";
+import PersonaSelector from "@/components/PersonaSelector";
+import PersonaCreationModal from "@/components/PersonaCreationModal";
 
 interface Message {
   role: "user" | "bot";
@@ -21,26 +20,11 @@ interface Persona {
   avatar?: string;
 }
 
-interface KnowledgeFile {
-  id: string;
-  name: string;
-  type: "transcription" | "upload";
-  selected: boolean;
-}
-
 const KnowledgeBot = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [activePersona, setActivePersona] = useState<string | null>(null);
-  const [knowledgeFiles, setKnowledgeFiles] = useState<KnowledgeFile[]>([
-    { id: "1", name: "Interview Transcript.txt", type: "transcription", selected: false },
-    { id: "2", name: "Product Demo.mp3", type: "transcription", selected: false },
-    { id: "3", name: "Marketing Plan.pdf", type: "upload", selected: false },
-    { id: "4", name: "Sales Pitch.docx", type: "upload", selected: false },
-    { id: "5", name: "Team Meeting.txt", type: "transcription", selected: false },
-    { id: "6", name: "Research Notes.pdf", type: "upload", selected: false },
-  ]);
-
-  const personas: Persona[] = [
+  const [isPersonaModalOpen, setIsPersonaModalOpen] = useState(false);
+  const [personas, setPersonas] = useState<Persona[]>([
     {
       id: "tech-guru",
       name: "Tech Guru",
@@ -65,7 +49,7 @@ const KnowledgeBot = () => {
       description: "Strategic advisor for business growth and development",
       avatar: "/placeholder.svg"
     },
-  ];
+  ]);
 
   const handleSendMessage = (message: string) => {
     const newUserMessage: Message = {
@@ -78,12 +62,9 @@ const KnowledgeBot = () => {
 
     // Simulate bot response
     setTimeout(() => {
-      const selectedFiles = knowledgeFiles.filter(file => file.selected);
-      const fileNames = selectedFiles.map(file => file.name).join(", ");
-      
       const botResponse = activePersona
-        ? `Response as ${personas.find(p => p.id === activePersona)?.name} based on ${selectedFiles.length ? fileNames : "general knowledge"}`
-        : `Response based on ${selectedFiles.length ? fileNames : "general knowledge"}`;
+        ? `Response as ${personas.find(p => p.id === activePersona)?.name} based on selected content`
+        : `Please select a persona first`;
 
       const newBotMessage: Message = {
         role: "bot",
@@ -95,69 +76,76 @@ const KnowledgeBot = () => {
     }, 1000);
   };
 
-  const toggleFileSelection = (fileId: string) => {
-    setKnowledgeFiles(prevFiles =>
-      prevFiles.map(file =>
-        file.id === fileId ? { ...file, selected: !file.selected } : file
-      )
-    );
-  };
-
-  const selectAllFiles = () => {
-    setKnowledgeFiles(prevFiles =>
-      prevFiles.map(file => ({ ...file, selected: true }))
-    );
-  };
-
-  const deselectAllFiles = () => {
-    setKnowledgeFiles(prevFiles =>
-      prevFiles.map(file => ({ ...file, selected: false }))
-    );
-  };
-
   const handlePersonaSelect = (personaId: string) => {
-    setActivePersona(personaId === activePersona ? null : personaId);
+    setActivePersona(personaId);
+    setMessages([]);
+  };
+
+  const handleAddPersona = (newPersona: Persona) => {
+    setPersonas([...personas, newPersona]);
+    setIsPersonaModalOpen(false);
   };
 
   return (
-    <div className="flex min-h-screen bg-[#121212]">
-      <SidebarProvider defaultOpen={true}>
-        <KnowledgeSidebar 
-          files={knowledgeFiles}
-          onToggleFile={toggleFileSelection}
-          onSelectAll={selectAllFiles}
-          onDeselectAll={deselectAllFiles}
-        />
+    <div className="min-h-screen bg-[#121212]">
+      <div className="max-w-6xl mx-auto p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-white">Knowledge Bot</h1>
+          <Button variant="outline" size="sm" asChild>
+            <Link to="/dashboard">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Dashboard
+            </Link>
+          </Button>
+        </div>
 
-        <div className="flex-1 p-6">
-          <div className="max-w-4xl mx-auto">
-            <div className="flex justify-between items-center mb-6">
-              <h1 className="text-2xl font-bold text-white">Knowledge Bot</h1>
-              <Button variant="outline" size="sm" asChild>
-                <Link to="/dashboard">
-                  <ArrowLeft className="mr-2 h-4 w-4" />
-                  Back to Dashboard
-                </Link>
+        {!activePersona ? (
+          <div>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-white">Select a Persona</h2>
+              <Button onClick={() => setIsPersonaModalOpen(true)} className="flex items-center">
+                <Plus className="mr-2 h-4 w-4" />
+                Create Persona
               </Button>
             </div>
             
-            <div className="mb-6">
-              <ChatArea 
-                messages={messages} 
-                onSendMessage={handleSendMessage} 
-              />
-            </div>
-
-            <div className="mb-6">
-              <PersonaSelector 
-                personas={personas}
-                activePersona={activePersona}
-                onPersonaSelect={handlePersonaSelect}
-              />
-            </div>
+            <PersonaSelector 
+              personas={personas}
+              activePersona={activePersona}
+              onPersonaSelect={handlePersonaSelect}
+            />
           </div>
-        </div>
-      </SidebarProvider>
+        ) : (
+          <div className="space-y-6">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setActivePersona(null)}
+                  size="sm"
+                >
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Back to Personas
+                </Button>
+                <h2 className="text-xl font-bold text-white">
+                  {personas.find(p => p.id === activePersona)?.name}
+                </h2>
+              </div>
+            </div>
+            
+            <ChatArea 
+              messages={messages} 
+              onSendMessage={handleSendMessage} 
+            />
+          </div>
+        )}
+      </div>
+
+      <PersonaCreationModal
+        isOpen={isPersonaModalOpen}
+        onClose={() => setIsPersonaModalOpen(false)}
+        onAddPersona={handleAddPersona}
+      />
     </div>
   );
 };

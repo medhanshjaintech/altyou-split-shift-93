@@ -1,0 +1,159 @@
+
+import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { File, Upload } from "lucide-react";
+
+interface Persona {
+  id: string;
+  name: string;
+  description: string;
+  avatar?: string;
+}
+
+interface DatabaseFile {
+  id: string;
+  name: string;
+  selected: boolean;
+}
+
+interface PersonaCreationModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onAddPersona: (persona: Persona) => void;
+}
+
+const PersonaCreationModal = ({
+  isOpen,
+  onClose,
+  onAddPersona
+}: PersonaCreationModalProps) => {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [instructions, setInstructions] = useState("");
+  
+  // Sample database files
+  const [databaseFiles, setDatabaseFiles] = useState<DatabaseFile[]>([
+    { id: "1", name: "Marketing Strategy.pdf", selected: false },
+    { id: "2", name: "Product Documentation.docx", selected: false },
+    { id: "3", name: "Company Handbook.pdf", selected: false },
+    { id: "4", name: "Research Results.pdf", selected: false },
+    { id: "5", name: "Sales Presentation.pptx", selected: false },
+  ]);
+
+  const toggleFileSelection = (fileId: string) => {
+    setDatabaseFiles(prevFiles =>
+      prevFiles.map(file =>
+        file.id === fileId ? { ...file, selected: !file.selected } : file
+      )
+    );
+  };
+
+  const handleSubmit = () => {
+    if (!name.trim() || !description.trim()) return;
+    
+    const newPersona: Persona = {
+      id: `persona-${Date.now()}`,
+      name: name.trim(),
+      description: description.trim(),
+      avatar: "/placeholder.svg"
+    };
+    
+    onAddPersona(newPersona);
+    
+    // Reset form
+    setName("");
+    setDescription("");
+    setInstructions("");
+    setDatabaseFiles(prevFiles =>
+      prevFiles.map(file => ({ ...file, selected: false }))
+    );
+  };
+
+  const handleFileUpload = () => {
+    console.log("File upload triggered");
+    // This would trigger a file upload in a real application
+    alert("File upload feature would open a file picker in a real application");
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="bg-neutral-900 text-white border-neutral-700 max-w-3xl">
+        <DialogHeader>
+          <DialogTitle className="text-xl font-bold text-white">Create a New Persona</DialogTitle>
+        </DialogHeader>
+        
+        <div className="grid gap-6 py-4">
+          <div className="grid grid-cols-1 gap-2">
+            <Label htmlFor="name">Persona Name</Label>
+            <Input
+              id="name"
+              placeholder="E.g., Finance Expert"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="bg-neutral-800 border-neutral-700"
+            />
+          </div>
+          
+          <div className="grid grid-cols-1 gap-2">
+            <Label htmlFor="description">Description</Label>
+            <Textarea
+              id="description"
+              placeholder="Briefly describe what this persona specializes in..."
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="bg-neutral-800 border-neutral-700"
+            />
+          </div>
+          
+          <div className="grid grid-cols-1 gap-2">
+            <Label htmlFor="instructions">Custom Instructions</Label>
+            <Textarea
+              id="instructions"
+              placeholder="Add specific instructions for how the persona should behave..."
+              value={instructions}
+              onChange={(e) => setInstructions(e.target.value)}
+              className="bg-neutral-800 border-neutral-700 min-h-[100px]"
+            />
+          </div>
+          
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <Label>Select Content from Database</Label>
+              <Button variant="outline" size="sm" onClick={handleFileUpload} className="text-xs flex items-center gap-1">
+                <Upload className="h-3 w-3" /> Upload New
+              </Button>
+            </div>
+            
+            <div className="bg-neutral-800 border border-neutral-700 rounded-md p-3 max-h-[200px] overflow-y-auto">
+              {databaseFiles.map(file => (
+                <div
+                  key={file.id}
+                  onClick={() => toggleFileSelection(file.id)}
+                  className={`flex items-center gap-2 p-2 text-sm rounded-md cursor-pointer mb-1 ${
+                    file.selected ? "bg-blue-800/50 text-white" : "text-white hover:bg-blue-900/30"
+                  }`}
+                >
+                  <File className="h-4 w-4 text-blue-500" />
+                  <span>{file.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose} className="border-white/20 bg-neutral-800 hover:bg-neutral-700">
+            Cancel
+          </Button>
+          <Button onClick={handleSubmit}>Create Persona</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default PersonaCreationModal;
