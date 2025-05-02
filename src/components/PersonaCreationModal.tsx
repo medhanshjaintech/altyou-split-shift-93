@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,6 +26,7 @@ interface PersonaCreationModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAddPersona: (persona: Persona) => void;
+  editingPersona?: Persona | null;
 }
 
 const DEFAULT_AVATARS = [
@@ -40,7 +41,8 @@ const DEFAULT_AVATARS = [
 const PersonaCreationModal = ({
   isOpen,
   onClose,
-  onAddPersona
+  onAddPersona,
+  editingPersona = null
 }: PersonaCreationModalProps) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -56,6 +58,22 @@ const PersonaCreationModal = ({
     { id: "5", name: "Sales Presentation.pptx", selected: false },
   ]);
 
+  // Populate form if editing an existing persona
+  useEffect(() => {
+    if (editingPersona) {
+      setName(editingPersona.name);
+      setDescription(editingPersona.description);
+      setInstructions(editingPersona.instructions || "");
+      setSelectedAvatar(editingPersona.avatar || DEFAULT_AVATARS[0]);
+    } else {
+      // Reset form when not editing
+      setName("");
+      setDescription("");
+      setInstructions("");
+      setSelectedAvatar(DEFAULT_AVATARS[0]);
+    }
+  }, [editingPersona, isOpen]);
+
   const toggleFileSelection = (fileId: string) => {
     setDatabaseFiles(prevFiles =>
       prevFiles.map(file =>
@@ -68,7 +86,7 @@ const PersonaCreationModal = ({
     if (!name.trim() || !description.trim()) return;
     
     const newPersona: Persona = {
-      id: `persona-${Date.now()}`,
+      id: editingPersona ? editingPersona.id : `persona-${Date.now()}`,
       name: name.trim(),
       description: description.trim(),
       instructions: instructions.trim(),
@@ -97,7 +115,9 @@ const PersonaCreationModal = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-neutral-900 text-white border-neutral-700 max-w-3xl">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold text-white">Create a New Persona</DialogTitle>
+          <DialogTitle className="text-xl font-bold text-white">
+            {editingPersona ? "Edit Persona" : "Create a New Persona"}
+          </DialogTitle>
         </DialogHeader>
         
         <div className="grid gap-6 py-4">
@@ -194,7 +214,7 @@ const PersonaCreationModal = ({
             Cancel
           </Button>
           <Button onClick={handleSubmit} className="bg-blue-600 hover:bg-blue-700 text-white">
-            Create Persona
+            {editingPersona ? "Save Changes" : "Create Persona"}
           </Button>
         </DialogFooter>
       </DialogContent>
