@@ -1,6 +1,6 @@
 
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { X } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { X, UserCircle } from "lucide-react";
 
 interface Persona {
   id: string;
@@ -49,6 +49,9 @@ const PersonaSelector = ({
             <div className="flex items-center gap-3 mb-2">
               <Avatar className="h-10 w-10 border border-neutral-700">
                 <AvatarImage src={persona.avatar} alt={persona.name} />
+                <AvatarFallback className="bg-neutral-800 text-white">
+                  <UserCircle className="h-6 w-6" />
+                </AvatarFallback>
               </Avatar>
               <span className="font-medium text-white">{persona.name}</span>
             </div>

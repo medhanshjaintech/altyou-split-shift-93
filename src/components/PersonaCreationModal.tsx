@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { File, Upload } from "lucide-react";
+import { File, Upload, UserCircle } from "lucide-react";
+import { Avatar, AvatarImage } from "./ui/avatar";
 
 interface Persona {
   id: string;
@@ -27,6 +28,15 @@ interface PersonaCreationModalProps {
   onAddPersona: (persona: Persona) => void;
 }
 
+const DEFAULT_AVATARS = [
+  "/lovable-uploads/f5e90732-46bb-4f6a-82c4-c07cb1e98cb9.png",
+  "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?auto=format&fit=crop&w=64&h=64",
+  "https://images.unsplash.com/photo-1582562124811-c09040d0a901?auto=format&fit=crop&w=64&h=64",
+  "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?auto=format&fit=crop&w=64&h=64",
+  "https://images.unsplash.com/photo-1501286353178-1ec871214838?auto=format&fit=crop&w=64&h=64",
+  "https://images.unsplash.com/photo-1441057206919-63d19fac2369?auto=format&fit=crop&w=64&h=64"
+];
+
 const PersonaCreationModal = ({
   isOpen,
   onClose,
@@ -35,6 +45,7 @@ const PersonaCreationModal = ({
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [instructions, setInstructions] = useState("");
+  const [selectedAvatar, setSelectedAvatar] = useState(DEFAULT_AVATARS[0]);
   
   // Sample database files
   const [databaseFiles, setDatabaseFiles] = useState<DatabaseFile[]>([
@@ -61,7 +72,7 @@ const PersonaCreationModal = ({
       name: name.trim(),
       description: description.trim(),
       instructions: instructions.trim(),
-      avatar: "/lovable-uploads/f5e90732-46bb-4f6a-82c4-c07cb1e98cb9.png"
+      avatar: selectedAvatar
     };
     
     onAddPersona(newPersona);
@@ -70,6 +81,7 @@ const PersonaCreationModal = ({
     setName("");
     setDescription("");
     setInstructions("");
+    setSelectedAvatar(DEFAULT_AVATARS[0]);
     setDatabaseFiles(prevFiles =>
       prevFiles.map(file => ({ ...file, selected: false }))
     );
@@ -89,6 +101,30 @@ const PersonaCreationModal = ({
         </DialogHeader>
         
         <div className="grid gap-6 py-4">
+          <div className="grid grid-cols-1 gap-2">
+            <Label htmlFor="avatar" className="text-white">Select Avatar</Label>
+            <div className="flex flex-wrap gap-2">
+              {DEFAULT_AVATARS.map((avatar, index) => (
+                <Avatar 
+                  key={index} 
+                  className={`h-12 w-12 cursor-pointer border-2 ${selectedAvatar === avatar ? 'border-blue-500' : 'border-transparent'}`}
+                  onClick={() => setSelectedAvatar(avatar)}
+                >
+                  <AvatarImage src={avatar} alt={`Avatar option ${index + 1}`} />
+                </Avatar>
+              ))}
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={handleFileUpload}
+                className="h-12 w-12 rounded-full text-white border-dashed border-neutral-600 bg-neutral-800 hover:bg-neutral-700"
+                title="Upload custom avatar"
+              >
+                <Upload className="h-5 w-5" />
+              </Button>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 gap-2">
             <Label htmlFor="name" className="text-white">Persona Name</Label>
             <Input

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { ArrowLeft, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -31,25 +30,25 @@ const KnowledgeBot = () => {
       id: "tech-guru",
       name: "Tech Guru",
       description: "Technology expert with deep knowledge of latest trends",
-      avatar: "/lovable-uploads/f5e90732-46bb-4f6a-82c4-c07cb1e98cb9.png"
+      avatar: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?auto=format&fit=crop&w=64&h=64"
     },
     {
       id: "marketing-expert",
       name: "Marketing Expert",
       description: "Marketing specialist with insights on growth strategies",
-      avatar: "/lovable-uploads/f5e90732-46bb-4f6a-82c4-c07cb1e98cb9.png"
+      avatar: "https://images.unsplash.com/photo-1582562124811-c09040d0a901?auto=format&fit=crop&w=64&h=64"
     },
     {
       id: "content-creator",
       name: "Content Creator",
       description: "Creative specialist for engaging content development",
-      avatar: "/lovable-uploads/f5e90732-46bb-4f6a-82c4-c07cb1e98cb9.png"
+      avatar: "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?auto=format&fit=crop&w=64&h=64"
     },
     {
       id: "business-coach",
       name: "Business Coach",
       description: "Strategic advisor for business growth and development",
-      avatar: "/lovable-uploads/f5e90732-46bb-4f6a-82c4-c07cb1e98cb9.png"
+      avatar: "https://images.unsplash.com/photo-1501286353178-1ec871214838?auto=format&fit=crop&w=64&h=64"
     },
   ]);
 
