@@ -99,7 +99,7 @@ const Sidebar = ({
           
           <button className={cn("flex items-center w-full px-4 py-3 transition-colors", activeSection === 'projects' ? "bg-white/10 border-l-2 border-indigo-500" : "hover:bg-white/5 border-l-2 border-transparent", !isOpen && "justify-center")} onClick={() => handleNavigation('/dashboard', 'projects')}>
             <Folder size={20} className="text-gray-400" />
-            {isOpen && <span className="ml-3 text-white">Sample Projects</span>}
+            {isOpen && <span className="ml-3 text-white">My Projects</span>}
           </button>
           
           <button className={cn("flex items-center w-full px-4 py-3 transition-colors", activeSection === 'knowledge-bot' ? "bg-white/10 border-l-2 border-indigo-500" : "hover:bg-white/5 border-l-2 border-transparent", !isOpen && "justify-center")} onClick={() => handleNavigation('/knowledge-bot', 'knowledge-bot')}>
