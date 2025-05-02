@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FileText, Search, Scissors, Star, Mic, Image, Video, ChartBar, Edit, Trash2 } from 'lucide-react';
+import { FileText, Search, Scissors, Star, Mic, Image, Video, ChartBar, Grid, Edit, Trash2, ExternalLink } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import Sidebar from '@/components/Sidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import ProjectCard from '@/components/ProjectCard';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 
 interface Project {
   id: number;
@@ -25,7 +26,8 @@ const Dashboard = () => {
   } = useToast();
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isProjectsDialogOpen, setIsProjectsDialogOpen] = useState(false);
+  const [isProjectsWindowOpen, setIsProjectsWindowOpen] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   // Your 8 primary tools
@@ -156,9 +158,16 @@ const Dashboard = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
   
-  const openProjectsDialog = (project: Project) => {
-    setSelectedProject(project);
-    setIsProjectsDialogOpen(true);
+  const openProjectsWindow = () => {
+    setIsProjectsWindowOpen(true);
+  };
+
+  const openProject = (project: Project) => {
+    toast({
+      title: "Opening project",
+      description: `Opening project: ${project.title}`
+    });
+    // Navigate to project view or set up project opening logic
   };
 
   const handleEditProject = (project: Project) => {
@@ -169,13 +178,20 @@ const Dashboard = () => {
     });
   };
 
-  const handleDeleteProject = (project: Project) => {
-    // Implement delete project functionality
-    toast({
-      title: "Delete project",
-      description: `Project ${project.title} has been deleted.`
-    });
-    setIsProjectsDialogOpen(false);
+  const confirmDeleteProject = (project: Project) => {
+    setSelectedProject(project);
+    setIsDeleteConfirmOpen(true);
+  };
+
+  const handleDeleteProject = () => {
+    if (selectedProject) {
+      toast({
+        title: "Project deleted",
+        description: `Project ${selectedProject.title} has been deleted.`
+      });
+      setIsDeleteConfirmOpen(false);
+      // In a real app, you would remove the project from the list
+    }
   };
 
   return <div className="flex min-h-screen bg-[#121212]">
@@ -187,8 +203,14 @@ const Dashboard = () => {
             <div className="flex justify-between items-center mb-8">
               <h1 className="text-3xl font-bold text-white">What do you want to do?</h1>
               <div className="flex space-x-3">
-                
-                
+                <Button 
+                  variant="outline" 
+                  className="bg-indigo-600/20 border-indigo-500/30 text-indigo-400 hover:bg-indigo-600/30"
+                  onClick={openProjectsWindow}
+                >
+                  <Grid className="mr-2 h-4 w-4" />
+                  All Projects
+                </Button>
               </div>
             </div>
 
@@ -220,7 +242,7 @@ const Dashboard = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 pb-8">
               {recentProjects.map(project => (
-                <div key={project.id} onClick={() => openProjectsDialog(project)}>
+                <div key={project.id} onClick={() => openProjectsWindow()}>
                   <ProjectCard 
                     image={project.image}
                     title={project.title}
@@ -235,79 +257,110 @@ const Dashboard = () => {
         </ScrollArea>
       </main>
 
-      {/* Projects Management Dialog */}
-      <Dialog open={isProjectsDialogOpen} onOpenChange={setIsProjectsDialogOpen}>
-        <DialogContent className="bg-[#1A1A1A] text-white border-neutral-700 sm:max-w-[700px]">
+      {/* Projects Window Dialog */}
+      <Dialog open={isProjectsWindowOpen} onOpenChange={setIsProjectsWindowOpen}>
+        <DialogContent className="bg-[#1A1A1A] text-white border-neutral-700 sm:max-w-[800px] max-h-[80vh]">
           <DialogHeader>
-            <DialogTitle className="text-2xl text-white">Project Management</DialogTitle>
+            <DialogTitle className="text-2xl text-white">My Projects</DialogTitle>
+            <DialogDescription className="text-gray-400">
+              Manage all your projects in one place
+            </DialogDescription>
           </DialogHeader>
           
-          <div className="py-4">
-            {selectedProject && (
-              <>
-                <div className="flex items-center gap-3 mb-6">
-                  {selectedProject.image ? (
-                    <img
-                      src={selectedProject.image}
-                      alt={selectedProject.title}
-                      className="w-20 h-20 rounded-md object-cover"
-                    />
-                  ) : (
-                    <div className={`w-20 h-20 ${selectedProject.avatarColor || 'bg-indigo-600'} rounded-md flex items-center justify-center`}>
-                      <span className="text-white text-xl">{selectedProject.userInitial || selectedProject.title.charAt(0)}</span>
+          <ScrollArea className="h-[60vh] pr-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+              {recentProjects.map(project => (
+                <div key={project.id} className="bg-[#262626] rounded-lg overflow-hidden">
+                  <div className="relative h-40">
+                    {project.image ? (
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className={`w-full h-full ${project.avatarColor || 'bg-indigo-600'} flex items-center justify-center`}>
+                        <span className="text-white text-xl">{project.userInitial || project.title.charAt(0)}</span>
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent">
+                      <div className="absolute bottom-0 left-0 p-3">
+                        <p className="text-xs text-white/70">Last edited {project.editedTime}</p>
+                      </div>
                     </div>
-                  )}
-                  <div>
-                    <h3 className="text-xl font-medium text-white">{selectedProject.title}</h3>
-                    <p className="text-gray-400 text-sm">Last edited {selectedProject.editedTime}</p>
+                  </div>
+                  <div className="p-4">
+                    <div className="flex justify-between items-center">
+                      <h3 className="text-lg font-medium text-white">{project.title}</h3>
+                      <div className="flex -space-x-2">
+                        {project.userInitial && (
+                          <div className={`w-7 h-7 rounded-full ${project.avatarColor} flex items-center justify-center text-xs text-white border-2 border-[#1A1A1A]`}>
+                            {project.userInitial}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <div className="flex justify-between mt-4 space-x-2">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        className="bg-white/5 border-white/10 hover:bg-white/10 text-white flex-1"
+                        onClick={() => openProject(project)}
+                      >
+                        <ExternalLink className="mr-2 h-4 w-4" />
+                        Open
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="bg-white/5 border-white/10 hover:bg-white/10 text-white"
+                        onClick={() => handleEditProject(project)}
+                      >
+                        <Edit className="mr-2 h-4 w-4" />
+                        Edit
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        className="bg-white/5 border-white/10 hover:bg-red-900/20 text-red-400 hover:text-red-300"
+                        onClick={() => confirmDeleteProject(project)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
                 </div>
-
-                <div className="space-y-6">
-                  <div className="bg-[#262626] p-4 rounded-md">
-                    <h4 className="text-md font-medium text-white mb-3">Project Details</h4>
-                    <Table>
-                      <TableBody>
-                        <TableRow className="border-b border-neutral-700">
-                          <TableCell className="py-2 font-medium text-white">Created by</TableCell>
-                          <TableCell className="py-2 text-gray-300">You</TableCell>
-                        </TableRow>
-                        <TableRow className="border-b border-neutral-700">
-                          <TableCell className="py-2 font-medium text-white">Last modified</TableCell>
-                          <TableCell className="py-2 text-gray-300">{selectedProject.editedTime}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="py-2 font-medium text-white">Type</TableCell>
-                          <TableCell className="py-2 text-gray-300">Document</TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </div>
-                  
-                  <div className="flex flex-col space-y-3">
-                    <Button 
-                      variant="outline" 
-                      className="bg-transparent border border-neutral-700 hover:bg-neutral-800 text-white justify-start"
-                      onClick={() => handleEditProject(selectedProject)}
-                    >
-                      <Edit className="mr-2 h-4 w-4" />
-                      Edit project
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      className="bg-transparent border border-neutral-700 hover:bg-red-900/20 text-red-500 justify-start"
-                      onClick={() => handleDeleteProject(selectedProject)}
-                    >
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      Delete project
-                    </Button>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
+              ))}
+            </div>
+          </ScrollArea>
         </DialogContent>
       </Dialog>
+      
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={isDeleteConfirmOpen} onOpenChange={setIsDeleteConfirmOpen}>
+        <AlertDialogContent className="bg-[#1A1A1A] border-neutral-700 text-white">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-xl text-white">
+              Delete Project
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-400">
+              Are you sure you want to delete "{selectedProject?.title}"? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="bg-transparent border border-neutral-700 text-white hover:bg-neutral-800 hover:text-white">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-600 hover:bg-red-700 text-white"
+              onClick={handleDeleteProject}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>;
 };
 
