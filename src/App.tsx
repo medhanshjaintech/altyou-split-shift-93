@@ -19,6 +19,7 @@ import ViralReelResults from "./pages/ViralReelResults";
 import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
+import BonusFeatures from "./pages/BonusFeatures";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => (
           <Route path="/content-analysis-result" element={<ContentAnalysisResult />} />
           <Route path="/viral-reel-cutter" element={<ViralReelCutter />} />
           <Route path="/viral-reel-results" element={<ViralReelResults />} />
+          <Route path="/bonus-features" element={<BonusFeatures />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Settings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

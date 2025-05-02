@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FileText, Database, Search, Scissors, Star, Mic, Image, Video, ChartBar } from 'lucide-react';
+import { FileText, Search, Scissors, Star, Mic, Image, Video, ChartBar } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import Sidebar from '@/components/Sidebar';
@@ -31,11 +31,11 @@ const Dashboard = () => {
     path: '/hinglish-transcribe'
   }, {
     id: 3,
-    name: 'Database',
-    icon: Database,
-    description: 'Manage your knowledge base and personas',
+    name: 'Knowledge Bot',
+    icon: Star,
+    description: 'Chat with your content using AI personas',
     comingSoon: false,
-    path: '/knowledge-base'
+    path: '/knowledge-bot'
   }, {
     id: 4,
     name: 'Content Suggestion Engine',
@@ -66,11 +66,11 @@ const Dashboard = () => {
     path: '/viral-reel-cutter'
   }, {
     id: 8,
-    name: 'Knowledge Bot',
+    name: 'Bonus Features',
     icon: Star,
-    description: 'Chat with your content using AI personas',
+    description: 'Access special bonus features and tools',
     comingSoon: false,
-    path: '/knowledge-bot'
+    path: '/bonus-features'
   }];
 
   // Gen AI tools (replacing featuredTools)
